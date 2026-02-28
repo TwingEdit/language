@@ -2,160 +2,468 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <title>Mastery Academy | Ders Müfredatı</title>
+    <title>Mastery Academy | 12 Zaman Tam Liste</title>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
         :root { --bg: #0b0f1a; --card: #161e2d; --p: #6366f1; --s: #10b981; --border: #334155; }
         body { background: var(--bg); color: white; font-family: 'Outfit', sans-serif; margin: 0; display: flex; height: 100vh; overflow: hidden; }
-        
-        /* Sol Menü: Konu Listesi */
-        .sidebar { width: 300px; background: var(--card); border-right: 1px solid var(--border); overflow-y: auto; padding: 20px; }
-        .sidebar h2 { font-size: 1.2rem; color: var(--s); margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 10px; }
-        .topic-link { padding: 12px 15px; border-radius: 10px; cursor: pointer; margin-bottom: 8px; transition: 0.3s; font-size: 0.95rem; border: 1px solid transparent; }
-        .topic-link:hover { background: #1f2937; border-color: var(--p); }
-        .topic-link.active { background: var(--p); color: white; font-weight: 600; }
-
-        /* Sağ Alan: İçerik */
-        .content { flex: 1; overflow-y: auto; padding: 40px; scroll-behavior: smooth; }
-        .lesson-header { background: var(--card); padding: 30px; border-radius: 20px; border: 1px solid var(--border); margin-bottom: 30px; }
-        .vocab-box { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 20px 0; }
-        .v-item { background: #1f2937; padding: 12px; border-radius: 8px; border-left: 4px solid var(--s); }
-
-        /* Test Alanı */
-        .quiz-container { background: #0f172a; padding: 30px; border-radius: 20px; border: 2px dashed var(--p); margin-top: 40px; }
+        .sidebar { width: 320px; background: var(--card); border-right: 1px solid var(--border); overflow-y: auto; padding: 20px; flex-shrink: 0; }
+        .sidebar h2 { font-size: 1.3rem; color: var(--s); margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
+        .topic-link { padding: 14px; border-radius: 12px; cursor: pointer; margin-bottom: 8px; transition: 0.2s; font-size: 0.85rem; background: #1f2937; border: 1px solid transparent; }
+        .topic-link:hover { border-color: var(--p); transform: translateX(5px); }
+        .topic-link.active { background: var(--p); color: white; font-weight: 800; }
+        .content { flex: 1; overflow-y: auto; padding: 40px; background: #0b0f1a; }
+        .lesson-card { background: var(--card); padding: 35px; border-radius: 25px; border: 1px solid var(--border); }
+        .vocab-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin: 20px 0; }
+        .v-item { background: #1f2937; padding: 10px; border-radius: 8px; border-left: 4px solid var(--s); font-size: 0.85rem; }
+        .quiz-box { background: #0f172a; padding: 25px; border-radius: 20px; border: 2px dashed var(--p); margin-top: 30px; }
         .opt { width: 100%; padding: 15px; margin: 8px 0; background: #1f2937; color: white; border: 1px solid var(--border); border-radius: 12px; cursor: pointer; text-align: left; transition: 0.2s; }
         .opt:hover { border-color: var(--s); background: #232d3f; }
-        
-        .welcome-screen { text-align: center; margin-top: 100px; }
         .hidden { display: none; }
     </style>
 </head>
 <body>
 
-    <div class="sidebar">
-        <h2>📚 Tense Arşivi</h2>
-        <div id="topic-list">
-            </div>
+<div class="sidebar">
+    <h2>⏳ 12 Tenses Master</h2>
+    <div id="menu"></div>
+</div>
+
+<div class="content">
+    <div id="empty" style="text-align:center; margin-top:150px;">
+        <h1 style="font-size: 3rem;">📖 Akademiye Başla</h1>
+        <p style="color:#94a3b8">Soldan bir zaman dilimi seçerek B2 seviyesine yolculuğa başla.</p>
     </div>
 
-    <div class="content" id="lesson-content">
-        <div class="welcome-screen" id="welcome">
-            <h1 style="font-size: 3rem;">📖 Akademiye Hoş Geldin</h1>
-            <p style="color: #94a3b8; font-size: 1.2rem;">Lütfen çalışmak istediğin zaman dilimini sol menüden seç.</p>
+    <div id="course-area" class="hidden">
+        <div class="lesson-card">
+            <h1 id="c-title" style="color: var(--s); margin-top:0;"></h1>
+            <p id="c-desc" style="line-height:1.7; color:#cbd5e1;"></p>
+            <h3>Kritik Kelimeler 🔑</h3>
+            <div id="c-vocab" class="vocab-grid"></div>
         </div>
 
-        <div id="lesson-data" class="hidden">
-            <div class="lesson-header">
-                <h1 id="title" style="color: var(--s); margin-top: 0;"></h1>
-                <p id="desc" style="line-height: 1.6; font-size: 1.1rem; color: #cbd5e1;"></p>
-                
-                <h3>Önemli Kelimeler 🔑</h3>
-                <div class="vocab-box" id="vocab"></div>
-            </div>
-
-            <div class="quiz-container">
-                <h2 style="color: var(--p);">Konu Pekiştirme Testi</h2>
-                <div id="quiz-area">
-                    <p id="q-text" style="font-weight: 600; font-size: 1.2rem;"></p>
-                    <div id="opt-area"></div>
-                </div>
+        <div class="quiz-box">
+            <h2 style="color:var(--p)">Konu Testi (5/5)</h2>
+            <div id="quiz-content">
+                <p id="q-text" style="font-size:1.1rem; font-weight:600;"></p>
+                <div id="options"></div>
             </div>
         </div>
     </div>
+</div>
 
 <script>
-    const database = {
-        "Simple Present Tense": {
-            desc: "Genel doğrular, alışkanlıklar ve rutinler için kullanılır. He/She/It öznelerinde fiile -s takısı gelir.",
-            vocab: ["Every day", "Usually", "Always", "Hardly ever"],
-            quiz: [
-                {q: "She ___ to the market every Friday.", a: ["go", "goes", "going"], c: 1},
-                {q: "Water ___ at 100 degrees.", a: ["boils", "boil", "is boiling"], c: 0},
-                {q: "___ they play football?", a: ["Does", "Do", "Are"], c: 1},
-                {q: "I ___ like spicy food.", a: ["doesn't", "don't", "am not"], c: 1},
-                {q: "Cats ___ milk.", a: ["likes", "like", "liking"], c: 1}
-            ]
-        },
-        "Simple Past Tense": {
-            desc: "Geçmişte tamamlanmış eylemler. Fiilin 2. hali (V2) kullanılır.",
-            vocab: ["Yesterday", "Two days ago", "In 1995", "Last night"],
-            quiz: [
-                {q: "I ___ a movie yesterday.", a: ["saw", "see", "seen"], c: 0},
-                {q: "Where ___ you go last night?", a: ["did", "do", "were"], c: 0},
-                {q: "They ___ born in Germany.", a: ["was", "were", "did"], c: 1},
-                {q: "She ___ not finish her work.", a: ["did", "was", "does"], c: 0},
-                {q: "We ___ to London last year.", a: ["go", "went", "gone"], c: 1}
-            ]
-        },
-        "Present Perfect Tense": {
-            desc: "Belirsiz bir zamanda yapılmış veya etkisi süren eylemler. Have/Has + V3 kullanılır.",
-            vocab: ["Already", "Yet", "Just", "Ever/Never"],
-            quiz: [
-                {q: "I ___ my homework yet.", a: ["haven't finished", "didn't finish", "don't finish"], c: 0},
-                {q: "___ you ever eaten sushi?", a: ["Did", "Have", "Are"], c: 1},
-                {q: "She ___ lived here for 10 years.", a: ["is", "did", "has"], c: 2},
-                {q: "We ___ that movie twice.", a: ["see", "saw", "have seen"], c: 2},
-                {q: "He ___ just arrived.", a: ["has", "is", "did"], c: 0}
-            ]
-        }
-        // Diğer 12 zamanı buraya aynı formatta ekleyebilirsin...
+const tensesData = {
+    "Simple Present Tense": {
+        desc: "Rutinler, genel doğrular ve alışkanlıklar. He/She/It fiile -s alır.",
+        vocab: ["Every day", "Usually", "Always", "Often"],
+        questions: [
+            {q: "He ___ (play) tennis.", a: ["play", "plays", "playing"], c: 1},
+            {q: "Water ___ (freeze) at 0°C.", a: ["freeze", "freezes", "is freezing"], c: 1},
+            {q: "___ you smoke?", a: ["Do", "Does", "Are"], c: 0},
+            {q: "She ___ (not/go) out.", a: ["don't", "doesn't", "isn't"], c: 1},
+            {q: "Birds ___ (fly) south.", a: ["fly", "flies", "flying"], c: 0}
+        ]
+    },
+    "Present Continuous Tense": {
+        desc: "Şu an yapılan işler. am/is/are + V-ing.",
+        vocab: ["Now", "Right now", "Listen!", "Look!"],
+        questions: [
+            {q: "I ___ (work) now.", a: ["work", "am working", "working"], c: 1},
+            {q: "Listen! She ___ (sing).", a: ["sings", "is singing", "sing"], c: 1},
+            {q: "They ___ (not/play).", a: ["aren't", "don't", "isn't"], c: 0},
+            {q: "What ___ you (doing)?", a: ["is", "are", "do"], c: 1},
+            {q: "It ___ (rain) today.", a: ["rains", "is raining", "rain"], c: 1}
+        ]
+    },
+    "Simple Past Tense": {
+        desc: "Geçmişte bitmiş olaylar. V2 kullanılır.",
+        vocab: ["Yesterday", "Ago", "Last week", "In 1990"],
+        questions: [
+            {q: "I ___ (see) him yesterday.", a: ["saw", "see", "seen"], c: 0},
+            {q: "We ___ (not/go) there.", a: ["didn't go", "weren't go", "don't go"], c: 0},
+            {q: "___ they arrive late?", a: ["Did", "Were", "Do"], c: 0},
+            {q: "She ___ (be) tired.", a: ["was", "were", "did"], c: 0},
+            {q: "I ___ (buy) a car.", a: ["buy", "bought", "buys"], c: 1}
+        ]
+    },
+    "Past Continuous Tense": {
+        desc: "Geçmişte belli bir anda devam eden eylemler. was/were + V-ing.",
+        vocab: ["While", "When", "At that time"],
+        questions: [
+            {q: "I ___ (sleep) when you called.", a: ["slept", "was sleeping", "am sleeping"], c: 1},
+            {q: "What ___ they (doing)?", a: ["were", "did", "was"], c: 0},
+            {q: "It ___ (rain) all night.", a: ["was raining", "rained", "rains"], c: 0},
+            {q: "We ___ (not/watching) TV.", a: ["weren't", "didn't", "wasn't"], c: 0},
+            {q: "She ___ (cooking) at 8 PM.", a: ["was", "did", "were"], c: 0}
+        ]
+    },
+    "Simple Future Tense": {
+        desc: "Gelecek tahminleri ve ani kararlar. Will + V1.",
+        vocab: ["Tomorrow", "Next year", "Soon", "Someday"],
+        questions: [
+            {q: "I ___ (call) you later.", a: ["will call", "call", "calling"], c: 0},
+            {q: "It ___ (not/rain) today.", a: ["won't", "don't", "isn't"], c: 0},
+            {q: "___ you help me?", a: ["Will", "Do", "Are"], c: 0},
+            {q: "They ___ (arrive) soon.", a: ["will arrive", "arrives", "arrived"], c: 0},
+            {q: "I think he ___ (win).", a: ["will win", "wins", "win"], c: 0}
+        ]
+    },
+    "Future Continuous Tense": {
+        desc: "Gelecekte belirli bir anda devam ediyor olacak eylemler. will be + V-ing.",
+        vocab: ["This time tomorrow", "At 10 PM next week"],
+        questions: [
+            {q: "This time tomorrow, I ___ (fly).", a: ["will fly", "will be flying", "fly"], c: 1},
+            {q: "They ___ (be/working) all day.", a: ["will", "will be", "are"], c: 1},
+            {q: "Don't call me, I ___ (be/driving).", a: ["will", "will be", "am"], c: 1},
+            {q: "Will you ___ (be/using) it?", a: ["be", "is", "do"], c: 0},
+            {q: "At 9, she ___ (be/sleeping).", a: ["will be", "will", "is"], c: 0}
+        ]
+    },
+    "Present Perfect Tense": {
+        desc: "Zamanı belirsiz geçmiş eylemler veya etkisi süren durumlar. have/has + V3.",
+        vocab: ["Ever", "Never", "Just", "Already", "Yet"],
+        questions: [
+            {q: "I ___ (lost) my keys.", a: ["lost", "have lost", "lose"], c: 1},
+            {q: "She ___ (not/see) him yet.", a: ["hasn't", "didn't", "doesn't"], c: 0},
+            {q: "___ you ever eaten sushi?", a: ["Did", "Have", "Are"], c: 1},
+            {q: "We ___ (be) to Paris.", a: ["were", "have been", "be"], c: 1},
+            {q: "He ___ just (arrived).", a: ["is", "has", "did"], c: 1}
+        ]
+    },
+    "Present Perfect Continuous": {
+        desc: "Geçmişte başlayıp hala devam eden süreçler. have/has been + V-ing.",
+        vocab: ["Since", "For", "All day"],
+        questions: [
+            {q: "I ___ (work) for 3 hours.", a: ["have been working", "worked", "am working"], c: 0},
+            {q: "How long ___ she (been/waiting)?", a: ["has", "is", "did"], c: 0},
+            {q: "It ___ (be/raining) all day.", a: ["has", "has been", "is"], c: 1},
+            {q: "We ___ (not/been/living) here long.", a: ["haven't", "don't", "didn't"], c: 0},
+            {q: "They ___ (be/playing) since 5.", a: ["have been", "are", "were"], c: 0}
+        ]
+    },
+    "Past Perfect Tense": {
+        desc: "Geçmişte iki olaydan daha önce olanı. had + V3.",
+        vocab: ["By the time", "Before", "After"],
+        questions: [
+            {q: "The train ___ (leave) before I arrived.", a: ["left", "had left", "has left"], c: 1},
+            {q: "I ___ (never/seen) her before.", a: ["had", "have", "did"], c: 0},
+            {q: "They ___ (finish) when he came.", a: ["finished", "had finished", "finish"], c: 1},
+            {q: "She ___ (not/called) me.", a: ["hadn't", "haven't", "didn't"], c: 0},
+            {q: "After he ___ (eat), he left.", a: ["had eaten", "eats", "ate"], c: 0}
+        ]
+    },
+    "Past Perfect Continuous": {
+        desc: "Geçmişteki bir andan öncesine kadar süregelen eylemler. had been + V-ing.",
+        vocab: ["For 2 hours (before then)", "All night"],
+        questions: [
+            {q: "He ___ (be/working) for 10 hours.", a: ["had been", "has been", "was"], c: 0},
+            {q: "I ___ (be/waiting) for an hour.", a: ["had been", "have been", "was"], c: 0},
+            {q: "They ___ (not/been/studying).", a: ["hadn't", "haven't", "weren't"], c: 0},
+            {q: "The ground was wet, it ___ (be/raining).", a: ["had been", "has been", "is"], c: 0},
+            {q: "Had you ___ (be/living) there long?", a: ["been", "be", "being"], c: 0}
+        ]
+    },
+    "Future Perfect Tense": {
+        desc: "Gelecekte belli bir zamana kadar bitmiş olacak işler. will have + V3.",
+        vocab: ["By then", "By 2030", "By next week"],
+        questions: [
+            {q: "By 2030, I ___ (finish) university.", a: ["will have finished", "will finish", "finish"], c: 0},
+            {q: "She ___ (have/left) by 8 PM.", a: ["will", "is", "has"], c: 0},
+            {q: "They ___ (not/have/done) it yet.", a: ["won't", "don't", "haven't"], c: 0},
+            {q: "Will you ___ (have/arrived)?", a: ["is", "have", "has"], c: 1},
+            {q: "By next year, he ___ (have/retired).", a: ["will", "is", "was"], c: 0}
+        ]
+    },
+    "Future Perfect Continuous": {
+        desc: "Gelecekteki bir ana kadar sürecek eylemin süresini belirtir. will have been + V-ing.",
+        vocab: ["By next year... for 5 years"],
+        questions: [
+            {q: "I ___ (be/working) here for 10 years by 2027.", a: ["will have been", "will be", "have been"], c: 0},
+            {q: "She ___ (be/teaching) for 2 hours.", a: ["will have been", "will be", "is"], c: 0},
+            {q: "How long will you ___ (be/living) here?", a: ["have been", "be", "being"], c: 0},
+            {q: "By 5 PM, they ___ (be/playing) all day.", a: ["will have been", "will be", "are"], c: 0},
+            {q: "It ___ (be/snowing) for days by then.", a: ["will have been", "will be", "is"], c: 0}
+        ]
+    }
+};
+
+const menu = document.getElementById('menu');
+Object.keys(tensesData).forEach(tense => {
+    const btn = document.createElement('div');
+    btn.className = 'topic-link';
+    btn.innerText = tense;
+    btn.onclick = () => {
+        document.querySelectorAll('.topic-link').forEach(el => el.classList.remove('active'));
+        btn.classList.add('active');
+        loadTense(tense);
     };
+    menu.appendChild(btn);
+});
 
-    // Menüyü oluştur
-    const list = document.getElementById('topic-list');
-    Object.keys(database).forEach(topic => {
-        const div = document.createElement('div');
-        div.className = 'topic-link';
-        div.innerText = topic;
-        div.onclick = () => loadLesson(topic, div);
-        list.appendChild(div);
-    });
+let curQ = 0, actT = "";
+function loadTense(n) {
+    actT = n; curQ = 0;
+    document.getElementById('empty').classList.add('hidden');
+    document.getElementById('course-area').classList.remove('hidden');
+    document.getElementById('c-title').innerText = n;
+    document.getElementById('c-desc').innerText = tensesData[n].desc;
+    const v = document.getElementById('c-vocab'); v.innerHTML = "";
+    tensesData[n].vocab.forEach(x => v.innerHTML += `<div class="v-item">${x}</div>`);
+    showQ();
+}
 
-    let currentQ = 0;
-    let activeTopic = "";
-
-    function loadLesson(topic, element) {
-        document.querySelectorAll('.topic-link').forEach(l => l.classList.remove('active'));
-        element.classList.add('active');
-        
-        document.getElementById('welcome').classList.add('hidden');
-        document.getElementById('lesson-data').classList.remove('hidden');
-        
-        activeTopic = topic;
-        const data = database[topic];
-        document.getElementById('title').innerText = topic;
-        document.getElementById('desc').innerText = data.desc;
-        
-        const vArea = document.getElementById('vocab');
-        vArea.innerHTML = "";
-        data.vocab.forEach(v => vArea.innerHTML += `<div class="v-item">${v}</div>`);
-        
-        currentQ = 0;
-        renderQuiz();
+function showQ() {
+    const qData = tensesData[actT].questions[curQ];
+    const qArea = document.getElementById('quiz-content');
+    if(!qData) {
+        qArea.innerHTML = `<h2 style="color:var(--s)">Tebrikler! ${actT} bitti.</h2>`;
+        return;
     }
+    document.getElementById('q-text').innerText = `${curQ+1}. ${qData.q}`;
+    const opts = document.getElementById('options'); opts.innerHTML = "";
+    qData.a.forEach((o, i) => opts.innerHTML += `<button class="opt" onclick="check(${i})">${o}</button>`);
+}
 
-    function renderQuiz() {
-        const qData = database[activeTopic].quiz[currentQ];
-        if(!qData) {
-            document.getElementById('quiz-area').innerHTML = `<h3 style="color:var(--s)">Tebrikler! ${activeTopic} konusunu tamamladın. ✅</h3>`;
-            return;
-        }
-        document.getElementById('q-text').innerText = `${currentQ + 1}. ${qData.q}`;
-        let html = "";
-        qData.a.forEach((opt, i) => {
-            html += `<button class="opt" onclick="checkAnswer(${i})">${opt}</button>`;
-        });
-        document.getElementById('opt-area').innerHTML = html;
-    }
+function check(i) {
+    if(i === tensesData[actT].questions[curQ].c) { curQ++; showQ(); }
+    else { alert("Yanlış! Tekrar dene. ❌"); }
+}
+</script>
+</body>
+</html><!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>Mastery Academy | 12 Zaman Tam Liste</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg: #0b0f1a; --card: #161e2d; --p: #6366f1; --s: #10b981; --border: #334155; }
+        body { background: var(--bg); color: white; font-family: 'Outfit', sans-serif; margin: 0; display: flex; height: 100vh; overflow: hidden; }
+        .sidebar { width: 320px; background: var(--card); border-right: 1px solid var(--border); overflow-y: auto; padding: 20px; flex-shrink: 0; }
+        .sidebar h2 { font-size: 1.3rem; color: var(--s); margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
+        .topic-link { padding: 14px; border-radius: 12px; cursor: pointer; margin-bottom: 8px; transition: 0.2s; font-size: 0.85rem; background: #1f2937; border: 1px solid transparent; }
+        .topic-link:hover { border-color: var(--p); transform: translateX(5px); }
+        .topic-link.active { background: var(--p); color: white; font-weight: 800; }
+        .content { flex: 1; overflow-y: auto; padding: 40px; background: #0b0f1a; }
+        .lesson-card { background: var(--card); padding: 35px; border-radius: 25px; border: 1px solid var(--border); }
+        .vocab-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin: 20px 0; }
+        .v-item { background: #1f2937; padding: 10px; border-radius: 8px; border-left: 4px solid var(--s); font-size: 0.85rem; }
+        .quiz-box { background: #0f172a; padding: 25px; border-radius: 20px; border: 2px dashed var(--p); margin-top: 30px; }
+        .opt { width: 100%; padding: 15px; margin: 8px 0; background: #1f2937; color: white; border: 1px solid var(--border); border-radius: 12px; cursor: pointer; text-align: left; transition: 0.2s; }
+        .opt:hover { border-color: var(--s); background: #232d3f; }
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
 
-    function checkAnswer(idx) {
-        if(idx === database[activeTopic].quiz[currentQ].c) {
-            currentQ++;
-            renderQuiz();
-        } else {
-            alert("Hatalı cevap, tekrar düşün! ❌");
-        }
+<div class="sidebar">
+    <h2>⏳ 12 Tenses Master</h2>
+    <div id="menu"></div>
+</div>
+
+<div class="content">
+    <div id="empty" style="text-align:center; margin-top:150px;">
+        <h1 style="font-size: 3rem;">📖 Akademiye Başla</h1>
+        <p style="color:#94a3b8">Soldan bir zaman dilimi seçerek B2 seviyesine yolculuğa başla.</p>
+    </div>
+
+    <div id="course-area" class="hidden">
+        <div class="lesson-card">
+            <h1 id="c-title" style="color: var(--s); margin-top:0;"></h1>
+            <p id="c-desc" style="line-height:1.7; color:#cbd5e1;"></p>
+            <h3>Kritik Kelimeler 🔑</h3>
+            <div id="c-vocab" class="vocab-grid"></div>
+        </div>
+
+        <div class="quiz-box">
+            <h2 style="color:var(--p)">Konu Testi (5/5)</h2>
+            <div id="quiz-content">
+                <p id="q-text" style="font-size:1.1rem; font-weight:600;"></p>
+                <div id="options"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+const tensesData = {
+    "Simple Present Tense": {
+        desc: "Rutinler, genel doğrular ve alışkanlıklar. He/She/It fiile -s alır.",
+        vocab: ["Every day", "Usually", "Always", "Often"],
+        questions: [
+            {q: "He ___ (play) tennis.", a: ["play", "plays", "playing"], c: 1},
+            {q: "Water ___ (freeze) at 0°C.", a: ["freeze", "freezes", "is freezing"], c: 1},
+            {q: "___ you smoke?", a: ["Do", "Does", "Are"], c: 0},
+            {q: "She ___ (not/go) out.", a: ["don't", "doesn't", "isn't"], c: 1},
+            {q: "Birds ___ (fly) south.", a: ["fly", "flies", "flying"], c: 0}
+        ]
+    },
+    "Present Continuous Tense": {
+        desc: "Şu an yapılan işler. am/is/are + V-ing.",
+        vocab: ["Now", "Right now", "Listen!", "Look!"],
+        questions: [
+            {q: "I ___ (work) now.", a: ["work", "am working", "working"], c: 1},
+            {q: "Listen! She ___ (sing).", a: ["sings", "is singing", "sing"], c: 1},
+            {q: "They ___ (not/play).", a: ["aren't", "don't", "isn't"], c: 0},
+            {q: "What ___ you (doing)?", a: ["is", "are", "do"], c: 1},
+            {q: "It ___ (rain) today.", a: ["rains", "is raining", "rain"], c: 1}
+        ]
+    },
+    "Simple Past Tense": {
+        desc: "Geçmişte bitmiş olaylar. V2 kullanılır.",
+        vocab: ["Yesterday", "Ago", "Last week", "In 1990"],
+        questions: [
+            {q: "I ___ (see) him yesterday.", a: ["saw", "see", "seen"], c: 0},
+            {q: "We ___ (not/go) there.", a: ["didn't go", "weren't go", "don't go"], c: 0},
+            {q: "___ they arrive late?", a: ["Did", "Were", "Do"], c: 0},
+            {q: "She ___ (be) tired.", a: ["was", "were", "did"], c: 0},
+            {q: "I ___ (buy) a car.", a: ["buy", "bought", "buys"], c: 1}
+        ]
+    },
+    "Past Continuous Tense": {
+        desc: "Geçmişte belli bir anda devam eden eylemler. was/were + V-ing.",
+        vocab: ["While", "When", "At that time"],
+        questions: [
+            {q: "I ___ (sleep) when you called.", a: ["slept", "was sleeping", "am sleeping"], c: 1},
+            {q: "What ___ they (doing)?", a: ["were", "did", "was"], c: 0},
+            {q: "It ___ (rain) all night.", a: ["was raining", "rained", "rains"], c: 0},
+            {q: "We ___ (not/watching) TV.", a: ["weren't", "didn't", "wasn't"], c: 0},
+            {q: "She ___ (cooking) at 8 PM.", a: ["was", "did", "were"], c: 0}
+        ]
+    },
+    "Simple Future Tense": {
+        desc: "Gelecek tahminleri ve ani kararlar. Will + V1.",
+        vocab: ["Tomorrow", "Next year", "Soon", "Someday"],
+        questions: [
+            {q: "I ___ (call) you later.", a: ["will call", "call", "calling"], c: 0},
+            {q: "It ___ (not/rain) today.", a: ["won't", "don't", "isn't"], c: 0},
+            {q: "___ you help me?", a: ["Will", "Do", "Are"], c: 0},
+            {q: "They ___ (arrive) soon.", a: ["will arrive", "arrives", "arrived"], c: 0},
+            {q: "I think he ___ (win).", a: ["will win", "wins", "win"], c: 0}
+        ]
+    },
+    "Future Continuous Tense": {
+        desc: "Gelecekte belirli bir anda devam ediyor olacak eylemler. will be + V-ing.",
+        vocab: ["This time tomorrow", "At 10 PM next week"],
+        questions: [
+            {q: "This time tomorrow, I ___ (fly).", a: ["will fly", "will be flying", "fly"], c: 1},
+            {q: "They ___ (be/working) all day.", a: ["will", "will be", "are"], c: 1},
+            {q: "Don't call me, I ___ (be/driving).", a: ["will", "will be", "am"], c: 1},
+            {q: "Will you ___ (be/using) it?", a: ["be", "is", "do"], c: 0},
+            {q: "At 9, she ___ (be/sleeping).", a: ["will be", "will", "is"], c: 0}
+        ]
+    },
+    "Present Perfect Tense": {
+        desc: "Zamanı belirsiz geçmiş eylemler veya etkisi süren durumlar. have/has + V3.",
+        vocab: ["Ever", "Never", "Just", "Already", "Yet"],
+        questions: [
+            {q: "I ___ (lost) my keys.", a: ["lost", "have lost", "lose"], c: 1},
+            {q: "She ___ (not/see) him yet.", a: ["hasn't", "didn't", "doesn't"], c: 0},
+            {q: "___ you ever eaten sushi?", a: ["Did", "Have", "Are"], c: 1},
+            {q: "We ___ (be) to Paris.", a: ["were", "have been", "be"], c: 1},
+            {q: "He ___ just (arrived).", a: ["is", "has", "did"], c: 1}
+        ]
+    },
+    "Present Perfect Continuous": {
+        desc: "Geçmişte başlayıp hala devam eden süreçler. have/has been + V-ing.",
+        vocab: ["Since", "For", "All day"],
+        questions: [
+            {q: "I ___ (work) for 3 hours.", a: ["have been working", "worked", "am working"], c: 0},
+            {q: "How long ___ she (been/waiting)?", a: ["has", "is", "did"], c: 0},
+            {q: "It ___ (be/raining) all day.", a: ["has", "has been", "is"], c: 1},
+            {q: "We ___ (not/been/living) here long.", a: ["haven't", "don't", "didn't"], c: 0},
+            {q: "They ___ (be/playing) since 5.", a: ["have been", "are", "were"], c: 0}
+        ]
+    },
+    "Past Perfect Tense": {
+        desc: "Geçmişte iki olaydan daha önce olanı. had + V3.",
+        vocab: ["By the time", "Before", "After"],
+        questions: [
+            {q: "The train ___ (leave) before I arrived.", a: ["left", "had left", "has left"], c: 1},
+            {q: "I ___ (never/seen) her before.", a: ["had", "have", "did"], c: 0},
+            {q: "They ___ (finish) when he came.", a: ["finished", "had finished", "finish"], c: 1},
+            {q: "She ___ (not/called) me.", a: ["hadn't", "haven't", "didn't"], c: 0},
+            {q: "After he ___ (eat), he left.", a: ["had eaten", "eats", "ate"], c: 0}
+        ]
+    },
+    "Past Perfect Continuous": {
+        desc: "Geçmişteki bir andan öncesine kadar süregelen eylemler. had been + V-ing.",
+        vocab: ["For 2 hours (before then)", "All night"],
+        questions: [
+            {q: "He ___ (be/working) for 10 hours.", a: ["had been", "has been", "was"], c: 0},
+            {q: "I ___ (be/waiting) for an hour.", a: ["had been", "have been", "was"], c: 0},
+            {q: "They ___ (not/been/studying).", a: ["hadn't", "haven't", "weren't"], c: 0},
+            {q: "The ground was wet, it ___ (be/raining).", a: ["had been", "has been", "is"], c: 0},
+            {q: "Had you ___ (be/living) there long?", a: ["been", "be", "being"], c: 0}
+        ]
+    },
+    "Future Perfect Tense": {
+        desc: "Gelecekte belli bir zamana kadar bitmiş olacak işler. will have + V3.",
+        vocab: ["By then", "By 2030", "By next week"],
+        questions: [
+            {q: "By 2030, I ___ (finish) university.", a: ["will have finished", "will finish", "finish"], c: 0},
+            {q: "She ___ (have/left) by 8 PM.", a: ["will", "is", "has"], c: 0},
+            {q: "They ___ (not/have/done) it yet.", a: ["won't", "don't", "haven't"], c: 0},
+            {q: "Will you ___ (have/arrived)?", a: ["is", "have", "has"], c: 1},
+            {q: "By next year, he ___ (have/retired).", a: ["will", "is", "was"], c: 0}
+        ]
+    },
+    "Future Perfect Continuous": {
+        desc: "Gelecekteki bir ana kadar sürecek eylemin süresini belirtir. will have been + V-ing.",
+        vocab: ["By next year... for 5 years"],
+        questions: [
+            {q: "I ___ (be/working) here for 10 years by 2027.", a: ["will have been", "will be", "have been"], c: 0},
+            {q: "She ___ (be/teaching) for 2 hours.", a: ["will have been", "will be", "is"], c: 0},
+            {q: "How long will you ___ (be/living) here?", a: ["have been", "be", "being"], c: 0},
+            {q: "By 5 PM, they ___ (be/playing) all day.", a: ["will have been", "will be", "are"], c: 0},
+            {q: "It ___ (be/snowing) for days by then.", a: ["will have been", "will be", "is"], c: 0}
+        ]
     }
+};
+
+const menu = document.getElementById('menu');
+Object.keys(tensesData).forEach(tense => {
+    const btn = document.createElement('div');
+    btn.className = 'topic-link';
+    btn.innerText = tense;
+    btn.onclick = () => {
+        document.querySelectorAll('.topic-link').forEach(el => el.classList.remove('active'));
+        btn.classList.add('active');
+        loadTense(tense);
+    };
+    menu.appendChild(btn);
+});
+
+let curQ = 0, actT = "";
+function loadTense(n) {
+    actT = n; curQ = 0;
+    document.getElementById('empty').classList.add('hidden');
+    document.getElementById('course-area').classList.remove('hidden');
+    document.getElementById('c-title').innerText = n;
+    document.getElementById('c-desc').innerText = tensesData[n].desc;
+    const v = document.getElementById('c-vocab'); v.innerHTML = "";
+    tensesData[n].vocab.forEach(x => v.innerHTML += `<div class="v-item">${x}</div>`);
+    showQ();
+}
+
+function showQ() {
+    const qData = tensesData[actT].questions[curQ];
+    const qArea = document.getElementById('quiz-content');
+    if(!qData) {
+        qArea.innerHTML = `<h2 style="color:var(--s)">Tebrikler! ${actT} bitti.</h2>`;
+        return;
+    }
+    document.getElementById('q-text').innerText = `${curQ+1}. ${qData.q}`;
+    const opts = document.getElementById('options'); opts.innerHTML = "";
+    qData.a.forEach((o, i) => opts.innerHTML += `<button class="opt" onclick="check(${i})">${o}</button>`);
+}
+
+function check(i) {
+    if(i === tensesData[actT].questions[curQ].c) { curQ++; showQ(); }
+    else { alert("Yanlış! Tekrar dene. ❌"); }
+}
 </script>
 </body>
 </html>
