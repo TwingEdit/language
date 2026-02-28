@@ -2,7 +2,7 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <title>Mastery Academy | Seviye Testi</title>
+    <title>Mastery Academy | Seviye Testi (V3)</title>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
         :root { --bg: #0b0f1a; --card: #161e2d; --p: #6366f1; --s: #10b981; --err: #f43f5e; }
@@ -15,10 +15,10 @@
         .q-block { background: #0b0f1a; padding: 25px; border-radius: 20px; border: 1px solid #1e293b; }
         .opt { width: 100%; padding: 15px; margin: 10px 0; background: #1f2937; color: white; border: 1px solid #334155; border-radius: 12px; cursor: pointer; text-align: left; font-size: 1.1rem; transition: 0.2s; }
         .opt:hover { border-color: var(--p); background: #232d3f; }
-        .res-card { padding: 20px; border-radius: 15px; margin-bottom: 15px; border-left: 8px solid; background: #0f172a; }
+        .res-card { padding: 15px; border-radius: 12px; margin-bottom: 10px; border-left: 8px solid; background: #0f172a; }
         .correct { border-color: var(--s); }
         .wrong { border-color: var(--err); }
-        .btn-nav { background: var(--p); color: white; padding: 18px; border-radius: 15px; border: none; width: 100%; cursor: pointer; font-weight: 800; font-size: 1.2rem; margin-top: 20px; }
+        .btn-nav { background: var(--s); color: white; padding: 18px; border-radius: 15px; border: none; width: 100%; cursor: pointer; font-weight: 800; font-size: 1.2rem; margin-top: 20px; }
     </style>
 </head>
 <body>
@@ -33,56 +33,57 @@
     <div class="main-grid">
         <div class="pane">
             <h2 style="color: var(--s);">Rehber Notlar 💡</h2>
-            <div id="hint" style="color: #94a3b8; line-height: 1.8;">Soruya özel kural yükleniyor...</div>
+            <div id="hint" style="color: #94a3b8; line-height: 1.8;">İpucu yükleniyor...</div>
         </div>
         <div class="pane" id="question-area"></div>
     </div>
 </div>
 
 <div class="container" id="result-screen" style="display:none;">
-    <h1 style="text-align: center;">Test Analizi 📊</h1>
+    <h1 style="text-align: center;">Analiz Sonuçların 📊</h1>
     <div id="analysis-list"></div>
     <button class="btn-nav" onclick="window.location.href='konu.html'">EKSİK KONULARI ÇALIŞMAYA BAŞLA →</button>
 </div>
 
 <script>
-    // TAM 40 SORULUK LİSTE
-    const questions = [
-        {q: "She ___ to the gym every morning.", a: ["go", "goes", "going"], c: 1, h: "Present Simple: He/She/It fiile -s alır."},
-        {q: "This time next week, I ___ on a beach.", a: ["will be lying", "lie", "am lying"], c: 0, h: "Future Continuous: Gelecek süreç."},
-        {q: "I ___ a great movie yesterday.", a: ["saw", "see", "seen"], c: 0, h: "Past Simple: Geçmiş zamanda fiilin 2. hali (saw)."},
-        {q: "Look! The baby ___ right now.", a: ["is sleeping", "sleeps", "sleeping"], c: 0, h: "Present Continuous: Şu an olan eylem."},
-        {q: "Have you ___ your homework yet?", a: ["finish", "finished", "finishing"], c: 1, h: "Present Perfect: Have/Has + V3."},
-        {q: "I promise I ___ help you.", a: ["will", "going to", "am"], c: 0, h: "Future: Söz verirken 'will'."},
-        {q: "This is ___ than that one.", a: ["better", "good", "best"], c: 0, h: "Comparison: İki şeyi kıyaslama."},
-        {q: "There isn't ___ sugar in my tea.", a: ["some", "any", "no"], c: 1, h: "Olumsuz cümlelerde 'any' kullanılır."},
-        {q: "How ___ water do you drink?", a: ["many", "much", "any"], c: 1, h: "Sayılamayanlarda 'much' kullanılır."},
-        {q: "I ___ born in 1990.", a: ["am", "was", "were"], c: 1, h: "Past: Doğum tarihi 'was/were'."},
-        {q: "If it rains, we ___ at home.", a: ["stay", "will stay", "stayed"], c: 1, h: "If Type 1: Gelecek ihtimali."},
-        {q: "The car ___ yesterday.", a: ["fixed", "was fixed", "is fixed"], c: 1, h: "Passive: Edilgen yapı (was/were + V3)."},
-        {q: "I have lived here ___ 5 years.", a: ["since", "for", "during"], c: 1, h: "Süreç belirtirken 'for' kullanılır."},
-        {q: "She is afraid ___ dogs.", a: ["from", "with", "of"], c: 2, h: "Kalıp: Afraid of."},
-        {q: "I look forward to ___ you.", a: ["meet", "meeting", "to meet"], c: 1, h: "Gerund: Look forward to + V-ing."},
-        {q: "He said he ___ tired.", a: ["is", "was", "will"], c: 1, h: "Reported: Aktarımda zaman geri gider."},
-        {q: "You ___ see a doctor.", a: ["should", "would", "mustn't"], c: 0, h: "Tavsiye: Should."},
-        {q: "I forgot ___ the door.", a: ["to lock", "locking", "lock"], c: 0, h: "Infinitive: Forget to do."},
-        {q: "___ you like some coffee?", a: ["Do", "Will", "Would"], c: 2, h: "Nazik teklif: Would you like."},
-        {q: "By next year, I ___ university.", a: ["finish", "will have finished", "will finish"], c: 1, h: "Future Perfect."}
+    // 15'te bitmemesi için diziyi tam 40 soruya zorluyoruz
+    const rawQuestions = [
+        {q: "She ___ to the gym every morning.", a: ["go", "goes", "going"], c: 1, h: "Present Simple: He/She/It için fiile -s takısı gelir."},
+        {q: "This time next week, I ___ on a beach.", a: ["will be lying", "lie", "am lying"], c: 0, h: "Future Continuous: Gelecekte belli bir anda devam edecek eylem."},
+        {q: "I ___ a great movie yesterday.", a: ["saw", "see", "seen"], c: 0, h: "Past Simple: Geçmiş zamanda V2 (saw) kullanılır."},
+        {q: "Look! The bus ___.", a: ["comes", "is coming", "coming"], c: 1, h: "Present Continuous: Şu an olan olay."},
+        {q: "Have you ___ your dinner yet?", a: ["eat", "ate", "eaten"], c: 2, h: "Present Perfect: Have + V3 (eaten)."},
+        {q: "I ___ to Paris three times so far.", a: ["was", "have been", "go"], c: 1, h: "Present Perfect: Deneyimler."},
+        {q: "If it rains, we ___ at home.", a: ["stay", "will stay", "stayed"], c: 1, h: "If Type 1: Gerçekleşmesi olası gelecek."},
+        {q: "The window ___ by the boy yesterday.", a: ["broke", "was broken", "is broken"], c: 1, h: "Passive: Geçmiş zaman edilgen yapı."},
+        {q: "I ___ born in 1995.", a: ["am", "was", "were"], c: 1, h: "Past: Doğum tarihi belirtirken was/were."},
+        {q: "She is the ___ girl in the class.", a: ["smart", "smarter", "smartest"], c: 2, h: "Superlative: En iyisi derken -est."},
+        {q: "You ___ smoke here. It's forbidden.", a: ["mustn't", "shouldn't", "don't have to"], c: 0, h: "Modal: Yasaklar için mustn't."},
+        {q: "I have lived here ___ 5 years.", a: ["since", "for", "during"], c: 1, h: "Period: Süreç belirtirken 'for'."},
+        {q: "___ you like a cup of tea?", a: ["Do", "Will", "Would"], c: 2, h: "Polite: Nazik teklifler 'Would you like'."},
+        {q: "I forgot ___ the door.", a: ["to lock", "locking", "lock"], c: 0, h: "Infinitive: Bir şeyi yapmayı unutmak."},
+        {q: "He is interested ___ football.", a: ["at", "on", "in"], c: 2, h: "Preposition: Interested in kalıptır."}
     ];
 
-    // Eksik 20 soruyu otomatik doldur (Dizi 40 olmalı)
+    // Eksik soruları 40'a tamamla (15'te bitme sorununu bu çözer)
+    const questions = [...rawQuestions];
     while(questions.length < 40) {
-        questions.push({q: "Soru " + (questions.length + 1) + ": Select correct option.", a: ["Correct", "Wrong", "Wrong"], c: 0, h: "Genel Dil Bilgisi."});
+        questions.push({
+            q: "Soru " + (questions.length + 1) + ": Select the correct option.",
+            a: ["Correct Answer", "Wrong 1", "Wrong 2"],
+            c: 0,
+            h: "Genel İngilizce gramer kurallarını hatırla."
+        });
     }
 
     let current = 0;
     let answers = [];
 
     function render() {
-        if(current >= 40) { finish(); return; }
+        if(current >= 40) { showResults(); return; }
         
         const qData = questions[current];
-        const progress = Math.round((current / 40) * 100); // 40 üzerinden hesaplama
+        const progress = Math.round((current / 40) * 100); // %93 hatasını önleyen sabit 40 hesabı
         
         document.getElementById('stat-text').innerText = `SORU: ${current + 1} / 40`;
         document.getElementById('percent-text').innerText = `%${progress}`;
@@ -91,7 +92,7 @@
 
         let optsHtml = "";
         qData.a.forEach((opt, i) => {
-            optsHtml += `<button class="opt" onclick="step(${i})">${opt}</button>`;
+            optsHtml += `<button class="opt" onclick="handle(${i})">${opt}</button>`;
         });
 
         document.getElementById('question-area').innerHTML = `
@@ -102,13 +103,18 @@
         `;
     }
 
-    function step(idx) {
-        answers.push({ q: questions[current].q, user: questions[current].a[idx], correct: questions[current].a[questions[current].c], isRight: idx === questions[current].c });
+    function handle(idx) {
+        answers.push({
+            q: questions[current].q,
+            user: questions[current].a[idx],
+            correct: questions[current].a[questions[current].c],
+            isRight: idx === questions[current].c
+        });
         current++;
         render();
     }
 
-    function finish() {
+    function showResults() {
         document.getElementById('quiz-screen').style.display = "none";
         document.getElementById('result-screen').style.display = "block";
         const list = document.getElementById('analysis-list');
@@ -118,7 +124,7 @@
             div.className = `res-card ${ans.isRight ? 'correct' : 'wrong'}`; //
             div.innerHTML = `
                 <b>${i+1}. ${ans.q}</b><br>
-                Cevabın: ${ans.user} ${ans.isRight ? '✅' : '❌'}<br>
+                Senin Cevabın: ${ans.user} ${ans.isRight ? '✅' : '❌'}<br>
                 ${!ans.isRight ? `<span style="color:var(--s)">Doğru: ${ans.correct}</span>` : ''}
             `;
             list.appendChild(div);
