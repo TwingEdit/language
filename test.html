@@ -2,74 +2,165 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <title>Mastery Academy | 40 Soruluk Test</title>
+    <title>Mastery Academy | 40 Soruluk Seviye Testi</title>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
         :root { --bg: #0b0f1a; --card: #161e2d; --p: #6366f1; --s: #10b981; --err: #f43f5e; }
-        body { background: var(--bg); color: white; font-family: 'Outfit', sans-serif; padding: 20px; }
-        .progress-wrapper { width: 100%; height: 12px; background: #1f2937; border-radius: 10px; margin: 20px 0; overflow: hidden; }
-        #bar { height: 100%; width: 0%; background: var(--s); transition: 0.3s; }
-        .q-card { background: var(--card); padding: 30px; border-radius: 20px; max-width: 800px; margin: auto; border: 1px solid #334155; }
-        .opt { width: 100%; padding: 15px; margin: 10px 0; background: #1f2937; color: white; border: 1px solid #444; border-radius: 10px; cursor: pointer; text-align: left; }
-        .res-item { padding: 15px; margin: 10px 0; border-radius: 10px; border-left: 5px solid; background: #1a2333; }
+        body { background: var(--bg); color: white; font-family: 'Outfit', sans-serif; margin: 0; padding: 20px; }
+        
+        /* Progress Bar */
+        .progress-container { max-width: 1000px; margin: 20px auto; }
+        .progress-wrapper { width: 100%; height: 12px; background: #1f2937; border-radius: 20px; overflow: hidden; border: 1px solid #334155; }
+        #bar-fill { height: 100%; width: 0%; background: linear-gradient(90deg, var(--p), var(--s)); transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .q-counter { display: flex; justify-content: space-between; font-weight: 800; color: var(--p); margin-bottom: 8px; font-size: 0.9rem; letter-spacing: 1px; }
+
+        .workspace { display: grid; grid-template-columns: 1fr 1.5fr; gap: 25px; max-width: 1400px; margin: auto; height: 85vh; }
+        .pane { background: var(--card); padding: 30px; border-radius: 25px; border: 1px solid #334155; overflow-y: auto; }
+        
+        /* Soru Kartı */
+        .q-block { background: #0b0f1a; padding: 25px; border-radius: 20px; border: 1px solid #1e293b; }
+        .opt-btn { width: 100%; padding: 15px; margin: 8px 0; background: #1f2937; border: 1px solid #334155; color: #cbd5e1; border-radius: 12px; cursor: pointer; text-align: left; font-size: 1rem; transition: 0.2s; }
+        .opt-btn:hover { background: #2d3748; border-color: var(--p); color: white; }
+        
+        /* Analiz Sonuçları */
+        .result-card { padding: 15px; border-radius: 12px; margin-bottom: 12px; border-left: 6px solid; background: #1a2333; }
+        .res-correct { border-color: var(--s); }
+        .res-wrong { border-color: var(--err); }
+        
+        .hint-box { background: rgba(99, 102, 241, 0.1); border: 1px solid var(--p); padding: 20px; border-radius: 15px; color: #a5b4fc; }
+        .btn-main { background: var(--p); color: white; padding: 15px 40px; border-radius: 15px; border: none; font-size: 1.1rem; cursor: pointer; font-weight: 800; width: 100%; margin-top: 20px; }
     </style>
 </head>
 <body>
-    <div id="quiz-container">
-        <div class="progress-wrapper"><div id="bar"></div></div>
-        <h3 id="counter">Soru: 1 / 40</h3>
-        <div id="q-area" class="q-card"></div>
-    </div>
-    <div id="result-area" style="display:none; max-width:800px; margin:auto;">
-        <h2>Sonuçlar 📊</h2>
-        <div id="analysis"></div>
-        <button onclick="location.reload()" class="opt" style="background:var(--p); text-align:center;">Testi Tekrarla</button>
+
+    <div class="progress-container">
+        <div class="q-counter">
+            <span id="q-label">ANALİZ BAŞLIYOR...</span>
+            <span id="q-stat">0 / 40</span>
+        </div>
+        <div class="progress-wrapper"><div id="bar-fill"></div></div>
     </div>
 
-    <script>
-        const questions = [
-            {q: "She ___ to the gym every morning.", a: ["go", "goes", "going"], c: 1}, //
-            {q: "We ___ to Paris last summer.", a: ["go", "went", "gone"], c: 1},
-            // ... Buraya 38 soru daha eklendi (Diziyi 40'a tamamla)
-        ];
-        // Test amaçlı 40'a tamamlıyoruz:
-        while(questions.length < 40) questions.push({q: "Soru " + (questions.length+1), a: ["A","B","C"], c: 0});
+    <div class="workspace" id="main-ws">
+        <div class="pane">
+            <button onclick="window.location.href='index.html'" style="background:none; color:#64748b; border:1px solid #334155; padding:8px 15px; border-radius:8px; cursor:pointer; margin-bottom:20px;">← Çıkış Yap</button>
+            <h2>Rehber Notlar 💡</h2>
+            <div id="hint-content" class="hint-box">Soruyu gördüğünde burada sana özel bir hatırlatıcı belirecek.</div>
+        </div>
 
-        let current = 0;
-        let answers = [];
+        <div class="pane" id="quiz-pane">
+            <div id="quiz-content"></div>
+        </div>
+    </div>
 
-        function render() {
-            const q = questions[current];
-            document.getElementById('counter').innerText = `Soru: ${current + 1} / 40`;
-            document.getElementById('bar').style.width = (current / 40 * 100) + "%";
-            
-            let html = `<p style="font-size:1.4rem">${q.q}</p>`;
-            q.a.forEach((opt, i) => {
-                html += `<button class="opt" onclick="next(${i})">${opt}</button>`;
-            });
-            document.getElementById('q-area').innerHTML = html;
-        }
+<script>
+    const questions = [
+        // A2 Seviyesi
+        {q: "She ___ (play) tennis every Sunday.", a: ["play", "plays", "playing"], c: 1, h: "Present Simple: He/She/It öznelerinde fiile -s takısı gelir."},
+        {q: "Look! They ___ (run) in the garden.", a: ["are running", "run", "is running"], c: 0, h: "Present Continuous: Şu an olan olaylarda am/is/are + V-ing."},
+        {q: "We ___ (go) to Paris last summer.", a: ["go", "went", "gone"], c: 1, h: "Past Simple: Geçmiş zamanda fiilin 2. hali (went) kullanılır."},
+        {q: "___ you ever eaten sushi?", a: ["Do", "Did", "Have"], c: 2, h: "Present Perfect: Hayat tecrübelerinden bahsederken Have/Has + V3."},
+        {q: "I promise I ___ (help) you tomorrow.", a: ["help", "will help", "helping"], c: 1, h: "Future Simple: Söz verirken 'will' kullanılır."},
+        {q: "This car is ___ than that one.", a: ["expensive", "more expensive", "the most expensive"], c: 1, h: "Comparatives: Uzun sıfatlarda 'more' kullanılır."},
+        {q: "There isn't ___ milk in the fridge.", a: ["any", "some", "a"], c: 0, h: "Quantifiers: Olumsuz cümlelerde 'any' kullanılır."},
+        {q: "How ___ friends do you have?", a: ["much", "any", "many"], c: 2, h: "Quantifiers: Sayılabilen çoğul isimlerde 'many' kullanılır."},
+        {q: "While I ___ (cook), the phone rang.", a: ["am cooking", "was cooking", "cooked"], c: 1, h: "Past Continuous: Geçmişte devam eden bir eylem (was/were V-ing)."},
+        {q: "He is the ___ player in the team.", a: ["good", "better", "best"], c: 2, h: "Superlatives: En iyisi derken 'the best' kullanılır."},
 
-        function next(idx) {
-            answers.push({ q: questions[current].q, user: questions[current].a[idx], correct: questions[current].a[questions[current].c], isRight: idx === questions[current].c });
-            current++;
-            if(current < 40) render(); else showResults();
-        }
+        // B1 Seviyesi
+        {q: "You ___ smoke here. It's strictly forbidden.", a: ["mustn't", "shouldn't", "don't have to"], c: 0, h: "Modals: Kesin yasaklarda 'mustn't' kullanılır."},
+        {q: "If it ___ (rain) tomorrow, we will stay home.", a: ["rains", "will rain", "rained"], c: 0, h: "If Clause Type 1: If kısmında 'will' kullanılmaz, Present Simple gelir."},
+        {q: "The window ___ (break) by the wind yesterday.", a: ["broke", "was broken", "is broken"], c: 1, h: "Passive Voice: Geçmiş zaman edilgen yapı (was/were + V3)."},
+        {q: "I have lived here ___ 5 years.", a: ["since", "for", "during"], c: 1, h: "Present Perfect: Zaman süresi belirtirken 'for' kullanılır."},
+        {q: "She's interested ___ learning Japanese.", a: ["at", "on", "in"], c: 2, h: "Prepositions: 'Interested' her zaman 'in' ile kullanılır."},
+        {q: "I'm looking forward to ___ (see) you.", a: ["see", "seeing", "to see"], c: 1, h: "Gerund: 'Look forward to' kalıbından sonra fiil -ing alır."},
+        {q: "He asked me where ___ (live).", a: ["do I live", "I lived", "did I live"], c: 1, h: "Reported Speech: Soru cümlesi düz cümleye dönüşür ve zaman geri gider."},
+        {q: "You ___ see a doctor. You look very ill.", a: ["should", "would", "could"], c: 0, h: "Advice: Tavsiye verirken 'should' kullanılır."},
+        {q: "I forgot ___ the door.", a: ["locking", "to lock", "lock"], c: 1, h: "Infinitives: Bir şeyi yapmayı unutmak (to + V1)."},
+        {q: "___ you like a cup of tea?", a: ["Do", "Will", "Would"], c: 2, h: "Polite Offers: Nazik tekliflerde 'Would you like' kullanılır."},
 
-        function showResults() {
-            document.getElementById('quiz-container').style.display = "none";
-            document.getElementById('result-area').style.display = "block";
-            const ana = document.getElementById('analysis');
-            answers.forEach((ans, i) => {
-                ana.innerHTML += `
-                    <div class="res-item" style="border-color:${ans.isRight ? 'var(--s)' : 'var(--err)'}">
-                        <b>${i+1}. ${ans.q}</b><br>
-                        Senin: ${ans.user} ${ans.isRight ? '✅' : '❌'}<br>
-                        ${!ans.isRight ? '<span style="color:var(--s)">Doğru: ' + ans.correct + '</span>' : ''}
-                    </div>`;
-            });
-        }
+        // B2 Seviyesi ve Üstü
+        {q: "By the time we arrived, the film ___ (start).", a: ["started", "has started", "had started"], c: 2, h: "Past Perfect: Geçmişteki iki olaydan daha önce olanı (had + V3)."},
+        {q: "I wish I ___ (speak) English fluently now.", a: ["speak", "spoke", "had spoken"], c: 1, h: "Wish Clauses: Şu anki pişmanlıklarda fiilin 2. hali (V2)."},
+        {q: "I would have passed if I ___ (study) harder.", a: ["studied", "had studied", "would study"], c: 1, h: "If Clause Type 3: Geçmişteki hayali durum (had + V3)."},
+        {q: "It's high time you ___ (find) a job.", a: ["find", "found", "to find"], c: 1, h: "Structures: 'It's time' yapısından sonra V2 gelir."},
+        {q: "Hardly ___ I entered when the light went out.", a: ["I had", "had I", "did I"], c: 1, h: "Inversion: Cümle başında 'Hardly' varsa devrik yapı kullanılır."},
+        {q: "I'd rather ___ (stay) at home tonight.", a: ["stay", "to stay", "staying"], c: 0, h: "Preferences: 'Would rather'dan sonra fiil yalın gelir."},
+        {q: "He is used to ___ (work) long hours.", a: ["work", "working", "worked"], c: 1, h: "Gerund: 'Be used to' (alışkın olmak) yapısından sonra -ing gelir."},
+        {q: "The man ___ car was stolen called the police.", a: ["who", "which", "whose"], c: 2, h: "Relative Clauses: Sahiplik belirtirken 'whose' kullanılır."},
+        {q: "Despite ___ tired, he continued working.", a: ["he was", "being", "his"], c: 1, h: "Conjunctions: 'Despite'tan sonra isim ya da -ing gelir."},
+        {q: "I ___ (wait) for two hours before she arrived.", a: ["have been waiting", "had been waiting", "waited"], c: 1, h: "Past Perfect Continuous: Geçmişteki bir ana kadar süren eylem."},
+
+        // Karma / Detay (40'a tamamlama)
+        {q: "Neither my mother ___ my father is coming.", a: ["or", "nor", "and"], c: 1, h: "Correlatives: Neither ... nor (ne o, ne diğeri)."},
+        {q: "You had better ___ (not/tell) anyone.", a: ["not tell", "not to tell", "don't tell"], c: 0, h: "Modals: 'Had better'dan sonra yalın fiil gelir."},
+        {q: "The news ___ (be) better than I expected.", a: ["is", "are", "were"], c: 0, h: "Nouns: 'News' (haber) kelimesi her zaman tekildir."},
+        {q: "If only I ___ (not/eat) so much yesterday!", a: ["didn't eat", "haven't eaten", "hadn't eaten"], c: 2, h: "Wish Clause: Geçmişe dair pişmanlık (had + V3)."},
+        {q: "The police ___ (be) looking for the thief.", a: ["is", "are", "was"], c: 1, h: "Nouns: 'Police' kelimesi her zaman çoğul fiil alır."},
+        {q: "I enjoy ___ (listen) to podcasts.", a: ["to listen", "listening", "listen"], c: 1, h: "Gerund: 'Enjoy'dan sonra fiil -ing alır."},
+        {q: "She succeeded ___ passing the driving test.", a: ["at", "on", "in"], c: 2, h: "Prepositions: Succeed 'in' edatı ile kullanılır."},
+        {q: "___ you help me, I will fail.", a: ["If", "Unless", "As long as"], c: 1, h: "Conjunctions: Unless (olmazsa/medikçe) anlamı katar."},
+        {q: "The children were made ___ (clean) the room.", a: ["clean", "to clean", "cleaning"], c: 1, h: "Causatives: Passive 'make' yapısında 'to' kullanılır."},
+        {q: "I'll call you as soon as I ___ (get) home.", a: ["get", "will get", "got"], c: 0, h: "Time Clauses: As soon as gibi yapılardan sonra 'will' gelmez."}
+    ];
+
+    let current = 0;
+    let answers = [];
+
+    function render() {
+        if(current >= questions.length) { showResults(); return; }
+
+        const qData = questions[current];
+        document.getElementById('q-label').innerText = "SEVİYE BELİRLEME TESTİ";
+        document.getElementById('q-stat').innerText = `${current + 1} / 40`;
+        document.getElementById('bar-fill').style.width = (current / 40 * 100) + "%";
+        document.getElementById('hint-content').innerText = qData.h;
+
+        let opts = "";
+        qData.a.forEach((opt, i) => {
+            opts += `<button class="opt-btn" onclick="handle(${i})">${opt}</button>`;
+        });
+
+        document.getElementById('quiz-content').innerHTML = `
+            <div class="q-block">
+                <p style="font-size:1.3rem; line-height:1.5;"><b>Soru ${current + 1}:</b><br>${qData.q}</p>
+                ${opts}
+            </div>
+        `;
+    }
+
+    function handle(idx) {
+        answers.push({
+            q: questions[current].q,
+            user: questions[current].a[idx],
+            correct: questions[current].a[questions[current].c],
+            isRight: idx === questions[current].c
+        });
+        current++;
         render();
-    </script>
+    }
+
+    function showResults() {
+        document.getElementById('bar-fill').style.width = "100%";
+        document.getElementById('q-stat').innerText = "ANALİZ TAMAMLANDI";
+        const quizPane = document.getElementById('quiz-pane');
+        quizPane.innerHTML = "<h2>Detaylı Sonuç Analizi</h2>";
+
+        answers.forEach((ans, i) => {
+            const div = document.createElement('div');
+            div.className = `result-card ${ans.isRight ? 'res-correct' : 'res-wrong'}`;
+            div.innerHTML = `
+                <b>${i+1}. ${ans.q}</b><br>
+                Senin Cevabın: ${ans.user} ${ans.isRight ? '✅' : '❌'}<br>
+                ${!ans.isRight ? `<span style="color:var(--s)">Doğru Cevap: ${ans.correct}</span>` : ''}
+            `;
+            quizPane.appendChild(div);
+        });
+
+        quizPane.innerHTML += `<button class="btn-main" onclick="window.location.href='konu.html'">EKSİK KONULARI ÇALIŞMAYA GİT</button>`;
+    }
+
+    render();
+</script>
 </body>
 </html>
