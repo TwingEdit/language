@@ -2,29 +2,150 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <title>Mastery Academy | Konu Çalışma</title>
+    <title>Mastery Academy | Detaylı Konu Anlatımı</title>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
-        :root { --bg: #0b0f1a; --card: #1c1c3c; --p: #6366f1; }
-        body { background: var(--bg); color: white; font-family: 'Outfit', sans-serif; padding: 40px; }
-        .topic-box { background: var(--card); padding: 30px; border-radius: 20px; margin-bottom: 25px; border-left: 8px solid var(--p); }
-        h2 { color: #818cf8; margin-top: 0; }
-        code { background: #0b0f1a; padding: 2px 8px; border-radius: 5px; color: #10b981; }
+        :root { --bg: #0b0f1a; --card: #1c1c3c; --p: #6366f1; --s: #10b981; --err: #f43f5e; }
+        body { background: var(--bg); color: white; font-family: 'Outfit', sans-serif; padding: 40px; line-height: 1.6; }
+        .container { max-width: 900px; margin: auto; }
+        
+        .topic-box { background: var(--card); padding: 35px; border-radius: 25px; margin-bottom: 50px; border-left: 8px solid var(--p); box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+        h2 { color: #818cf8; font-size: 2rem; margin-top: 0; }
+        h3 { color: var(--s); margin-top: 25px; }
+        
+        code { background: #0b0f1a; padding: 3px 10px; border-radius: 6px; color: #ffcc00; font-family: monospace; }
+        .example-card { background: rgba(255,255,255,0.05); padding: 15px; border-radius: 12px; margin: 10px 0; border: 1px dashed #444; }
+        
+        /* Quiz Alanı */
+        .mini-quiz { background: #0b0f1a; padding: 25px; border-radius: 20px; margin-top: 30px; border: 1px solid var(--p); }
+        .q-text { font-weight: 600; font-size: 1.1rem; margin-bottom: 15px; display: block; }
+        .opt-btn { width: 100%; padding: 12px; margin: 8px 0; background: #1f2937; color: white; border: 1px solid #334155; border-radius: 10px; cursor: pointer; text-align: left; transition: 0.3s; }
+        .opt-btn:hover { border-color: var(--p); background: #2d3748; }
+        
+        .feedback { margin-top: 10px; font-weight: bold; display: none; }
+        .back-btn { background: var(--p); color: white; border: none; padding: 12px 25px; border-radius: 12px; cursor: pointer; font-weight: 800; margin-bottom: 30px; }
     </style>
 </head>
 <body>
-    <button onclick="window.location.href='index.html'" style="padding:10px; margin-bottom:20px; cursor:pointer;">← Geri</button>
-    <h1>📖 Konu Anlatımları</h1>
-    
-    <div class="topic-box">
-        <h2>Present Simple (Geniş Zaman)</h2>
-        <p>Bak kardeşim, her gün yaptığın işleri anlatırken fiili olduğu gibi bırakıyorsun. Ama özne "He, She, It" ise fiilin sonuna bir <code>-s</code> ekliyorsun. Bu kadar!</p>
-        <p><i>Örnek: I go to work. / She goes to work.</i></p>
+
+    <div class="container">
+        <button class="back-btn" onclick="window.location.href='index.html'">← Ana Menüye Dön</button>
+        <h1>🚀 İngilizce Zamanlar (Full Rehber)</h1>
+        <p style="opacity: 0.8; margin-bottom: 40px;">Her konunun sonunda seni bekleyen 5 soruluk mini testi çözmeden diğerine geçme!</p>
+
+        <div class="topic-box">
+            <h2>1. Present Simple (Geniş Zaman)</h2>
+            <p>Hayatın rutinlerini, her zaman yaptığın işleri (işe gitmek, diş fırçalamak) veya değişmeyen gerçekleri (suyun kaynaması) anlatır.</p>
+            <h3>Altın Kural:</h3>
+            <p>Özne <code>I, You, We, They</code> ise fiil çıplak kalır. Ama özne <code>He, She, It</code> ise fiilin sonuna <code>-s</code> takısı takılır.</p>
+            <div class="example-card">
+                <b>(+)</b> She <u>drinks</u> coffee. (O kahve içer.)<br>
+                <b>(-)</b> She <u>doesn't drink</u> coffee. (O kahve içmez.)<br>
+                <b>(?)</b> <u>Does</u> she <u>drink</u> coffee? (O kahve içer mi?)
+            </div>
+
+            <div class="mini-quiz">
+                <span class="q-text">1. My brother ___ (play) football on Saturdays.</span>
+                <button class="opt-btn" onclick="check(this, true)">plays</button>
+                <button class="opt-btn" onclick="check(this, false)">play</button>
+                <button class="opt-btn" onclick="check(this, false)">playing</button>
+            </div>
+            </div>
+
+        <div class="topic-box">
+            <h2>2. Present Continuous (Şimdiki Zaman)</h2>
+            <p>Şu an, tam şu saniyede yaptığın işler için kullanılır. Konuşma anında olan olaylar.</p>
+            <h3>Altın Kural:</h3>
+            <p><code>am / is / are</code> yardımcı fiillerinden birini seç ve fiilin sonuna mutlaka <code>-ing</code> takısını yapıştır.</p>
+            <div class="example-card">
+                <b>(+)</b> I <u>am writing</u> now. (Şu an yazıyorum.)<br>
+                <b>(-)</b> You <u>aren't listening</u>. (Dinlemiyorsun.)<br>
+                <b>(?)</b> <u>Is</u> it <u>raining</u>? (Yağmur mu yağıyor?)
+            </div>
+
+            <div class="mini-quiz">
+                <span class="q-text">2. Look! They ___ (dance) over there.</span>
+                <button class="opt-btn" onclick="check(this, false)">dance</button>
+                <button class="opt-btn" onclick="check(this, true)">are dancing</button>
+                <button class="opt-btn" onclick="check(this, false)">is dancing</button>
+            </div>
+        </div>
+
+        <div class="topic-box">
+            <h2>3. Past Simple (Geçmiş Zaman)</h2>
+            <p>Dün, geçen yıl veya 5 dakika önce bitti gitti. Zamanı belli olan geçmiş olaylar.</p>
+            <h3>Altın Kural:</h3>
+            <p>Olumlu cümlede fiilin 2. halini (V2) kullan. Düzenli ise <code>-ed</code> getir, düzensizse (go -> went gibi) ezberle. Olumsuzda ve soruda <code>did / didn't</code> gelince fiil eski haline (V1) döner!</p>
+            <div class="example-card">
+                <b>(+)</b> I <u>watched</u> a movie. (Film izledim.)<br>
+                <b>(-)</b> I <u>didn't watch</u> a movie. (Film izlemedim.)<br>
+                <b>(?)</b> <u>Did</u> you <u>watch</u>? (İzledin mi?)
+            </div>
+
+            <div class="mini-quiz">
+                <span class="q-text">3. We ___ (see) him at the mall yesterday.</span>
+                <button class="opt-btn" onclick="check(this, false)">seed</button>
+                <button class="opt-btn" onclick="check(this, false)">seen</button>
+                <button class="opt-btn" onclick="check(this, true)">saw</button>
+            </div>
+        </div>
+
+        <div class="topic-box">
+            <h2>4. Present Perfect (Yakın Geçmiş Zaman)</h2>
+            <p>En kafa karıştıran budur: Geçmişte oldu ama zamanı belli değil ya da etkisi hala sürüyor (Anahtarı kaybettim, hala yok!).</p>
+            <h3>Altın Kural:</h3>
+            <p><code>have / has</code> + fiilin 3. hali (V3). </p>
+            <div class="example-card">
+                <b>(+)</b> I <u>have cleaned</u> my room. (Odamı temizledim - tertemiz duruyor.)<br>
+                <b>(-)</b> He <u>hasn't called</u> me. (Beni aramadı.)
+            </div>
+
+            <div class="mini-quiz">
+                <span class="q-text">4. ___ you ever ___ (be) to London?</span>
+                <button class="opt-btn" onclick="check(this, false)">Did / be</button>
+                <button class="opt-btn" onclick="check(this, true)">Have / been</button>
+                <button class="opt-btn" onclick="check(this, false)">Has / been</button>
+            </div>
+        </div>
+
+        <div class="topic-box">
+            <h2>5. Future Simple (Gelecek Zaman)</h2>
+            <p>Gelecekle ilgili tahminler, sözler veya ani verilen kararlar.</p>
+            <h3>Altın Kural:</h3>
+            <p>Sadece <code>will</code> getir ve fiili yalın bırak. Planlı işlerde "going to" kullanılır ama genel gelecek "will"dir.</p>
+            <div class="example-card">
+                <b>(+)</b> I <u>will help</u> you. (Sana yardım edeceğim.)<br>
+                <b>(-)</b> It <u>won't rain</u> tomorrow. (Yarın yağmayacak.)
+            </div>
+
+            <div class="mini-quiz">
+                <span class="q-text">5. I think United ___ (win) the match.</span>
+                <button class="opt-btn" onclick="check(this, true)">will win</button>
+                <button class="opt-btn" onclick="check(this, false)">wins</button>
+                <button class="opt-btn" onclick="check(this, false)">going to win</button>
+            </div>
+        </div>
+
     </div>
 
-    <div class="topic-box">
-        <h2>Past Simple (Geçmiş Zaman)</h2>
-        <p>Dün yaptığın bir şeyi anlatırken fiilin 2. halini kullanırsın. Düzenli fiillere <code>-ed</code> takısı gelir, düzensizleri ezberlemek zorundasın.</p>
-    </div>
+    <script>
+        function check(btn, isCorrect) {
+            const parent = btn.parentElement;
+            const buttons = parent.querySelectorAll('.opt-btn');
+            
+            // Diğer butonları kilitle
+            buttons.forEach(b => b.disabled = true);
+            
+            if(isCorrect) {
+                btn.style.background = "var(--s)";
+                btn.style.borderColor = "var(--s)";
+                btn.innerText += " ✅ (Doğru!)";
+            } else {
+                btn.style.background = "var(--err)";
+                btn.style.borderColor = "var(--err)";
+                btn.innerText += " ❌ (Yanlış!)";
+            }
+        }
+    </script>
 </body>
 </html>
