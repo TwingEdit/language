@@ -12,11 +12,17 @@
         .progress-bar { width: 100%; height: 12px; background: #1f2937; border-radius: 10px; overflow: hidden; margin-bottom: 30px; border: 1px solid #334155; }
         #bar { height: 100%; width: 0%; background: linear-gradient(90deg, var(--p), var(--s)); transition: 0.5s; }
         .main-grid { display: grid; grid-template-columns: 1fr 1.5fr; gap: 25px; }
-        .pane { background: var(--card); padding: 35px; border-radius: 30px; border: 1px solid #334155; min-height: 480px; box-shadow: 0 10px 30px rgba(0,0,0,0.4); }
+        .pane { background: var(--card); padding: 35px; border-radius: 30px; border: 1px solid #334155; min-height: 400px; box-shadow: 0 10px 30px rgba(0,0,0,0.4); }
         .opt { width: 100%; padding: 18px; margin: 10px 0; background: #1f2937; color: white; border: 1px solid #334155; border-radius: 15px; cursor: pointer; text-align: left; font-size: 1.1rem; transition: 0.3s; font-family: 'Outfit'; }
         .opt:hover { border-color: var(--p); background: #232d3f; transform: translateX(8px); }
-        .res-card { padding: 15px; border-radius: 12px; margin-bottom: 10px; border-left: 8px solid; background: #0f172a; }
-        .btn-finish { background: var(--s); color: white; padding: 22px; border-radius: 20px; border: none; width: 100%; cursor: pointer; font-weight: 800; font-size: 1.3rem; margin-top: 20px; }
+        
+        /* Sonuç Ekranı Tasarımı */
+        .score-summary { display: flex; justify-content: center; gap: 20px; margin-bottom: 40px; }
+        .score-box { background: var(--card); padding: 25px; border-radius: 20px; border: 1px solid #334155; text-align: center; min-width: 150px; }
+        .score-num { font-size: 2.5rem; font-weight: 800; }
+        .res-card { padding: 20px; border-radius: 15px; margin-bottom: 12px; border-left: 8px solid; background: #1a2333; }
+        .btn-finish { background: var(--s); color: white; padding: 22px; border-radius: 20px; border: none; width: 100%; cursor: pointer; font-weight: 800; font-size: 1.3rem; margin-top: 20px; transition: 0.3s; }
+        .btn-finish:hover { transform: scale(1.02); filter: brightness(1.1); }
     </style>
 </head>
 <body>
@@ -34,43 +40,46 @@
 </div>
 
 <div id="result-screen" class="container" style="display:none">
-    <h1 style="text-align:center; font-size: 2.5rem;">Analiz Raporun 📊</h1>
+    <h1 style="text-align:center; font-size: 2.5rem; margin-bottom: 10px;">Analiz Raporun 📊</h1>
+    
+    <div class="score-summary">
+        <div class="score-box">
+            <div style="color: var(--s); font-size: 0.9rem; margin-bottom: 5px;">DOĞRU</div>
+            <div id="correct-total" class="score-num" style="color: var(--s);">0</div>
+        </div>
+        <div class="score-box">
+            <div style="color: var(--err); font-size: 0.9rem; margin-bottom: 5px;">YANLIŞ</div>
+            <div id="wrong-total" class="score-num" style="color: var(--err);">0</div>
+        </div>
+    </div>
+
     <div id="res-list"></div>
-    <button class="btn-finish" onclick="location.href='konu.html'">EKSİK KONULARI ÇALIŞMAYA BAŞLA →</button>
+    <button class="btn-finish" onclick="location.href='index.html'">ANA SAYFAYA DÖN →</button>
 </div>
 
 <script>
-    // 40 Soruluk Tam Liste - Her Tense için 5 Soru
     const questions = [
-        // Present Simple (1-5)
+        // Soruların tamamını buraya ekliyoruz (Senin listen + Tamamlama)
         {q: "She ___ to the gym every morning.", a: ["go", "goes", "going"], c: 1, h: "Simple Present: He/She/It fiili -s alır."},
         {q: "Water ___ at 100 degrees.", a: ["boil", "boils", "is boiling"], c: 1, h: "Bilimsel gerçekler Geniş Zaman ile söylenir."},
         {q: "___ you play the guitar?", a: ["Do", "Does", "Are"], c: 0, h: "You için soru kalıbı 'Do'dur."},
         {q: "He ___ like spicy food.", a: ["don't", "doesn't", "isn't"], c: 1, h: "Olumsuzda He/She/It için 'doesn't' gelir."},
         {q: "The train ___ at 10:00 every day.", a: ["leaves", "leave", "is leaving"], c: 0, h: "Zaman çizelgeleri Geniş Zaman'dır."},
-        
-        // Present Continuous (6-10)
         {q: "Look! The baby ___.", a: ["sleeps", "is sleeping", "sleep"], c: 1, h: "Şu an olan eylemler (is sleeping)."},
         {q: "I ___ a book these days.", a: ["read", "am reading", "reads"], c: 1, h: "Geçici süreçler Şimdiki Zaman'dır."},
         {q: "They ___ soccer right now.", a: ["play", "are playing", "plays"], c: 1, h: "Now/Right now ifadeleri -ing gerektirir."},
         {q: "Why ___ you laughing?", a: ["do", "are", "is"], c: 1, h: "Şu anki durumu sorma kalıbı."},
         {q: "The weather ___ colder now.", a: ["gets", "is getting", "get"], c: 1, h: "Değişen durumlar Şimdiki Zaman'dır."},
-
-        // Past Simple (11-15)
         {q: "I ___ a movie yesterday.", a: ["saw", "see", "seen"], c: 0, h: "Past Simple: Dün (yesterday) V2 hali (saw)."},
-        {q: "Where ___ you go last night?", a: ["did", "do", "were"], c: 1, h: "Geçmiş zaman soru yardımcı fiili 'did'."},
+        {q: "Where ___ you go last night?", a: ["did", "do", "were"], c: 0, h: "Geçmiş zaman soru yardımcı fiili 'did'."},
         {q: "She ___ her homework an hour ago.", a: ["finished", "finish", "finishes"], c: 0, h: "Belirli geçmiş zaman V2 gerektirir."},
         {q: "We ___ not go out last night.", a: ["did", "do", "were"], c: 0, h: "Olumsuz geçmiş zaman 'did not'."},
         {q: "They ___ born in 1990.", a: ["was", "were", "did"], c: 1, h: "You/We/They için 'were born' kullanılır."},
-
-        // Future Continuous (16-20)
         {q: "This time next week, I ___ on a beach.", a: ["will be lying", "lie", "am lying"], c: 0, h: "Gelecekte sürecek eylem."},
         {q: "At 9 PM tonight, he ___ dinner.", a: ["eats", "will be eating", "will eat"], c: 1, h: "Gelecekte belirli bir andaki eylem."},
         {q: "I ___ working all day tomorrow.", a: ["will be", "am", "will"], c: 0, h: "Gelecek süreç vurgusu."},
         {q: "___ you be using your laptop later?", a: ["Will", "Do", "Are"], c: 0, h: "Nazikçe gelecek planı sorma."},
         {q: "They ___ traveling this time tomorrow.", a: ["will", "will be", "are"], c: 1, h: "Belirli gelecek zaman noktası."},
-
-        // Diğer Zamanlar (21-40) - Analiz için 40'a tamamlama
         {q: "I ___ my homework already.", a: ["finish", "have finished", "finished"], c: 1, h: "Present Perfect: Belirsiz geçmiş."},
         {q: "How long ___ you lived here?", a: ["do", "did", "have"], c: 2, h: "Süreç sorma (Present Perfect)."},
         {q: "She ___ just arrived.", a: ["has", "is", "did"], c: 0, h: "Henüz bitmiş eylem (just)."},
@@ -94,27 +103,17 @@
     ];
 
     let current = 0;
-    let score = [];
+    let scoreRecords = [];
 
     function render() {
-        if(current >= 40) {
-            document.getElementById('quiz-screen').style.display='none';
-            document.getElementById('result-screen').style.display='block';
-            const list = document.getElementById('res-list');
-            score.forEach((s, i) => {
-                const d = document.createElement('div');
-                d.className = `res-card`;
-                d.style.borderLeftColor = s.ok ? 'var(--s)' : 'var(--err)'; //
-                d.innerHTML = `<b>${i+1}. ${s.q}</b><br>Senin Cevabın: ${s.u} ${s.ok ? '✅' : '❌'}`;
-                list.appendChild(d);
-            });
-            window.scrollTo(0,0);
+        if(current >= questions.length) {
+            showResults();
             return;
         }
 
         const data = questions[current];
-        const pc = Math.round((current / 40) * 100); // %18 gibi doğru hesaplama
-        document.getElementById('q-text').innerText = `SORU: ${current + 1} / 40`;
+        const pc = Math.round((current / questions.length) * 100);
+        document.getElementById('q-text').innerText = `SORU: ${current + 1} / ${questions.length}`;
         document.getElementById('p-text').innerText = `%${pc}`;
         document.getElementById('bar').style.width = pc + "%";
         document.getElementById('hint').innerText = data.h;
@@ -127,10 +126,44 @@
     }
 
     function next(idx) {
-        score.push({q: questions[current].q, u: questions[current].a[idx], ok: idx === questions[current].c});
+        const isCorrect = idx === questions[current].c;
+        scoreRecords.push({
+            q: questions[current].q, 
+            u: questions[current].a[idx], 
+            correct: questions[current].a[questions[current].c],
+            ok: isCorrect
+        });
         current++;
         render();
     }
+
+    function showResults() {
+        document.getElementById('quiz-screen').style.display='none';
+        document.getElementById('result-screen').style.display='block';
+        
+        const correctCount = scoreRecords.filter(s => s.ok).length;
+        const wrongCount = questions.length - correctCount;
+
+        document.getElementById('correct-total').innerText = correctCount;
+        document.getElementById('wrong-total').innerText = wrongCount;
+
+        const list = document.getElementById('res-list');
+        scoreRecords.forEach((s, i) => {
+            const d = document.createElement('div');
+            d.className = `res-card`;
+            d.style.borderLeftColor = s.ok ? 'var(--s)' : 'var(--err)';
+            d.innerHTML = `
+                <div style="font-size:1.1rem; margin-bottom:5px;"><b>${i+1}. ${s.q}</b></div>
+                <div style="color:${s.ok ? 'var(--s)' : 'var(--err)'}">
+                    Cevabın: ${s.u} ${s.ok ? '✅' : '❌'}
+                </div>
+                ${!s.ok ? `<div style="color:#94a3b8; font-size:0.9rem; margin-top:5px;">Doğru Cevap: ${s.correct}</div>` : ''}
+            `;
+            list.appendChild(d);
+        });
+        window.scrollTo(0,0);
+    }
+
     render();
 </script>
 </body>
