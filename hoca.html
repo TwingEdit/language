@@ -2,26 +2,28 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mastery Academy | Prof. Twing AI</title>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
         :root { --bg: #0b0f1a; --card: #161e2d; --p: #6366f1; --s: #10b981; --border: #334155; }
-        body { background: var(--bg); color: white; font-family: 'Outfit', sans-serif; margin: 0; padding: 0; height: 100vh; display: flex; flex-direction: column; }
+        body { background: var(--bg); color: white; font-family: 'Outfit', sans-serif; margin: 0; padding: 0; height: 100vh; overflow: hidden; display: flex; flex-direction: column; }
         .header-nav { height: 70px; background: rgba(11, 15, 26, 0.95); border-bottom: 1px solid var(--border); display: flex; align-items: center; padding: 0 30px; }
         .btn-home { background: var(--p); color: white; padding: 10px 20px; border-radius: 10px; text-decoration: none; font-weight: 800; border:none; cursor:pointer;}
         .chat-container { display: grid; grid-template-columns: 350px 1fr; flex: 1; overflow: hidden; }
-        .ai-avatar-panel { background: var(--card); border-right: 1px solid var(--border); display: flex; flex-direction: column; align-items: center; padding: 40px 20px; }
-        .avatar-frame { width: 220px; height: 220px; border-radius: 50%; border: 4px solid var(--p); overflow: hidden; background: #000; box-shadow: 0 0 20px rgba(99, 102, 241, 0.2); }
+        .ai-avatar-panel { background: var(--card); border-right: 1px solid var(--border); display: flex; flex-direction: column; align-items: center; padding: 40px 20px; text-align: center; }
+        .avatar-frame { width: 220px; height: 220px; border-radius: 50%; border: 4px solid var(--p); overflow: hidden; background: #000; box-shadow: 0 0 30px rgba(99, 102, 241, 0.3); margin-bottom: 20px; }
         .avatar-frame img { width: 100%; height: 100%; object-fit: cover; }
         .chat-main { display: flex; flex-direction: column; background: #0f172a; position: relative; }
         #chat-window { flex: 1; overflow-y: auto; padding: 30px; display: flex; flex-direction: column; gap: 20px; padding-bottom: 150px; }
-        .msg { max-width: 80%; padding: 15px 20px; border-radius: 20px; font-size: 1.1rem; line-height: 1.5; }
+        .msg { max-width: 80%; padding: 18px 25px; border-radius: 20px; font-size: 1.1rem; line-height: 1.6; }
         .msg.ai { background: var(--card); align-self: flex-start; border: 1px solid var(--border); border-bottom-left-radius: 2px; }
         .msg.user { background: var(--p); align-self: flex-end; border-bottom-right-radius: 2px; }
-        .input-area { position: absolute; bottom: 30px; left: 20px; right: 20px; padding: 10px; background: var(--card); border: 2px solid var(--border); border-radius: 20px; display: flex; gap: 10px; }
-        input { flex: 1; background: transparent; border: none; color: white; padding: 10px; font-size: 1.1rem; outline: none; }
-        .btn-send { background: var(--p); color: white; padding: 10px 25px; border-radius: 15px; font-weight: 800; border: none; cursor: pointer; }
-        .loading-text { font-size: 0.8rem; color: #94a3b8; display: none; margin-left: 30px; margin-bottom: 10px; }
+        .input-area { position: absolute; bottom: 30px; left: 30px; right: 30px; padding: 10px; background: var(--card); border: 2px solid var(--border); border-radius: 25px; display: flex; gap: 15px; box-shadow: 0 10px 40px rgba(0,0,0,0.5); }
+        input { flex: 1; background: transparent; border: none; color: white; padding: 15px; font-size: 1.2rem; outline: none; }
+        .btn-send { background: var(--p); color: white; padding: 12px 35px; border-radius: 20px; font-weight: 800; border: none; cursor: pointer; transition: 0.3s; }
+        .btn-send:hover { transform: scale(1.05); background: #4f46e5; }
+        .loading { font-style: italic; color: #94a3b8; display: none; padding-left: 40px; margin-bottom: 10px; }
     </style>
 </head>
 <body>
@@ -34,19 +36,22 @@
 <div class="chat-container">
     <div class="ai-avatar-panel">
         <div class="avatar-frame">
-            <img src="teacher.png" onerror="this.src='ComfyUI_00001_.png'" alt="Prof. Twing AI">
+            <img src="teacher.png" onerror="this.onerror=null; this.src='ComfyUI_00001_.png';" alt="Prof. Twing AI">
         </div>
-        <h2 style="margin-top:20px;">Prof. Twing AI</h2>
+        <h2>Prof. Twing AI</h2>
         <p><span style="color:var(--s)">●</span> Online & Yardıma Hazır</p>
+        <div style="background:rgba(99, 102, 241, 0.1); padding: 15px; border-radius: 15px; margin-top: 20px; border: 1px solid var(--border); font-size: 0.9rem;">
+            <b>Hoca Notu:</b><br>İngilizce öğrenmek bir maratondur. Ben buradayım, beraber başaracağız!
+        </div>
     </div>
 
     <div class="chat-main">
         <div id="chat-window">
-            <div class="msg ai">Hello! Ben Prof. Twing AI. Mastery Academy'deki İngilizce yolculuğunda sana rehberlik etmek için buradayım. Senin için bağlantıyı güncelledim, hadi bir şeyler yaz! 🎓</div>
+            <div class="msg ai">Hello! I am Prof. Twing AI. Mastery Academy'ye tekrar hoş geldin! Senin için bağlantıyı bu yeni anahtarla tazeledim. İngilizce adına bugün ne yapmak istersin? Sorularını sorabilirsin! 🎓</div>
         </div>
-        <div id="loading" class="loading-text">Prof. Twing AI yanıt hazırlıyor...</div>
+        <div id="loading" class="loading">Prof. Twing AI düşünüyor...</div>
         <div class="input-area">
-            <input type="text" id="user-input" placeholder="Buraya yazın..." onkeypress="if(event.key === 'Enter') sendMessage()">
+            <input type="text" id="user-input" placeholder="Hocaya bir şeyler yaz..." onkeypress="if(event.key === 'Enter') sendMessage()">
             <button class="btn-send" onclick="sendMessage()">GÖNDER</button>
         </div>
     </div>
@@ -55,12 +60,13 @@
 <script type="module">
     import { GoogleGenerativeAI } from "https://esm.run/@google/generative-ai";
 
-    // Alttaki (...oBnc) API anahtarını buraya ekledik:
-    const API_KEY = "BURAYA_ALTAKİ_OBNC_ANAHTARINI_YAPISTIR"; 
+    // Yeni verdiğin (...oBnc) anahtarı buraya eklendi
+    const API_KEY = "AIzaSyC41X1le73N5hJ2QIJFhQ6ekxoT5ozoBnc"; 
     const genAI = new GoogleGenerativeAI(API_KEY);
+
     const model = genAI.getGenerativeModel({ 
         model: "gemini-1.5-flash",
-        systemInstruction: "Sen Prof. Twing AI adında karizmatik ve bilgili bir İngilizce hocasısın. Mastery Academy'nin başöğretmenisin. Nazik ve motive edicisin."
+        systemInstruction: "Senin adın Prof. Twing AI. Mastery Academy'nin karizmatik İngilizce hocasısın. Nazik, bilgili ve öğrencilerini motive eden birisin. Türkçe ve İngilizce konuşabilirsin."
     });
 
     const chat = model.startChat({ history: [] });
@@ -80,7 +86,7 @@
             addMessage(response.text(), 'ai');
         } catch (e) {
             console.error(e);
-            addMessage("Bağlantı henüz tam aktifleşmedi. Lütfen 30 saniye bekleyip tekrar dene. (API Warning uyarısı geçici bir durumdur)", "ai");
+            addMessage("Küçük bir bağlantı gecikmesi oldu. Anahtarın tam aktifleşmesi 1 dakika sürebilir, lütfen tekrar dene!", 'ai');
         } finally {
             document.getElementById('loading').style.display = "none";
         }
