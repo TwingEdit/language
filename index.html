@@ -2,20 +2,53 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <title>Mastery English | Giriş</title>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;800&display=swap" rel="stylesheet">
+    <title>Mastery English Academy</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
-        body { background: #0b0f1a; color: white; font-family: 'Outfit', sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; }
-        .box { text-align: center; background: #161e2d; padding: 60px; border-radius: 40px; border: 1px solid #334155; box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
-        .btn { background: #6366f1; color: white; padding: 22px 45px; border-radius: 18px; text-decoration: none; font-weight: 800; font-size: 1.2rem; display: inline-block; transition: 0.3s; }
-        .btn:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(99, 102, 241, 0.4); }
+        :root { --bg: #0b1120; --card: #161e2d; --p: #6366f1; --s: #10b981; --w: #ffffff; }
+        body { 
+            background: var(--bg); color: var(--w); font-family: 'Outfit', sans-serif; 
+            margin: 0; display: flex; align-items: center; justify-content: center; height: 100vh;
+        }
+        .main-card {
+            background: var(--card); padding: 50px; border-radius: 30px; 
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5); text-align: center;
+            border: 1px solid #334155; width: 450px;
+        }
+        h1 { font-size: 2.2rem; margin-bottom: 5px; font-weight: 800; }
+        p { color: #94a3b8; margin-bottom: 35px; }
+        
+        .menu-grid { display: grid; grid-template-columns: 1fr; gap: 15px; }
+        .menu-btn {
+            background: #1f2937; color: white; text-decoration: none;
+            padding: 18px; border-radius: 15px; font-weight: 600;
+            border: 1px solid #334155; transition: 0.3s; display: block;
+        }
+        .menu-btn:hover {
+            transform: translateY(-3px); border-color: var(--p);
+            background: #232d3f; box-shadow: 0 10px 20px rgba(99, 102, 241, 0.2);
+        }
+        /* Analiz Butonu Özel Rengi */
+        .btn-analiz { background: var(--p); border: none; }
+        .btn-analiz:hover { background: #4f46e5; }
     </style>
 </head>
 <body>
-    <div class="box">
-        <h1 style="font-size: 2.5rem; margin-bottom: 10px;">Mastery English Academy</h1>
-        <p style="color: #94a3b8; font-size: 1.1rem; margin-bottom: 30px;">40 Soruluk Detaylı Seviye Analizi</p>
-        <a href="seviye-testi.html" class="btn">ANALİZİ BAŞLAT</a>
+
+    <div class="main-card">
+        <h1>Mastery English Academy</h1>
+        <p>A2'den B2 Seviyesine Profesyonel Yolculuk</p>
+
+        <div class="menu-grid">
+            <a href="analiz.html" class="menu-btn btn-analiz">📊 SEVİYE ANALİZİNİ BAŞLAT</a>
+            <a href="konu.html" class="menu-btn">📖 KONU ANLATIMLARI</a>
+            <a href="kelime.html" class="menu-btn">🧠 KELİME ANTRENÖRÜ</a>
+        </div>
+        
+        <div style="margin-top: 30px; font-size: 0.8rem; color: #475569;">
+            Toplam 40 Soru | 12 Zaman Dilimi | B2 Kelime Seti
+        </div>
     </div>
+
 </body>
 </html>
