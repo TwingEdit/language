@@ -2,13 +2,12 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <title>Mastery Academy | AI Tutor</title>
+    <title>Mastery Academy | Prof. Twing</title>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
         :root { --bg: #0b0f1a; --card: #161e2d; --p: #6366f1; --s: #10b981; --border: #334155; }
         body { background: var(--bg); color: white; font-family: 'Outfit', sans-serif; margin: 0; padding: 0; overflow: hidden; }
 
-        /* Sabit Üst Bar */
         .header-nav {
             position: fixed; top: 0; left: 0; right: 0; height: 70px;
             background: rgba(11, 15, 26, 0.95); backdrop-filter: blur(10px);
@@ -19,107 +18,109 @@
 
         .chat-container { display: grid; grid-template-columns: 350px 1fr; height: 100vh; padding-top: 70px; }
 
-        /* Sol Panel: ComfyUI'dan Gelen Gerçek Hoca Görseli */
+        /* Sol Panel */
         .ai-avatar-panel { background: var(--card); border-right: 1px solid var(--border); display: flex; flex-direction: column; align-items: center; padding: 40px 20px; }
-        .avatar-frame { 
-            width: 250px; 
-            height: 250px; 
-            border-radius: 50%; 
-            border: 4px solid var(--p); 
-            overflow: hidden; 
-            box-shadow: 0 0 30px rgba(99, 102, 241, 0.3); 
-            margin-bottom: 20px; 
-            background: #0b0f1a;
-        }
+        .avatar-frame { width: 220px; height: 220px; border-radius: 50%; border: 4px solid var(--p); overflow: hidden; box-shadow: 0 0 30px rgba(99, 102, 241, 0.3); margin-bottom: 20px; }
         .avatar-frame img { width: 100%; height: 100%; object-fit: cover; }
         .status-dot { width: 12px; height: 12px; background: var(--s); border-radius: 50%; display: inline-block; margin-right: 8px; animation: pulse 2s infinite; }
         
-        @keyframes pulse {
-            0% { opacity: 1; }
-            50% { opacity: 0.5; }
-            100% { opacity: 1; }
-        }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
 
-        /* Sağ Panel: Chat Alanı */
+        /* Chat Alanı */
         .chat-main { display: flex; flex-direction: column; background: #0f172a; }
         #chat-window { flex: 1; overflow-y: auto; padding: 30px; display: flex; flex-direction: column; gap: 20px; scroll-behavior: smooth; }
         
-        .msg { max-width: 75%; padding: 15px 20px; border-radius: 20px; line-height: 1.5; font-size: 1rem; position: relative; }
+        .msg { max-width: 80%; padding: 15px 20px; border-radius: 20px; line-height: 1.6; font-size: 1rem; position: relative; }
         .msg.ai { background: var(--card); align-self: flex-start; border-bottom-left-radius: 2px; border: 1px solid var(--border); }
         .msg.user { background: var(--p); align-self: flex-end; border-bottom-right-radius: 2px; box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2); }
 
         .input-area { padding: 25px; background: var(--card); border-top: 1px solid var(--border); display: flex; gap: 15px; }
         input { flex: 1; background: #0b0f1a; border: 1px solid var(--border); border-radius: 12px; color: white; padding: 15px; font-family: 'Outfit'; outline: none; transition: 0.3s; }
-        input:focus { border-color: var(--p); box-shadow: 0 0 10px rgba(99, 102, 241, 0.2); }
+        input:focus { border-color: var(--p); box-shadow: 0 0 10px rgba(99, 102, 241, 0.1); }
+        
+        .typing { font-style: italic; color: #94a3b8; font-size: 0.9rem; margin-bottom: 10px; display: none; }
     </style>
 </head>
 <body>
 
 <div class="header-nav">
     <a href="index.html" class="btn-home">⬅ ANA MENÜ</a>
-    <h3 style="margin-left: 20px; font-weight: 400; color: #94a3b8;">AI Tutor: <span style="color: white; font-weight: 800;">Mr. Mastery</span></h3>
+    <h3 style="margin-left: 20px; font-weight: 400; color: #94a3b8;">AI Tutor: <span style="color:white; font-weight:800;">Prof. Twing</span></h3>
 </div>
 
 <div class="chat-container">
     <div class="ai-avatar-panel">
         <div class="avatar-frame">
-            <img src="ComfyUI_00001_.png" alt="Mr. Mastery AI Tutor">
+            <img src="ComfyUI_00001_.png" alt="Prof. Twing">
         </div>
-        <h2 style="margin: 10px 0;">Mr. Mastery</h2>
-        <p style="color: #94a3b8; text-align: center;"><span class="status-dot"></span> Online & Yardıma Hazır</p>
-        
-        <div style="margin-top: 30px; background: #1f2937; padding: 20px; border-radius: 15px; font-size: 0.9rem; border-left: 4px solid var(--p);">
-            <b style="color: var(--p); display: block; margin-bottom: 5px;">Hoca Hakkında:</b>
-            Uzmanlık alanı Pratik Gramer ve Telaffuz olan Mr. Mastery, hatalarını anında fark eder.
+        <h2 style="margin: 10px 0;">Prof. Twing</h2>
+        <p><span class="status-dot"></span> Online & Yardıma Hazır</p>
+        <div style="margin-top: 20px; background: #1f2937; padding: 15px; border-radius: 12px; font-size: 0.85rem; line-height: 1.5; border-left: 4px solid var(--p);">
+            <b>Eğitmen Notu:</b><br>
+            Ben Prof. Twing. Gramer hatalarını düzeltmek ve akıcı konuşman için buradayım. İstediğini sorabilirsin!
         </div>
     </div>
 
     <div class="chat-main">
         <div id="chat-window">
-            <div class="msg ai">Hello! Ben senin kişisel İngilizce hocan Mr. Mastery. ComfyUI sağ olsun, artık bir yüzüm var! 😄 Bugün hangi konuyu pekiştirmek istersin ya da bana bir cümle kur, hatalarını düzelteyim! 🎓</div>
+            <div class="msg ai">Merhaba! Ben Prof. Twing. Harika bir hoca görseli hazırlamışsın, teşekkürler! 😄 Bugün İngilizce adına ne yapmak istersin? İster sohbet edelim, ister bir konuyu anlatayım.</div>
         </div>
+        <div id="typing-indicator" class="msg ai typing">Prof. Twing yazıyor...</div>
         <div class="input-area">
-            <input type="text" id="user-input" placeholder="Mr. Mastery'e bir şey yazın..." onkeypress="if(event.key === 'Enter') sendMessage()">
+            <input type="text" id="user-input" placeholder="Prof. Twing'e bir mesaj yaz..." onkeypress="if(event.key === 'Enter') sendMessage()">
             <button class="btn-home" onclick="sendMessage()">GÖNDER</button>
         </div>
     </div>
 </div>
 
-<script>
-    const chatWin = document.getElementById('chat-window');
-    const input = document.getElementById('user-input');
+<script type="module">
+    import { GoogleGenerativeAI } from "https://esm.run/@google/generative-ai";
 
-    function sendMessage() {
+    // Kendi API Anahtarın yerleştirildi:
+    const API_KEY = "AIzaSyBjEhNsJLMP5y1fOTpfYEHsqkkdw-HopaQ";
+    const genAI = new GoogleGenerativeAI(API_KEY);
+
+    const model = genAI.getGenerativeModel({ 
+        model: "gemini-1.5-flash",
+        systemInstruction: "Senin adın Prof. Twing. Mastery Academy'de çok karizmatik, bilgili, nazik ve hafif esprili bir İngilizce hocasısın. Görselinde gözlüklü, lacivert kazaklı, sınıfta duran profesyonel bir adamsın. Kullanıcının İngilizce hatalarını düzelt, pratik yaptır ve her zaman destekleyici ol. Türkçe ve İngilizceyi akıcı kullan."
+    });
+
+    const chat = model.startChat({
+        history: [],
+    });
+
+    window.sendMessage = async function() {
+        const input = document.getElementById('user-input');
         const text = input.value.trim();
-        if(!text) return;
+        if (!text) return;
 
         addMessage(text, 'user');
         input.value = "";
+        
+        const typingIndicator = document.getElementById('typing-indicator');
+        typingIndicator.style.display = "block";
 
-        // Yapay zeka simülasyonu
-        setTimeout(() => {
-            const reply = getAIResponse(text);
-            addMessage(reply, 'ai');
-        }, 800);
+        try {
+            const result = await chat.sendMessage(text);
+            const response = await result.response;
+            addMessage(response.text(), 'ai');
+        } catch (error) {
+            addMessage("Küçük bir teknik aksaklık oldu. Lütfen internetini veya API kotanı kontrol et.", 'ai');
+            console.error(error);
+        } finally {
+            typingIndicator.style.display = "none";
+        }
     }
 
     function addMessage(text, side) {
+        const chatWin = document.getElementById('chat-window');
         const div = document.createElement('div');
         div.className = `msg ${side}`;
         div.innerText = text;
         chatWin.appendChild(div);
         chatWin.scrollTop = chatWin.scrollHeight;
     }
-
-    function getAIResponse(input) {
-        const lowInput = input.toLowerCase();
-        if(lowInput.includes("selam") || lowInput.includes("hello")) return "Hello there! Nice to meet you. How can I help you with your English today?";
-        if(lowInput.includes("i goes")) return "Küçük bir hata yakaladım! 'I' öznesi ile 'go' kullanılır. Doğrusu: 'I go'. Unutma, -s takısı sadece He/She/It için gelir. 😉";
-        if(lowInput.includes("adın ne") || lowInput.includes("who are you")) return "Ben Mr. Mastery! Mastery Academy'nin yapay zeka destekli İngilizce eğitmeniyim.";
-        if(lowInput.includes("teşekkür") || lowInput.includes("thanks")) return "You are very welcome! Her zaman buradayım.";
-        
-        return "Bu harika bir başlangıç! İngilizceni geliştirmek için çok doğru yerdesin. Başka bir cümle kurmak ister misin?";
-    }
 </script>
+
 </body>
 </html>
