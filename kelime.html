@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>Mastery Academy | Akıllı Kelime Kartları</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg: #0b0f1a; --card: #161e2d; --p: #6366f1; --s: #10b981; --err: #f43f5e; }
+        body { background: var(--bg); color: white; font-family: 'Outfit', sans-serif; margin: 0; padding: 20px; }
+        .main-layout { display: grid; grid-template-columns: 1.5fr 1fr; gap: 30px; max-width: 1200px; margin: auto; }
+        
+        /* Sol: Kelime Listesi */
+        .word-list-box { background: var(--card); padding: 30px; border-radius: 25px; border: 1px solid #334155; }
+        .word-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; }
+        .word-card { background: #1f2937; padding: 15px; border-radius: 12px; border-left: 5px solid var(--s); transition: 0.3s; }
+        .level-tag { font-size: 0.7rem; background: var(--p); padding: 2px 6px; border-radius: 4px; float: right; }
+
+        /* Sağ: Test Paneli */
+        .test-box { background: #0f172a; padding: 30px; border-radius: 25px; border: 2px dashed var(--p); position: sticky; top: 20px; height: fit-content; }
+        
+        .btn { background: var(--p); color: white; border: none; padding: 12px 25px; border-radius: 10px; cursor: pointer; font-weight: 800; transition: 0.3s; }
+        .btn-refresh { background: var(--s); margin-bottom: 20px; width: 100%; }
+        .btn:hover { opacity: 0.8; transform: scale(1.02); }
+
+        .opt { width: 100%; padding: 12px; margin: 8px 0; background: #1f2937; color: white; border: 1px solid #334155; border-radius: 10px; cursor: pointer; text-align: left; }
+        .opt:hover { border-color: var(--s); }
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+
+<div class="main-layout">
+    <div class="word-list-box">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <h2>Günlük 10 Kelime (A2-B2) 📚</h2>
+            <button class="btn" onclick="generateNewList()">🔄 KELİMELERİ YENİLE</button>
+        </div>
+        <p style="color: #94a3b8;">Her yenilediğinde havuzdan farklı seviyelerde 10 kelime gelir.</p>
+        <div id="word-grid" class="word-grid"></div>
+    </div>
+
+    <div class="test-box">
+        <h3>Anlam Testi 🎯</h3>
+        <p id="test-info" style="color: #94a3b8; font-size: 0.9rem;">Soldaki kelimelerden rastgele sorulur.</p>
+        <hr style="border: 0.5px solid #334155; margin: 20px 0;">
+        
+        <div id="quiz-area">
+            <p id="q-text" style="font-size: 1.1rem; font-weight: 600;"></p>
+            <div id="opt-area"></div>
+        </div>
+        <div id="feedback" style="margin-top: 15px; font-weight: 800;"></div>
+    </div>
+</div>
+
+<script>
+    // Dev Kelime Havuzu (A2 - B2)
+    const wordPool = [
+        {w: "Achieve", t: "Başarmak", l: "B1"}, {w: "Ancient", t: "Antik, Çok Eski", l: "A2"},
+        {w: "Brief", t: "Kısa ve Öz", l: "B1"}, {w: "Crucial", t: "Çok Önemli", l: "B2"},
+        {w: "Delighted", t: "Çok Mutlu", l: "B2"}, {w: "Enormous", t: "Devasa", l: "B1"},
+        {w: "Frequent", t: "Sık, Yaygın", l: "A2"}, {w: "Genuine", t: "Gerçek, Hakiki", l: "B2"},
+        {w: "Hesitate", t: "Tereddüt Etmek", l: "B1"}, {w: "Incredible", t: "İnanılmaz", l: "A2"},
+        {w: "Justice", t: "Adalet", l: "B2"}, {w: "Knowledge", t: "Bilgi", l: "A2"},
+        {w: "Maintain", t: "Sürdürmek, Korumak", l: "B2"}, {w: "Notice", t: "Fark Etmek", l: "A2"},
+        {w: "Opportunity", t: "Fırsat", l: "B1"}, {w: "Persuade", t: "İkna Etmek", l: "B2"},
+        {w: "Quit", t: "Bırakmak, Vazgeçmek", l: "A2"}, {w: "Reliable", t: "Güvenilir", l: "B1"},
+        {w: "Significant", t: "Önemli, Anlamlı", l: "B2"}, {w: "Thrive", t: "Gelişmek, Parlamak", l: "B2"}
+    ];
+
+    let currentList = [];
+
+    function generateNewList() {
+        // Havuzu karıştır ve ilk 10'u al
+        currentList = [...wordPool].sort(() => 0.5 - Math.random()).slice(0, 10);
+        
+        // Kartları oluştur
+        const grid = document.getElementById('word-grid');
+        grid.innerHTML = "";
+        currentList.forEach(item => {
+            grid.innerHTML += `
+                <div class="word-card">
+                    <span class="level-tag">${item.l}</span>
+                    <b>${item.w}</b><br>
+                    <small style="color: #94a3b8;">${item.t}</small>
+                </div>
+            `;
+        });
+        
+        document.getElementById('feedback').innerText = "";
+        generateQuiz();
+    }
+
+    function generateQuiz() {
+        const randomWord = currentList[Math.floor(Math.random() * currentList.length)];
+        document.getElementById('q-text').innerText = `"${randomWord.w}" kelimesinin anlamı nedir?`;
+        
+        // Şıkları oluştur (1 doğru, 2 yanlış)
+        let options = [randomWord.t];
+        while(options.length < 3) {
+            let wrong = wordPool[Math.floor(Math.random() * wordPool.length)].t;
+            if(!options.includes(wrong)) options.push(wrong);
+        }
+        options.sort(() => 0.5 - Math.random());
+
+        const optArea = document.getElementById('opt-area');
+        optArea.innerHTML = "";
+        options.forEach(opt => {
+            optArea.innerHTML += `<button class="opt" onclick="checkAnswer('${opt}', '${randomWord.t}')">${opt}</button>`;
+        });
+    }
+
+    function checkAnswer(selected, correct) {
+        const feedback = document.getElementById('feedback');
+        if(selected === correct) {
+            feedback.innerHTML = "<span style='color:var(--s)'>Doğru! 🎉 Sıradaki geliyor...</span>";
+            setTimeout(generateQuiz, 1000);
+        } else {
+            feedback.innerHTML = "<span style='color:var(--err)'>Yanlış! Tekrar dene. ❌</span>";
+        }
+    }
+
+    // İlk açılışta listeyi oluştur
+    generateNewList();
+</script>
+</body>
+</html>
