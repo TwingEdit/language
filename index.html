@@ -3,151 +3,163 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mastery English | AI-Powered Learning</title>
+    <title>Mastery English | AI Learning Path</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
-        :root { --p: #4f46e5; --s: #10b981; --err: #ef4444; --bg: #f8fafc; --card: #ffffff; }
-        body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color: #1e293b; margin: 0; line-height: 1.6; }
-        
-        /* Ana Ekran Tasarımı */
-        .hero { height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%); color: white; text-align: center; padding: 20px; }
-        .btn-main { background: white; color: var(--p); padding: 18px 45px; border-radius: 50px; font-weight: 700; border: none; cursor: pointer; font-size: 1.2rem; transition: 0.3s; box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
-        .btn-main:hover { transform: translateY(-3px); box-shadow: 0 15px 25px rgba(0,0,0,0.2); }
+        :root { --p: #6366f1; --p-dark: #4f46e5; --s: #10b981; --err: #f43f5e; --bg: #0f172a; --card: #1e293b; }
+        * { box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background-color: var(--bg); color: #f8fafc; margin: 0; min-height: 100vh; overflow-x: hidden; }
 
-        /* Test Alanı */
-        .container { max-width: 800px; margin: 40px auto; padding: 20px; }
-        .card { background: var(--card); padding: 40px; border-radius: 24px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
-        .hidden { display: none; }
-        .q-text { font-size: 1.4rem; font-weight: 600; margin-bottom: 25px; }
-        .opt { display: block; width: 100%; padding: 16px; margin: 12px 0; border: 2px solid #e2e8f0; border-radius: 12px; background: white; cursor: pointer; transition: 0.2s; text-align: left; font-size: 1rem; }
-        .opt:hover { border-color: var(--p); background: #f5f3ff; }
-        
-        /* Sonuç ve Analiz */
-        .analysis-item { border-bottom: 1px solid #eee; padding: 15px 0; }
-        .correct-ans { color: var(--s); font-weight: bold; }
-        .wrong-ans { color: var(--err); text-decoration: line-through; }
-        .lesson-box { background: #eff6ff; padding: 20px; border-radius: 15px; margin-top: 20px; border-left: 6px solid var(--p); }
-        
-        .progress-container { width: 100%; height: 8px; background: #e2e8f0; border-radius: 10px; margin-bottom: 30px; }
-        .progress-bar { height: 100%; background: var(--s); width: 0%; transition: 0.3s; }
+        /* Arka Plan Süslemesi */
+        .bg-blur { position: fixed; top: -10%; left: -10%; width: 40%; height: 40%; background: var(--p); filter: blur(150px); opacity: 0.2; z-index: -1; }
+
+        /* Ana Ekran (Hero Section) */
+        .hero { height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 20px; }
+        .hero h1 { font-size: clamp(2.5rem, 8vw, 4.5rem); margin: 0; background: linear-gradient(to right, #818cf8, #c084fc); -webkit-background-clip: text; -webkit-text-fill-color: transparent; line-height: 1.1; }
+        .hero p { font-size: 1.2rem; color: #94a3b8; max-width: 600px; margin: 20px 0 40px; }
+        .btn-start { background: var(--p); color: white; padding: 20px 50px; border-radius: 16px; border: none; font-size: 1.2rem; font-weight: 600; cursor: pointer; transition: all 0.3s; box-shadow: 0 10px 25px -5px rgba(99, 102, 241, 0.4); }
+        .btn-start:hover { transform: translateY(-5px); background: var(--p-dark); box-shadow: 0 20px 30px -5px rgba(99, 102, 241, 0.5); }
+
+        /* Test ve İçerik Alanı */
+        .container { max-width: 850px; margin: 50px auto; padding: 20px; display: none; }
+        .card { background: var(--card); padding: 40px; border-radius: 30px; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); }
+        .progress-wrap { width: 100%; height: 10px; background: #334155; border-radius: 10px; margin-bottom: 30px; overflow: hidden; }
+        .progress-bar { height: 100%; background: linear-gradient(to right, var(--p), var(--s)); width: 0%; transition: 0.4s; }
+
+        /* Sorular */
+        .q-text { font-size: 1.5rem; font-weight: 600; margin-bottom: 30px; color: #f1f5f9; }
+        .opt { display: block; width: 100%; padding: 18px 25px; margin-bottom: 15px; background: #334155; border: 2px solid transparent; border-radius: 15px; color: #cbd5e1; text-align: left; cursor: pointer; font-size: 1.1rem; transition: 0.2s; }
+        .opt:hover { border-color: var(--p); background: #475569; color: white; }
+
+        /* Analiz */
+        .analysis-card { background: #0f172a; padding: 20px; border-radius: 15px; margin-bottom: 15px; border-left: 4px solid var(--err); }
+        .lesson-box { background: linear-gradient(135deg, #312e81 0%, #1e1b4b 100%); padding: 25px; border-radius: 20px; margin-top: 25px; border: 1px solid var(--p); }
+        .tag-correct { color: var(--s); font-weight: bold; }
+        .tag-wrong { color: var(--err); text-decoration: line-through; opacity: 0.7; }
     </style>
 </head>
 <body>
 
-<div id="hero" class="hero">
-    <h1 style="font-size: 3.5rem; margin-bottom: 10px;">Mastery English</h1>
-    <p style="font-size: 1.2rem; opacity: 0.9; margin-bottom: 30px;">40 Soruluk Yapay Zeka Destekli Seviye Analizi</p>
-    <button class="btn-main" onclick="startTest()">Analize Başla</button>
+<div class="bg-blur"></div>
+
+<div id="home" class="hero">
+    <div style="font-size: 1rem; color: var(--p); font-weight: bold; text-transform: uppercase; letter-spacing: 3px; margin-bottom: 10px;">Future of Language</div>
+    <h1>Mastery English</h1>
+    <p>Seviyeni tek seferde analiz edelim. Hatalarından öğrenen, sana özel bir müfredat oluşturan akıllı sistem.</p>
+    <button class="btn-start" onclick="begin()">Yolculuğa Başla</button>
 </div>
 
-<div id="test-area" class="container hidden">
-    <div class="progress-container"><div id="progress" class="progress-bar"></div></div>
+<div id="test" class="container">
+    <div class="progress-wrap"><div id="bar" class="progress-bar"></div></div>
     <div class="card">
-        <div id="q-number" style="color: var(--p); font-weight: bold; margin-bottom: 10px;">Soru 1/40</div>
-        <div id="q-text" class="q-text">Soru yükleniyor...</div>
+        <div id="q-meta" style="color: #94a3b8; margin-bottom: 10px; font-weight: bold;"></div>
+        <div id="q-text" class="q-text"></div>
         <div id="options"></div>
     </div>
 </div>
 
-<div id="result-area" class="container hidden">
+<div id="results" class="container">
     <div class="card">
-        <h1>Analiz Raporun 📑</h1>
-        <div id="score-summary" style="font-size: 1.5rem; margin-bottom: 20px;"></div>
-        <div id="detailed-analysis"></div>
-        <hr>
-        <h3>Özel Ders Programın</h3>
-        <div id="study-lessons"></div>
+        <h2 style="font-size: 2.5rem; margin-top: 0;">Analiz Raporun 🚀</h2>
+        <div id="score-text" style="font-size: 1.3rem; color: var(--s); margin-bottom: 30px;"></div>
+        
+        <div id="error-list"></div>
+        
+        <div id="study-plan">
+            <h3 style="margin-top: 40px; border-bottom: 1px solid #334155; padding-bottom: 10px;">Sana Özel Çalışma Notları</h3>
+            <div id="lessons"></div>
+        </div>
+        <button class="btn-start" style="margin-top: 30px; width: 100%;" onclick="location.reload()">Sıfırla ve Yeniden Başla</button>
     </div>
 </div>
 
 <script>
-    // 40 Soruluk Veri Seti (Özetlendi, hepsini buraya ekleyebilirsin)
-    const questions = [
-        { q: "I ___ to the gym every morning.", a: ["goes", "go", "going"], c: 1, t: "Present Simple", d: "Geniş zamanlarda 'I' öznesi takı almaz.", lv: "A2" },
-        { q: "Yesterday, I ___ a giant pizza.", a: ["eat", "eaten", "ate"], c: 2, t: "Past Simple", d: "Geçmiş zamanda düzensiz fiillerin 2. hali kullanılır.", lv: "A2" },
-        { q: "This house ___ in 1950.", a: ["built", "was built", "is built"], c: 1, t: "Passive Voice", d: "Geçmişteki edilgen yapılarda 'was/were + V3' kullanılır.", lv: "B1" },
-        // ... Buraya 40 soruya kadar ekleme yapılabilir. Şimdilik mantığı kuruyoruz.
-        { q: "If I ___ you, I wouldn't do that.", a: ["am", "was", "were"], c: 2, t: "Conditionals", d: "Hayali durumlarda (Type 2) 'were' tercih edilir.", lv: "B1" },
-        { q: "By next month, we ___ the project.", a: ["finish", "will have finished", "will finish"], c: 1, t: "Future Perfect", d: "Belirli bir zamana kadar bitmiş olacak işler için kullanılır.", lv: "B2" }
-        // (40 soruya tamamlamak için benzer yapıda sorular eklenecek)
+    // 40 Soru Örneği (Mantık aynı, dilediğin kadar çoğaltabilirsin)
+    const db = [
+        { q: "She ___ French but she's learning it now.", a: ["doesn't speak", "isn't speaking", "don't speak"], c: 0, t: "Present Simple", d: "Genel durumlardan bahsederken Present Simple kullanılır. She/He/It öznelerinde 'doesn't' gelir.", lv: "A2" },
+        { q: "If I had seen him, I ___ hello.", a: ["would say", "would have said", "will say"], c: 1, t: "Conditionals Type 3", d: "Geçmişteki hayali durumlar için 'would have + V3' yapısı kullanılır.", lv: "B2" },
+        { q: "The thief ___ by the police last night.", a: ["is caught", "was caught", "caught"], c: 1, t: "Passive Voice", d: "Geçmiş zaman edilgen cümlelerde 'was/were + V3' kullanılır.", lv: "B1" },
+        { q: "I'm looking forward to ___ you.", a: ["see", "seeing", "seen"], c: 1, t: "Gerunds", d: "'Look forward to' kalıbından sonra fiil -ing takısı alır.", lv: "B1" }
+        // 40 soruya burayı kopyalayarak devam edebilirsin...
     ];
 
     let current = 0;
-    let userAnswers = [];
+    let log = [];
     let score = 0;
 
-    function startTest() {
-        document.getElementById('hero').classList.add('hidden');
-        document.getElementById('test-area').classList.remove('hidden');
-        showQuestion();
+    function begin() {
+        document.getElementById('home').style.display = 'none';
+        document.getElementById('test').style.display = 'block';
+        load();
     }
 
-    function showQuestion() {
-        const q = questions[current];
+    function load() {
+        const q = db[current];
+        document.getElementById('q-meta').innerText = `SORU ${current + 1} / ${db.length} • SEVİYE: ${q.lv}`;
         document.getElementById('q-text').innerText = q.q;
-        document.getElementById('q-number').innerText = `Soru ${current + 1}/${questions.length}`;
-        document.getElementById('progress').style.width = ((current+1)/questions.length*100) + "%";
-        
-        const optDiv = document.getElementById('options');
-        optDiv.innerHTML = '';
-        q.a.forEach((option, i) => {
-            const btn = document.createElement('button');
-            btn.className = 'opt';
-            btn.innerText = option;
-            btn.onclick = () => next(i);
-            optDiv.appendChild(btn);
+        document.getElementById('bar').style.width = ((current + 1) / db.length * 100) + "%";
+
+        const box = document.getElementById('options');
+        box.innerHTML = '';
+        q.a.forEach((opt, i) => {
+            const b = document.createElement('button');
+            b.className = 'opt';
+            b.innerText = opt;
+            b.onclick = () => submit(i);
+            box.appendChild(b);
         });
     }
 
-    function next(ui) {
-        userAnswers.push({
-            question: questions[current].q,
-            userAns: questions[current].a[ui],
-            correctAns: questions[current].a[questions[current].c],
-            isRight: ui === questions[current].c,
-            topic: questions[current].t,
-            desc: questions[current].d
+    function submit(idx) {
+        const q = db[current];
+        const isRight = idx === q.c;
+        if(isRight) score++;
+
+        log.push({
+            q: q.q,
+            u: q.a[idx],
+            r: q.a[q.c],
+            ok: isRight,
+            topic: q.t,
+            desc: q.d
         });
-        
-        if(ui === questions[current].c) score++;
-        
+
         current++;
-        if(current < questions.length) showQuestion();
-        else showResults();
+        if(current < db.length) load();
+        else finish();
     }
 
-    function showResults() {
-        document.getElementById('test-area').classList.add('hidden');
-        document.getElementById('result-area').classList.remove('hidden');
+    function finish() {
+        document.getElementById('test').style.display = 'none';
+        document.getElementById('results').style.display = 'block';
         
-        document.getElementById('score-summary').innerText = `Puanın: ${score} / ${questions.length}`;
+        document.getElementById('score-text').innerText = `Başarı Oranı: %${(score/db.length*100).toFixed(0)} (${score} / ${db.length} Doğru)`;
         
-        let analysisHTML = "<h3>Yanlış Analizi</h3>";
+        let errHTML = "";
         let lessonHTML = "";
-        let seenTopics = new Set();
+        let topics = new Set();
 
-        userAnswers.forEach(ans => {
-            if(!ans.isRight) {
-                analysisHTML += `
-                    <div class="analysis-item">
-                        <strong>Soru:</strong> ${ans.question}<br>
-                        <strong>Senin Cevabın:</strong> <span class="wrong-ans">${ans.userAns}</span><br>
-                        <strong>Doğru Cevap:</strong> <span class="correct-ans">${ans.correctAns}</span>
-                    </div>`;
+        log.forEach(item => {
+            if(!item.ok) {
+                errHTML += `
+                <div class="analysis-card">
+                    <div style="color: #94a3b8; font-size: 0.9rem; margin-bottom: 5px;">Soru: ${item.q}</div>
+                    <div>Cevabın: <span class="tag-wrong">${item.u}</span> | Doğru: <span class="tag-correct">${item.r}</span></div>
+                </div>`;
                 
-                if(!seenTopics.has(ans.topic)) {
+                if(!topics.has(item.topic)) {
                     lessonHTML += `
-                        <div class="lesson-box">
-                            <h4>Konu: ${ans.topic}</h4>
-                            <p>${ans.desc}</p>
-                            <small>Pekiştirme Ödevi: Bu konuyla ilgili 5 cümle kur.</small>
-                        </div>`;
-                    seenTopics.add(ans.topic);
+                    <div class="lesson-box">
+                        <h4 style="margin: 0 0 10px; color: var(--p);">📖 Konu: ${item.topic}</h4>
+                        <p style="margin: 0; font-size: 0.95rem; color: #cbd5e1;">${item.desc}</p>
+                    </div>`;
+                    topics.add(item.topic);
                 }
             }
         });
-        
-        document.getElementById('detailed-analysis').innerHTML = analysisHTML;
-        document.getElementById('study-lessons').innerHTML = lessonHTML || "<p>Mükemmel! Hiç yanlışın yok.</p>";
+
+        document.getElementById('error-list').innerHTML = errHTML || "🎉 Hiç hata yapmadın, harikasın!";
+        document.getElementById('lessons').innerHTML = lessonHTML || "Geliştirilmesi gereken bir konu bulunamadı.";
     }
 </script>
 </body>
