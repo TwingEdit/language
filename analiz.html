@@ -7,16 +7,17 @@
     <style>
         :root { --bg: #0b0f1a; --card: #161e2d; --p: #6366f1; --s: #10b981; --err: #f43f5e; }
         body { background: var(--bg); color: white; font-family: 'Outfit', sans-serif; margin: 0; padding: 20px; }
-        .container { max-width: 1000px; margin: auto; }
-        .header { display: flex; justify-content: space-between; font-weight: 800; color: var(--p); margin-bottom: 10px; }
-        .progress-bar { width: 100%; height: 12px; background: #1f2937; border-radius: 10px; overflow: hidden; margin-bottom: 30px; }
-        #bar { height: 100%; width: 0%; background: linear-gradient(90deg, var(--p), var(--s)); transition: 0.4s; }
-        .main-grid { display: grid; grid-template-columns: 1fr 1.5fr; gap: 20px; }
-        .pane { background: var(--card); padding: 30px; border-radius: 25px; border: 1px solid #334155; min-height: 450px; }
-        .opt { width: 100%; padding: 18px; margin: 10px 0; background: #1f2937; color: white; border: 1px solid #334155; border-radius: 15px; cursor: pointer; text-align: left; font-size: 1.1rem; transition: 0.2s; }
-        .opt:hover { border-color: var(--p); background: #232d3f; }
-        .res-card { padding: 15px; border-radius: 12px; margin-bottom: 10px; border-left: 8px solid; background: #0f172a; }
-        .btn-finish { background: var(--s); color: white; padding: 20px; border-radius: 15px; border: none; width: 100%; cursor: pointer; font-weight: 800; font-size: 1.2rem; }
+        .container { max-width: 1100px; margin: auto; }
+        .header { display: flex; justify-content: space-between; font-weight: 800; color: var(--p); margin-bottom: 10px; font-size: 1.1rem; }
+        .progress-bar { width: 100%; height: 12px; background: #1f2937; border-radius: 10px; overflow: hidden; margin-bottom: 30px; border: 1px solid #334155; }
+        #bar { height: 100%; width: 0%; background: linear-gradient(90deg, var(--p), var(--s)); transition: 0.5s ease; }
+        .main-grid { display: grid; grid-template-columns: 1fr 1.5fr; gap: 25px; }
+        .pane { background: var(--card); padding: 35px; border-radius: 30px; border: 1px solid #334155; min-height: 480px; box-shadow: 0 15px 30px rgba(0,0,0,0.3); }
+        .opt { width: 100%; padding: 20px; margin: 12px 0; background: #1f2937; color: white; border: 1px solid #334155; border-radius: 18px; cursor: pointer; text-align: left; font-size: 1.15rem; transition: 0.3s; font-family: 'Outfit'; }
+        .opt:hover { border-color: var(--p); background: #232d3f; transform: translateX(10px); }
+        .res-card { padding: 20px; border-radius: 15px; margin-bottom: 15px; border-left: 10px solid; background: #0f172a; }
+        .btn-finish { background: var(--s); color: white; padding: 22px; border-radius: 20px; border: none; width: 100%; cursor: pointer; font-weight: 800; font-size: 1.3rem; margin-top: 20px; transition: 0.3s; }
+        .btn-finish:hover { filter: brightness(1.2); transform: scale(1.02); }
     </style>
 </head>
 <body>
@@ -26,31 +27,35 @@
     <div class="progress-bar"><div id="bar"></div></div>
     <div class="main-grid">
         <div class="pane">
-            <h2 style="color:var(--s)">Rehber 💡</h2>
-            <p id="hint" style="color:#94a3b8; line-height:1.6"></p>
+            <h2 style="color:var(--s); font-size: 1.8rem; margin-top:0;">Rehber 💡</h2>
+            <p id="hint" style="color:#94a3b8; line-height:1.8; font-size: 1.1rem;"></p>
         </div>
         <div class="pane" id="q-area"></div>
     </div>
 </div>
 
 <div id="result-screen" class="container" style="display:none">
-    <h1 style="text-align:center">Analiz Sonuçların 📊</h1>
-    <div id="res-list"></div>
+    <h1 style="text-align:center; font-size: 2.5rem;">Analiz Sonuçların 📊</h1>
+    <div id="res-list" style="margin-bottom: 30px;"></div>
     <button class="btn-finish" onclick="location.href='konu.html'">EKSİK KONULARI ÇALIŞMAYA BAŞLA →</button>
 </div>
 
 <script>
-    // Gerçek Soru Seti
     const questions = [
-        {q: "She ___ to the gym every morning.", a: ["go", "goes", "going"], c: 1, h: "Simple Present: He/She/It fiili -s alır."},
-        {q: "This time next week, I ___ on a beach.", a: ["will be lying", "lie", "am lying"], c: 0, h: "Future Continuous: Gelecek süreç."},
-        {q: "I ___ a movie yesterday.", a: ["saw", "see", "seen"], c: 0, h: "Past Simple: Geçmiş zaman V2."},
-        {q: "Look! The baby ___.", a: ["is sleeping", "sleeps", "sleeping"], c: 0, h: "Present Continuous: Şu an olan eylem."}
+        {q: "She ___ to the gym every morning.", a: ["go", "goes", "going"], c: 1, h: "Geniş Zaman: He/She/It öznelerinde fiil -s takısı alır."},
+        {q: "This time next week, I ___ on a beach.", a: ["will be lying", "lie", "am lying"], c: 0, h: "Gelecekte belli bir süre devam edecek eylemler (Future Continuous)."},
+        {q: "I ___ a great movie yesterday.", a: ["saw", "see", "seen"], c: 0, h: "Geçmiş Zaman: Fiilin ikinci hali (V2) kullanılır."},
+        {q: "Have you ___ your homework yet?", a: ["finish", "finished", "finishing"], c: 1, h: "Present Perfect: Have/Has + Fiilin 3. hali."}
     ];
 
-    // Soruları 40'a tamamlama (Asla 15'te bitmez)
+    // Listeyi 40'a tamamlıyoruz (Analiz Sorusu formatı)
     while(questions.length < 40) {
-        questions.push({q: "Analiz Sorusu " + (questions.length+1), a: ["Cevap A", "Cevap B", "Cevap C"], c: 0, h: "Seviye ölçümü yapılıyor..."});
+        questions.push({
+            q: "Analiz Sorusu " + (questions.length + 1),
+            a: ["Cevap A", "Cevap B", "Cevap C"],
+            c: 0,
+            h: "Seviye ölçümü yapılıyor... Bilgi birikimini hatırla."
+        });
     }
 
     let current = 0;
@@ -63,11 +68,12 @@
             const list = document.getElementById('res-list');
             userAnswers.forEach((ans, i) => {
                 const div = document.createElement('div');
-                div.className = `res-card ${ans.isOk ? 'correct' : 'wrong'}`;
+                div.className = `res-card`;
                 div.style.borderLeftColor = ans.isOk ? 'var(--s)' : 'var(--err)';
-                div.innerHTML = `<b>${i+1}. ${ans.q}</b><br>Cevabın: ${ans.u} ${ans.isOk ? '✅' : '❌'}`;
+                div.innerHTML = `<b>${i+1}. ${ans.q}</b><br>Senin Cevabın: ${ans.u} ${ans.isOk ? '✅' : '❌'}`;
                 list.appendChild(div);
             });
+            window.scrollTo(0,0);
             return;
         }
 
@@ -78,7 +84,7 @@
         document.getElementById('bar').style.width = prog + "%";
         document.getElementById('hint').innerText = data.h;
 
-        let html = `<p style="font-size:1.4rem; font-weight:600">${data.q}</p>`;
+        let html = `<p style="font-size:1.6rem; font-weight:600; margin-bottom:30px;">${data.q}</p>`;
         data.a.forEach((opt, i) => {
             html += `<button class="opt" onclick="next(${i})">${opt}</button>`;
         });
