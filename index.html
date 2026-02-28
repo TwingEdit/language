@@ -3,106 +3,113 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>English Mentor | Level Test & Study</title>
+    <title>English Mastery | Level Finder</title>
     <style>
-        :root { --primary: #1a73e8; --success: #34a853; --bg: #f8f9fa; }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; padding: 20px; }
-        .container { max-width: 700px; margin: auto; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+        :root { --main: #2563eb; --bg: #fdfdfd; --text: #1e293b; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+        .app-card { width: 90%; max-width: 600px; background: white; padding: 40px; border-radius: 24px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); text-align: center; }
         .hidden { display: none; }
-        .quiz-option { display: block; width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 8px; cursor: pointer; text-align: left; background: white; }
-        .quiz-option:hover { background: #f1f3f4; border-color: var(--primary); }
-        .result-box { border-left: 5px solid var(--primary); padding: 15px; background: #e8f0fe; margin-top: 20px; }
-        .study-card { margin-top: 15px; padding: 15px; border: 1px solid #eee; border-radius: 8px; }
-        button#start-btn { background: var(--primary); color: white; border: none; padding: 15px 30px; border-radius: 8px; cursor: pointer; font-size: 1.1rem; }
+        .option-btn { display: block; width: 100%; padding: 15px; margin: 10px 0; border: 2px solid #e2e8f0; border-radius: 12px; background: none; cursor: pointer; transition: 0.2s; font-size: 1rem; }
+        .option-btn:hover { border-color: var(--main); background: #eff6ff; }
+        .progress-bar { height: 6px; background: #e2e8f0; border-radius: 3px; margin-bottom: 20px; overflow: hidden; }
+        .progress-fill { height: 100%; background: var(--main); width: 0%; transition: 0.3s; }
+        .result-tag { font-size: 3rem; font-weight: 800; color: var(--main); margin: 10px 0; }
+        .topic-list { text-align: left; background: #f8fafc; padding: 20px; border-radius: 12px; margin-top: 20px; }
+        button#start-btn { background: var(--main); color: white; border: none; padding: 16px 40px; border-radius: 12px; font-size: 1.1rem; cursor: pointer; }
     </style>
 </head>
 <body>
 
-<div class="container" id="main-container">
-    <div id="intro-screen">
-        <h1>Hoş Geldin! 👋</h1>
-        <p>İngilizce seviyeni belirleyelim ve eksiklerine göre bir yol haritası çıkaralım.</p>
-        <button id="start-btn" onclick="startQuiz()">Seviye Testine Başla</button>
+<div class="app-card" id="app">
+    <div id="step-1">
+        <h1 style="font-size: 2.5rem;">Ready? 🇬🇧</h1>
+        <p>Hiç vakit kaybetmeden seviyeni belirleyelim. 10 soruluk hızlı bir test seni bekliyor.</p>
+        <button id="start-btn" onclick="initQuiz()">Teste Başla</button>
     </div>
 
-    <div id="quiz-screen" class="hidden">
-        <h2 id="question-text">Soru buraya gelecek...</h2>
-        <div id="options-container"></div>
+    <div id="step-2" class="hidden">
+        <div class="progress-bar"><div class="progress-fill" id="progress"></div></div>
+        <h2 id="q-text" style="margin-bottom: 25px;">Soru Yükleniyor...</h2>
+        <div id="options"></div>
     </div>
 
-    <div id="result-screen" class="hidden">
-        <h2>Analiz Sonucun 📊</h2>
-        <div class="result-box" id="level-result"></div>
-        <h3>Senin İçin Önerilen Çalışmalar:</h3>
-        <div id="study-recommendations"></div>
-        <button onclick="location.reload()" style="margin-top:20px; padding:10px; cursor:pointer;">Testi Tekrarla</button>
+    <div id="step-3" class="hidden">
+        <h2>Analiz Tamamlandı!</h2>
+        <p>Senin İngilizce profilin:</p>
+        <div class="result-tag" id="level-id">B1</div>
+        <div class="topic-list" id="feedback">
+            </div>
+        <button onclick="location.reload()" style="margin-top:20px; border:none; background:none; color:var(--main); cursor:pointer;">Yeniden Test Yap</button>
     </div>
 </div>
 
 <script>
     const questions = [
-        { q: "I ___ to the cinema yesterday.", a: ["go", "gone", "went", "goes"], correct: 2, level: "A2", skill: "Past Tense" },
-        { q: "If I ___ rich, I would travel the world.", a: ["am", "was", "were", "be"], correct: 2, level: "B1", skill: "Conditionals" },
-        { q: "The room ___ every day by the staff.", a: ["cleans", "is cleaned", "cleaned", "is clean"], correct: 1, level: "B1", skill: "Passive Voice" },
-        { q: "I have been living here ___ 2010.", a: ["for", "since", "at", "in"], correct: 1, level: "A2", skill: "Present Perfect" },
-        { q: "By next year, I ___ my degree.", a: ["will finish", "finish", "will have finished", "am finishing"], correct: 2, level: "B2", skill: "Future Perfect" }
+        { q: "She ___ (watch) TV every evening.", a: ["watch", "watches", "watching"], c: 1, lv: "A2", t: "Present Simple" },
+        { q: "Where ___ you go last summer?", a: ["do", "did", "were"], c: 1, lv: "A2", t: "Past Simple" },
+        { q: "I haven't finished my homework ___.", a: ["already", "just", "yet"], c: 2, lv: "A2", t: "Present Perfect" },
+        { q: "The cake ___ by my mother yesterday.", a: ["made", "was made", "is made"], c: 1, lv: "B1", t: "Passive Voice" },
+        { q: "If it rains, we ___ at home.", a: ["stay", "would stay", "will stay"], c: 2, lv: "B1", t: "Conditionals" },
+        { q: "I wish I ___ more time to study.", a: ["have", "had", "would have"], c: 1, lv: "B1", t: "Wish Clauses" },
+        { q: "He suggested ___ to the park.", a: ["to go", "going", "go"], c: 1, lv: "B2", t: "Gerunds & Infinitives" },
+        { q: "Hardly ___ I entered the room when the phone rang.", a: ["did", "had", "was"], c: 1, lv: "B2", t: "Inversion" },
+        { q: "I'd rather you ___ tell anyone.", a: ["don't", "didn't", "not"], c: 1, lv: "B2", t: "Preference" },
+        { q: "By this time tomorrow, I ___ my exam.", a: ["will finish", "will be finishing", "will have finished"], c: 2, lv: "B2", t: "Future Perfect" }
     ];
 
-    let currentQ = 0;
-    let score = { A2: 0, B1: 0, B2: 0 };
-    let gaps = [];
+    let current = 0;
+    let wrongTopics = [];
+    let points = 0;
 
-    function startQuiz() {
-        document.getElementById('intro-screen').classList.add('hidden');
-        document.getElementById('quiz-screen').classList.remove('hidden');
-        showQuestion();
+    function initQuiz() {
+        document.getElementById('step-1').classList.add('hidden');
+        document.getElementById('step-2').classList.remove('hidden');
+        loadQuestion();
     }
 
-    function showQuestion() {
-        const q = questions[currentQ];
-        document.getElementById('question-text').innerText = q.q;
-        const container = document.getElementById('options-container');
-        container.innerHTML = '';
-        q.a.forEach((opt, index) => {
-            const btn = document.createElement('button');
-            btn.className = 'quiz-option';
-            btn.innerText = opt;
-            btn.onclick = () => handleAnswer(index);
-            container.appendChild(btn);
+    function loadQuestion() {
+        const q = questions[current];
+        document.getElementById('q-text').innerText = q.q;
+        document.getElementById('progress').style.width = (current / questions.length * 100) + "%";
+        
+        const optDiv = document.getElementById('options');
+        optDiv.innerHTML = '';
+        q.a.forEach((opt, i) => {
+            const b = document.createElement('button');
+            b.className = 'option-btn';
+            b.innerText = opt;
+            b.onclick = () => {
+                if(i === q.c) points++;
+                else wrongTopics.push({topic: q.t, level: q.lv});
+                
+                current++;
+                if(current < questions.length) loadQuestion();
+                else showFinal();
+            };
+            optDiv.appendChild(b);
         });
     }
 
-    function handleAnswer(index) {
-        const q = questions[currentQ];
-        if(index === q.correct) {
-            score[q.level]++;
-        } else {
-            gaps.push(q.skill);
-        }
+    function showFinal() {
+        document.getElementById('step-2').classList.add('hidden');
+        document.getElementById('step-3').classList.remove('hidden');
         
-        currentQ++;
-        if(currentQ < questions.length) { showQuestion(); } 
-        else { showResults(); }
-    }
-
-    function showResults() {
-        document.getElementById('quiz-screen').classList.add('hidden');
-        document.getElementById('result-screen').classList.remove('hidden');
+        let finalLv = "A2";
+        if(points > 4) finalLv = "B1";
+        if(points > 7) finalLv = "B2";
         
-        let finalLevel = score.B2 > 0 ? "B2" : (score.B1 > 0 ? "B1" : "A2");
-        document.getElementById('level-result').innerHTML = `Tahmini Seviyen: <strong>${finalLevel}</strong><br>Doğru Sayısı: ${score.A2 + score.B1 + score.B2} / 5`;
+        document.getElementById('level-id').innerText = finalLv;
         
-        const recBox = document.getElementById('study-recommendations');
-        if(gaps.length > 0) {
-            gaps.forEach(gap => {
-                const card = document.createElement('div');
-                card.className = 'study-card';
-                card.innerHTML = `<strong>Eksik Konu: ${gap}</strong><br>Bu konuyu tekrar etmen gerekiyor.`;
-                recBox.appendChild(card);
+        let feedbackHTML = "<strong>Odaklanman gereken konular:</strong><ul>";
+        if(wrongTopics.length > 0) {
+            wrongTopics.forEach(w => {
+                feedbackHTML += `<li>${w.topic} (${w.level})</li>`;
             });
         } else {
-            recBox.innerHTML = "<p>Harika! Tüm konulara hakimsin. B2 üstü akademik metinlere geçebilirsin.</p>";
+            feedbackHTML += "<li>Tüm konulara hakimsin! Harika!</li>";
         }
+        feedbackHTML += "</ul>";
+        document.getElementById('feedback').innerHTML = feedbackHTML;
     }
 </script>
 </body>
