@@ -2,99 +2,111 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <title>Akademi | Mastery English</title>
+    <title>Akademi | Tüm Zamanlar</title>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
         :root { --bg: #0b0f1a; --card: #161e2d; --p: #6366f1; --s: #10b981; }
         body { background: var(--bg); color: white; font-family: 'Outfit', sans-serif; margin: 0; padding: 20px; }
-        .grid-main { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; max-width: 1000px; margin: 50px auto; }
+        .grid-menu { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; max-width: 1000px; margin: 50px auto; }
         .box { background: var(--card); height: 250px; border-radius: 30px; border: 2px solid #334155; display: flex; flex-direction: column; justify-content: center; align-items: center; cursor: pointer; transition: 0.3s; }
         .box:hover { border-color: var(--p); transform: translateY(-5px); }
         
-        /* Yan Yana Panel */
-        .workspace { display: none; grid-template-columns: 1.2fr 0.8fr; gap: 20px; max-width: 1400px; margin: auto; height: 85vh; }
+        /* Yan Yana Panel (Paint Düzeni) */
+        .workspace { display: none; grid-template-columns: 1fr 1fr; gap: 20px; max-width: 1400px; margin: auto; height: 85vh; }
         .pane { background: var(--card); padding: 30px; border-radius: 25px; border: 1px solid #334155; overflow-y: auto; }
         .active { display: grid !important; }
         
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; background: #0b0f1a; }
+        th, td { border: 1px solid #334155; padding: 12px; text-align: left; font-size: 0.9rem; }
+        th { background: var(--p); color: white; }
+
         .word-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .word-item { background: #1f2937; padding: 15px; border-radius: 12px; display: flex; justify-content: space-between; }
-        .q-btn { width: 100%; padding: 15px; margin: 5px 0; background: #0b0f1a; border: 1px solid #334155; color: white; border-radius: 10px; cursor: pointer; text-align: left; }
-        .refresh-btn { background: var(--p); color: white; border: none; padding: 10px 20px; border-radius: 10px; cursor: pointer; margin-bottom: 20px; font-weight: bold; }
+        .word-item { background: #1f2937; padding: 12px; border-radius: 10px; display: flex; justify-content: space-between; font-size: 0.9rem; }
+        .q-btn { width: 100%; padding: 15px; margin: 5px 0; background: #0b0f1a; border: 1px solid #334155; color: white; border-radius: 12px; cursor: pointer; text-align: left; }
     </style>
 </head>
 <body>
 
-    <div id="main-menu" class="grid-main">
-        <div class="box" onclick="showSection('konu')"><h1>📖</h1><h3>KONU ÇALIŞMA</h3></div>
-        <div class="box" onclick="showSection('kelime')"><h1>🔤</h1><h3>500+ KELİME</h3></div>
-        <div class="box" onclick="showSection('quiz')"><h1>📝</h1><h3>GENEL QUİZLER</h3></div>
+    <div id="menu" class="grid-menu">
+        <div class="box" onclick="openS('konu')"><h1>📖</h1><h3>KONU ÇALIŞMA</h3></div>
+        <div class="box" onclick="openS('kelime')"><h1>🔤</h1><h3>500+ KELİME</h3></div>
+        <div class="box" onclick="openS('quiz')"><h1>📝</h1><h3>GENEL QUİZLER</h3></div>
     </div>
 
     <div id="ws" class="workspace">
         <div class="pane">
-            <button onclick="location.reload()" style="background:#334155; color:white; border:none; padding:10px; border-radius:8px; cursor:pointer; margin-bottom:20px;">← Menü</button>
-            <div id="left-content"></div>
+            <button onclick="location.reload()" style="background:#334155; color:white; border:none; padding:10px 20px; border-radius:10px; cursor:pointer; margin-bottom:20px;">← Geri</button>
+            <div id="left"></div>
         </div>
         <div class="pane">
-            <h2 id="right-title" style="color:var(--s);">Konu Testi</h2>
+            <h2 id="right-title" style="color:var(--s);">Hızlı Test</h2>
             <div id="right-quiz"></div>
         </div>
     </div>
 
 <script>
-    // 500+ KELİME HAVUZU (Buraya istediğin kadar ekleyebilirsin)
-    const wordBank = [
-        {en: "Accurate", tr: "Kesin, doğru"}, {en: "Benefit", tr: "Fayda"}, {en: "Challenge", tr: "Zorluk"},
-        {en: "Determine", tr: "Belirlemek"}, {en: "Efficient", tr: "Verimli"}, {en: "Flexible", tr: "Esnek"},
-        {en: "Gather", tr: "Toplamak"}, {en: "Halt", tr: "Durdurmak"}, {en: "Impact", tr: "Etki"}
-        // ... listeyi 500'e kadar uzatıyorum
-    ];
+    // 500 Kelime (Örnek başlangıç, her yenilemede 50 tane çeker)
+    const wordBank = Array.from({length: 500}, (_, i) => ({en: `Word ${i+1}`, tr: `Kelime ${i+1}`}));
 
-    const curriculum = {
-        "Present Simple": {
-            text: "<h2>Present Simple</h2><p>Geniş zaman, rutin işler için kullanılır. He/She/It öznelerinde fiile -s takısı gelir.</p>",
-            quiz: [{q: "She ___ (like) pizza.", a: ["like", "likes", "liking"], c: 1}]
+    const tenses = {
+        "Simple Present": {
+            desc: "Rutin işler. He/She/It -> -s takısı.",
+            table: "<table><tr><th>Zaman</th><th>Olumlu</th><th>Olumsuz</th><th>Soru</th></tr><tr><td>Simple Present</td><td>I work / He works</td><td>I don't work / He doesn't work</td><td>Do I work? / Does he work?</td></tr></table>",
+            quiz: [{q: "She ___ (read) books.", a:["read","reads","reading"], c:1}]
         },
-        "Past Simple": {
-            text: "<h2>Past Simple</h2><p>Geçmişte bitmiş olaylar. Düzenli fiillere -ed takısı gelir.</p>",
-            quiz: [{q: "I ___ (go) to London.", a: ["go", "went", "gone"], c: 1}]
+        "Present Continuous": {
+            desc: "Şu an yapılan eylemler. am/is/are + V-ing.",
+            table: "<table><tr><th>Zaman</th><th>Olumlu</th><th>Olumsuz</th><th>Soru</th></tr><tr><td>Present Continuous</td><td>I am working</td><td>I am not working</td><td>Am I working?</td></tr></table>",
+            quiz: [{q: "They ___ (watch) TV now.", a:["watch","are watching","watched"], c:1}]
         }
-        // Tüm müfredat buraya eklenebilir
+        // Diğer 10 zaman da buraya eklenecek...
     };
 
-    function showSection(s) {
-        document.getElementById('main-menu').style.display = 'none';
+    function openS(type) {
+        document.getElementById('menu').style.display = 'none';
         document.getElementById('ws').classList.add('active');
-        if(s === 'kelime') loadWords();
-        if(s === 'konu') loadLessonsMenu();
+        if(type === 'kelime') loadKelime();
+        if(type === 'konu') loadKonuMenu();
     }
 
-    function loadWords() {
-        const left = document.getElementById('left-content');
-        left.innerHTML = `<h2>Kelime Havuzu</h2><button class="refresh-btn" onclick="loadWords()">YENİLE 🔄</button><div class="word-grid"></div>`;
+    function loadKelime() {
+        const left = document.getElementById('left');
+        left.innerHTML = `<h2>500+ Kelime Havuzu</h2><button onclick="loadKelime()" style="background:var(--p); color:white; border:none; padding:10px; border-radius:8px; cursor:pointer; margin-bottom:15px;">KELİMELERİ YENİLE 🔄</button><div class="word-grid"></div>`;
         const grid = left.querySelector('.word-grid');
-        const shuffled = wordBank.sort(() => 0.5 - Math.random()).slice(0, 50);
-        shuffled.forEach(w => grid.innerHTML += `<div class="word-item"><b>${w.en}</b> <span>${w.tr}</span></div>`);
-        document.getElementById('right-quiz').innerHTML = "<p>Kelimeleri ezberle, sonra genel quize geç!</p>";
+        const randomWords = wordBank.sort(() => 0.5 - Math.random()).slice(0, 50);
+        randomWords.forEach(w => grid.innerHTML += `<div class="word-item"><b>${w.en}</b> <span>${w.tr}</span></div>`);
+        
+        // Sağ taraftaki kelime testini başlat
+        loadWordQuiz(randomWords.slice(0, 5));
     }
 
-    function loadLessonsMenu() {
-        const left = document.getElementById('left-content');
-        left.innerHTML = "<h2>Konu Seçiniz</h2>";
-        Object.keys(curriculum).forEach(topic => {
-            left.innerHTML += `<div onclick="startLesson('${topic}')" style="background:#1f2937; padding:15px; margin:10px 0; border-radius:12px; cursor:pointer;">${topic}</div>`;
+    function loadWordQuiz(words) {
+        const right = document.getElementById('right-quiz');
+        right.innerHTML = "<h3>Anlamını Tahmin Et</h3>";
+        words.forEach(w => {
+            right.innerHTML += `<p><b>${w.en}</b> nedir?</p><button class="q-btn" onclick="this.innerText='${w.tr}'">Cevabı Gör</button>`;
+        });
+    }
+
+    function loadKonuMenu() {
+        const left = document.getElementById('left');
+        left.innerHTML = "<h2>İngilizce Zamanlar</h2>";
+        Object.keys(tenses).forEach(t => {
+            left.innerHTML += `<div onclick="startLesson('${t}')" style="background:#1f2937; padding:15px; margin:10px 0; border-radius:12px; cursor:pointer;">${t}</div>`;
         });
     }
 
     function startLesson(t) {
-        const data = curriculum[t];
-        document.getElementById('left-content').innerHTML = data.text;
-        let qH = "";
+        const data = tenses[t];
+        document.getElementById('left').innerHTML = `<h2>${t}</h2><p>${data.desc}</p>${data.table}`;
+        let qHtml = "";
         data.quiz.forEach(q => {
-            qH += `<p><b>${q.q}</b></p>`;
-            q.a.forEach((opt, i) => qH += `<button class="q-btn" onclick="this.style.background='${i==q.c?'#10b981':'#f43f5e'}'">${opt}</button>`);
+            qHtml += `<p><b>${q.q}</b></p>`;
+            q.a.forEach((opt, i) => {
+                qHtml += `<button class="q-btn" onclick="this.style.background='${i==q.c?'var(--s)':'#f43f5e'}'">${opt}</button>`;
+            });
         });
-        document.getElementById('right-quiz').innerHTML = qH;
+        document.getElementById('right-quiz').innerHTML = qHtml;
     }
 </script>
 </body>
