@@ -2,17 +2,89 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <title>Mastery English | Konu Anlatımı</title>
+    <title>Mastery Academy | Ders Paneli</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
-        body { background: #0b0f1a; color: white; font-family: sans-serif; text-align: center; padding: 100px; }
-        .card { background: #161e2d; padding: 50px; border-radius: 20px; border: 1px solid #334155; display: inline-block; }
+        :root { --bg: #0b0f1a; --card: #161e2d; --p: #6366f1; --s: #10b981; }
+        body { background: var(--bg); color: white; font-family: 'Outfit', sans-serif; margin: 0; padding: 40px; }
+        .container { max-width: 900px; margin: auto; }
+        .lesson-card { background: var(--card); padding: 40px; border-radius: 30px; border: 1px solid #334155; margin-bottom: 30px; }
+        h1 { color: var(--s); font-size: 2.2rem; }
+        .vocab-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 20px 0; }
+        .vocab-item { background: #1f2937; padding: 15px; border-radius: 12px; border-left: 5px solid var(--p); }
+        .quiz-section { background: #0f172a; padding: 30px; border-radius: 20px; border: 1px dashed var(--p); margin-top: 40px; }
+        .opt { width: 100%; padding: 15px; margin: 8px 0; background: #1f2937; color: white; border: 1px solid #334155; border-radius: 12px; cursor: pointer; text-align: left; }
+        .opt:hover { border-color: var(--s); }
+        .hidden { display: none; }
+        .btn-next { background: var(--p); color: white; padding: 15px 30px; border-radius: 12px; border: none; cursor: pointer; font-weight: 800; margin-top: 20px; }
     </style>
 </head>
 <body>
-    <div class="card">
-        <h1>Çalışma Sayfası Aktif! 📖</h1>
-        <p>Eksik konularına göre burası güncellenecektir.</p>
-        <a href="index.html" style="color:#6366f1">Anasayfaya Dön</a>
+
+<div class="container">
+    <div class="lesson-card">
+        <h1>Present Continuous (Şimdiki Zaman)</h1>
+        <p>Şu an yapmakta olduğumuz eylemleri anlatırken kullanılır. Formül: <b>am/is/are + Fiil(-ing)</b></p>
+        
+        <h3>Kritik Kelimeler 🔑</h3>
+        <div class="vocab-grid">
+            <div class="vocab-item"><b>Right now:</b> Şu anda</div>
+            <div class="vocab-item"><b>At the moment:</b> Şu an</div>
+            <div class="vocab-item"><b>Currently:</b> Şu aralar</div>
+            <div class="vocab-item"><b>Listen!:</b> Dinle!</div>
+        </div>
     </div>
+
+    <div class="quiz-section">
+        <h2 style="color: var(--p);">Konu Pekiştime Testi (5 Soru)</h2>
+        <div id="mini-quiz">
+            <p id="m-question" style="font-size: 1.2rem; font-weight: 600;"></p>
+            <div id="m-options"></div>
+        </div>
+        <div id="m-result" class="hidden">
+            <h3 style="color: var(--s);">Tebrikler! Konuyu Tamamladın. 🎉</h3>
+            <button class="btn-next" onclick="location.href='index.html'">Sıradaki Konuya Geç</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    const miniQuestions = [
+        {q: "I ___ a letter right now.", a: ["am writing", "write", "writing"], c: 0},
+        {q: "Listen! The baby ___.", a: ["sleeps", "is sleeping", "is sleep"], c: 1},
+        {q: "They ___ playing football today.", a: ["is", "am", "are"], c: 2},
+        {q: "Why ___ you crying?", a: ["do", "is", "are"], c: 2},
+        {q: "He ___ coming to the party tonight.", a: ["isn't", "don't", "not"], c: 0}
+    ];
+
+    let currentM = 0;
+
+    function renderMini() {
+        if(currentM >= 5) {
+            document.getElementById('mini-quiz').classList.add('hidden');
+            document.getElementById('m-result').classList.remove('hidden');
+            return;
+        }
+        const data = miniQuestions[currentM];
+        document.getElementById('m-question').innerText = `${currentM + 1}. ${data.q}`;
+        let html = "";
+        data.a.forEach((opt, i) => {
+            html += `<button class="opt" onclick="checkMini(${i})">${opt}</button>`;
+        });
+        document.getElementById('m-options').innerHTML = html;
+    }
+
+    function checkMini(idx) {
+        if(idx === miniQuestions[currentM].c) {
+            alert("Doğru! ✅");
+            currentM++;
+            renderMini();
+        } else {
+            alert("Hatalı, tekrar dene! ❌");
+        }
+    }
+
+    renderMini();
+</script>
 </body>
 </html>
