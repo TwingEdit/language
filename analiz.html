@@ -2,22 +2,21 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <title>Analiz | Mastery English</title>
+    <title>Mastery English | Full Tense Analizi</title>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
         :root { --bg: #0b0f1a; --card: #161e2d; --p: #6366f1; --s: #10b981; --err: #f43f5e; }
         body { background: var(--bg); color: white; font-family: 'Outfit', sans-serif; margin: 0; padding: 20px; }
         .container { max-width: 1100px; margin: auto; }
-        .header { display: flex; justify-content: space-between; font-weight: 800; color: var(--p); margin-bottom: 10px; font-size: 1.1rem; }
+        .header { display: flex; justify-content: space-between; font-weight: 800; color: var(--p); margin-bottom: 10px; }
         .progress-bar { width: 100%; height: 12px; background: #1f2937; border-radius: 10px; overflow: hidden; margin-bottom: 30px; border: 1px solid #334155; }
-        #bar { height: 100%; width: 0%; background: linear-gradient(90deg, var(--p), var(--s)); transition: 0.5s ease; }
+        #bar { height: 100%; width: 0%; background: linear-gradient(90deg, var(--p), var(--s)); transition: 0.5s; }
         .main-grid { display: grid; grid-template-columns: 1fr 1.5fr; gap: 25px; }
-        .pane { background: var(--card); padding: 35px; border-radius: 30px; border: 1px solid #334155; min-height: 480px; box-shadow: 0 15px 30px rgba(0,0,0,0.3); }
-        .opt { width: 100%; padding: 20px; margin: 12px 0; background: #1f2937; color: white; border: 1px solid #334155; border-radius: 18px; cursor: pointer; text-align: left; font-size: 1.15rem; transition: 0.3s; font-family: 'Outfit'; }
-        .opt:hover { border-color: var(--p); background: #232d3f; transform: translateX(10px); }
-        .res-card { padding: 20px; border-radius: 15px; margin-bottom: 15px; border-left: 10px solid; background: #0f172a; }
-        .btn-finish { background: var(--s); color: white; padding: 22px; border-radius: 20px; border: none; width: 100%; cursor: pointer; font-weight: 800; font-size: 1.3rem; margin-top: 20px; transition: 0.3s; }
-        .btn-finish:hover { filter: brightness(1.2); transform: scale(1.02); }
+        .pane { background: var(--card); padding: 35px; border-radius: 30px; border: 1px solid #334155; min-height: 480px; }
+        .opt { width: 100%; padding: 18px; margin: 10px 0; background: #1f2937; color: white; border: 1px solid #334155; border-radius: 15px; cursor: pointer; text-align: left; font-size: 1.1rem; transition: 0.2s; }
+        .opt:hover { border-color: var(--p); background: #232d3f; transform: translateX(5px); }
+        .res-card { padding: 15px; border-radius: 12px; margin-bottom: 10px; border-left: 8px solid; background: #0f172a; }
+        .btn-finish { background: var(--s); color: white; padding: 20px; border-radius: 20px; border: none; width: 100%; cursor: pointer; font-weight: 800; font-size: 1.3rem; margin-top: 20px; }
     </style>
 </head>
 <body>
@@ -27,36 +26,77 @@
     <div class="progress-bar"><div id="bar"></div></div>
     <div class="main-grid">
         <div class="pane">
-            <h2 style="color:var(--s); font-size: 1.8rem; margin-top:0;">Rehber 💡</h2>
-            <p id="hint" style="color:#94a3b8; line-height:1.8; font-size: 1.1rem;"></p>
+            <h2 style="color:var(--s)">Dil Bilgisi Notu 💡</h2>
+            <p id="hint" style="color:#94a3b8; line-height:1.6; font-size: 1.1rem;"></p>
         </div>
         <div class="pane" id="q-area"></div>
     </div>
 </div>
 
 <div id="result-screen" class="container" style="display:none">
-    <h1 style="text-align:center; font-size: 2.5rem;">Analiz Sonuçların 📊</h1>
-    <div id="res-list" style="margin-bottom: 30px;"></div>
+    <h1 style="text-align:center">Analiz Sonuçların 📊</h1>
+    <div id="res-list"></div>
     <button class="btn-finish" onclick="location.href='konu.html'">EKSİK KONULARI ÇALIŞMAYA BAŞLA →</button>
 </div>
 
 <script>
     const questions = [
-        {q: "She ___ to the gym every morning.", a: ["go", "goes", "going"], c: 1, h: "Geniş Zaman: He/She/It öznelerinde fiil -s takısı alır."},
-        {q: "This time next week, I ___ on a beach.", a: ["will be lying", "lie", "am lying"], c: 0, h: "Gelecekte belli bir süre devam edecek eylemler (Future Continuous)."},
-        {q: "I ___ a great movie yesterday.", a: ["saw", "see", "seen"], c: 0, h: "Geçmiş Zaman: Fiilin ikinci hali (V2) kullanılır."},
-        {q: "Have you ___ your homework yet?", a: ["finish", "finished", "finishing"], c: 1, h: "Present Perfect: Have/Has + Fiilin 3. hali."}
-    ];
+        // 1-5: PRESENT SIMPLE (Geniş Zaman)
+        {q: "She ___ to the gym every morning.", a: ["go", "goes", "going"], c: 1, h: "He/She/It özneleri için fiile -s takısı gelir."},
+        {q: "Water ___ at 100 degrees Celsius.", a: ["boil", "boils", "is boiling"], c: 1, h: "Bilimsel gerçekler her zaman Geniş Zaman ile anlatılır."},
+        {q: "___ you play the guitar?", a: ["Do", "Does", "Are"], c: 0, h: "Soru sorarken 'You' öznesi için 'Do' yardımcı fiili kullanılır."},
+        {q: "He ___ like spicy food.", a: ["don't", "doesn't", "isn't"], c: 1, h: "Geniş zaman olumsuzluklarda He/She/It için 'doesn't' gelir."},
+        {q: "My plane ___ at 9 PM tonight.", a: ["leaves", "leave", "is leave"], c: 0, h: "Tarifeli ulaşım araçları için Geniş Zaman kullanılır."},
 
-    // Listeyi 40'a tamamlıyoruz (Analiz Sorusu formatı)
-    while(questions.length < 40) {
-        questions.push({
-            q: "Analiz Sorusu " + (questions.length + 1),
-            a: ["Cevap A", "Cevap B", "Cevap C"],
-            c: 0,
-            h: "Seviye ölçümü yapılıyor... Bilgi birikimini hatırla."
-        });
-    }
+        // 6-10: PRESENT CONTINUOUS (Şimdiki Zaman)
+        {q: "Look! The children ___ in the garden.", a: ["play", "plays", "are playing"], c: 2, h: "Şu an gerçekleşen eylemler için am/is/are + V-ing kullanılır."},
+        {q: "I ___ a very interesting book these days.", a: ["read", "am reading", "reads"], c: 1, h: "Geçici olarak devam eden süreçlerde Şimdiki Zaman kullanılır."},
+        {q: "Listen! Someone ___ the piano upstairs.", a: ["plays", "is playing", "play"], c: 1, h: "'Listen' gibi uyarılar anlık eylemi belirtir."},
+        {q: "Why ___ you wearing a coat? It's hot.", a: ["do", "are", "is"], c: 1, h: "Soru yapısında yardımcı fiil özneden önce gelir (are you wearing)."},
+        {q: "The population of the world ___ very fast.", a: ["is increasing", "increase", "increases"], c: 0, h: "Değişmekte olan durumlar için Şimdiki Zaman kullanılır."},
+
+        // 11-15: PAST SIMPLE (Geçmiş Zaman)
+        {q: "I ___ a great movie yesterday.", a: ["saw", "see", "seen"], c: 0, h: "Belirli bir geçmiş zaman (yesterday) için fiilin 2. hali kullanılır."},
+        {q: "Where ___ you go for your last holiday?", a: ["do", "did", "were"], c: 1, h: "Geçmiş zaman sorularında 'did' yardımcı fiili kullanılır."},
+        {q: "She ___ her keys two hours ago.", a: ["loses", "lost", "lose"], c: 1, h: "Lose fiilinin 2. hali 'lost'tur."},
+        {q: "We ___ stay at a hotel; we camped.", a: ["didn't", "don't", "weren't"], c: 0, h: "Geçmiş zaman olumsuzluklarında 'didn't + V1' kullanılır."},
+        {q: "They ___ born in Germany.", a: ["was", "were", "did"], c: 1, h: "Doğum tarihi söylerken 'were born' kullanılır."},
+
+        // 16-20: PRESENT PERFECT (Yakın Geçmiş Zaman)
+        {q: "I ___ my homework already.", a: ["finished", "have finished", "finish"], c: 1, h: "Zamanı belli olmayan, tamamlanmış eylemler için Have/Has + V3 kullanılır."},
+        {q: "___ you ever eaten sushi?", a: ["Did", "Do", "Have"], c: 2, h: "Hayat tecrübelerinden bahsederken Present Perfect kullanılır."},
+        {q: "She ___ here since 2015.", a: ["is living", "has lived", "lives"], c: 1, h: "'Since' ile başlayan süreçlerde Present Perfect kullanılır."},
+        {q: "We ___ that movie three times so far.", a: ["saw", "have seen", "see"], c: 1, h: "'So far' (şu ana kadar) ifadesi bu zamanı gerektirir."},
+        {q: "He ___ just left the office.", a: ["has", "is", "did"], c: 0, h: "Henüz yeni bitmiş eylemler için 'just' ile kullanılır."},
+
+        // 21-25: FUTURE WILL / GOING TO (Gelecek Zaman)
+        {q: "I think it ___ rain tomorrow.", a: ["is going to", "will", "rains"], c: 1, h: "Tahminlerde (I think) genellikle 'will' kullanılır."},
+        {q: "Look at those black clouds! It ___ rain.", a: ["is going to", "will", "rains"], c: 0, h: "Kanıtı olan durumlar için 'be going to' kullanılır."},
+        {q: "I ___ meet my friends tonight at 8.", a: ["will", "am going to", "meet"], c: 1, h: "Önceden planlanmış eylemler için 'be going to' kullanılır."},
+        {q: "Wait! I ___ help you with those bags.", a: ["will", "am going to", "help"], c: 0, h: "Konuşma anında verilen kararlar için 'will' kullanılır."},
+        {q: "Next year, I ___ 25 years old.", a: ["am going to be", "will be", "am"], c: 1, h: "Gelecekteki değiştirilemez gerçekler için 'will' kullanılır."},
+
+        // 26-30: PAST CONTINUOUS (Geçmişte Süreklilik)
+        {q: "I ___ TV when the phone rang.", a: ["watched", "was watching", "am watching"], c: 1, h: "Geçmişte başka bir olayla kesilen uzun eylem için kullanılır."},
+        {q: "What ___ you doing at 10 PM last night?", a: ["were", "did", "was"], c: 0, h: "Geçmişte belirli bir andaki eylemi sorar."},
+        {q: "It ___ raining while we were walking.", a: ["was", "were", "did"], c: 0, h: "İki paralel geçmiş eylemi anlatırken 'while' ile kullanılır."},
+        {q: "They ___ sleeping when the thief entered.", a: ["are", "were", "was"], c: 1, h: "Özne 'They' olduğu için 'were' yardımcı fiili gelir."},
+        {q: "She ___ reading a book all evening.", a: ["was", "did", "is"], c: 0, h: "Geçmişte belirli bir süre devam eden işleri anlatır."},
+
+        // 31-35: FUTURE CONTINUOUS (Gelecekte Süreklilik)
+        {q: "This time next week, I ___ on a beach.", a: ["will be lying", "lie", "am lying"], c: 0, h: "Gelecekte belirli bir anda devam edecek eylemler."},
+        {q: "Don't phone me at 9; I ___ dinner.", a: ["will have", "will be having", "am having"], c: 1, h: "Gelecek planındaki yoğunluğu belirtir."},
+        {q: "___ you be using your car tomorrow?", a: ["Will", "Do", "Are"], c: 0, h: "Nazikçe gelecek planı sorma yapısıdır."},
+        {q: "I ___ working all day tomorrow.", a: ["will be", "am", "will"], c: 0, h: "Gelecekteki süreci vurgular."},
+        {q: "They ___ flying to New York this time tomorrow.", a: ["will", "will be", "are"], c: 1, h: "Belirli bir gelecek zaman noktası vurgulanmıştır."},
+
+        // 36-40: MIXED TENSES (Karma Genel Bakış)
+        {q: "By the time we arrived, the train ___.", a: ["left", "had left", "has left"], c: 1, h: "Past Perfect: Geçmişteki bir olaydan daha önce gerçekleşen eylem."},
+        {q: "I ___ English for five years now.", a: ["study", "have been studying", "am studying"], c: 1, h: "Geçmişte başlayıp hala devam eden eylem süreci."},
+        {q: "If it ___ tomorrow, we will stay home.", a: ["rains", "will rain", "rained"], c: 0, h: "If Clause Type 1: Gelecek ihtimali (Geniş Zaman kullanılır)."},
+        {q: "The bridge ___ built in 1950.", a: ["was", "is", "were"], c: 0, h: "Passive Voice: Geçmiş zaman edilgen yapı."},
+        {q: "I ___ my keys. Can you help me look?", a: ["lost", "have lost", "lose"], c: 1, h: "Sonucu şu anı etkileyen geçmiş eylem (Present Perfect)."}
+    ];
 
     let current = 0;
     let userAnswers = [];
@@ -69,8 +109,8 @@
             userAnswers.forEach((ans, i) => {
                 const div = document.createElement('div');
                 div.className = `res-card`;
-                div.style.borderLeftColor = ans.isOk ? 'var(--s)' : 'var(--err)';
-                div.innerHTML = `<b>${i+1}. ${ans.q}</b><br>Senin Cevabın: ${ans.u} ${ans.isOk ? '✅' : '❌'}`;
+                div.style.borderLeftColor = ans.isOk ? 'var(--s)' : 'var(--err)'; //
+                div.innerHTML = `<b>${i+1}. ${ans.q}</b><br>Cevabın: ${ans.u} ${ans.isOk ? '✅' : '❌'}`;
                 list.appendChild(div);
             });
             window.scrollTo(0,0);
@@ -78,13 +118,13 @@
         }
 
         const data = questions[current];
-        const prog = Math.round((current / 40) * 100);
+        const prog = Math.round((current / 40) * 100); // %18 gibi doğru hesaplama
         document.getElementById('q-text').innerText = `SORU: ${current + 1} / 40`;
         document.getElementById('p-text').innerText = `%${prog}`;
         document.getElementById('bar').style.width = prog + "%";
         document.getElementById('hint').innerText = data.h;
 
-        let html = `<p style="font-size:1.6rem; font-weight:600; margin-bottom:30px;">${data.q}</p>`;
+        let html = `<p style="font-size:1.4rem; font-weight:600; margin-bottom:25px;">${data.q}</p>`;
         data.a.forEach((opt, i) => {
             html += `<button class="opt" onclick="next(${i})">${opt}</button>`;
         });
