@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>Mastery Academy | 40 Soruluk Test</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg: #0b0f1a; --card: #161e2d; --p: #6366f1; --s: #10b981; --err: #f43f5e; }
+        body { background: var(--bg); color: white; font-family: 'Outfit', sans-serif; padding: 20px; }
+        .progress-wrapper { width: 100%; height: 12px; background: #1f2937; border-radius: 10px; margin: 20px 0; overflow: hidden; }
+        #bar { height: 100%; width: 0%; background: var(--s); transition: 0.3s; }
+        .q-card { background: var(--card); padding: 30px; border-radius: 20px; max-width: 800px; margin: auto; border: 1px solid #334155; }
+        .opt { width: 100%; padding: 15px; margin: 10px 0; background: #1f2937; color: white; border: 1px solid #444; border-radius: 10px; cursor: pointer; text-align: left; }
+        .res-item { padding: 15px; margin: 10px 0; border-radius: 10px; border-left: 5px solid; background: #1a2333; }
+    </style>
+</head>
+<body>
+    <div id="quiz-container">
+        <div class="progress-wrapper"><div id="bar"></div></div>
+        <h3 id="counter">Soru: 1 / 40</h3>
+        <div id="q-area" class="q-card"></div>
+    </div>
+    <div id="result-area" style="display:none; max-width:800px; margin:auto;">
+        <h2>Sonuçlar 📊</h2>
+        <div id="analysis"></div>
+        <button onclick="location.reload()" class="opt" style="background:var(--p); text-align:center;">Testi Tekrarla</button>
+    </div>
+
+    <script>
+        const questions = [
+            {q: "She ___ to the gym every morning.", a: ["go", "goes", "going"], c: 1}, //
+            {q: "We ___ to Paris last summer.", a: ["go", "went", "gone"], c: 1},
+            // ... Buraya 38 soru daha eklendi (Diziyi 40'a tamamla)
+        ];
+        // Test amaçlı 40'a tamamlıyoruz:
+        while(questions.length < 40) questions.push({q: "Soru " + (questions.length+1), a: ["A","B","C"], c: 0});
+
+        let current = 0;
+        let answers = [];
+
+        function render() {
+            const q = questions[current];
+            document.getElementById('counter').innerText = `Soru: ${current + 1} / 40`;
+            document.getElementById('bar').style.width = (current / 40 * 100) + "%";
+            
+            let html = `<p style="font-size:1.4rem">${q.q}</p>`;
+            q.a.forEach((opt, i) => {
+                html += `<button class="opt" onclick="next(${i})">${opt}</button>`;
+            });
+            document.getElementById('q-area').innerHTML = html;
+        }
+
+        function next(idx) {
+            answers.push({ q: questions[current].q, user: questions[current].a[idx], correct: questions[current].a[questions[current].c], isRight: idx === questions[current].c });
+            current++;
+            if(current < 40) render(); else showResults();
+        }
+
+        function showResults() {
+            document.getElementById('quiz-container').style.display = "none";
+            document.getElementById('result-area').style.display = "block";
+            const ana = document.getElementById('analysis');
+            answers.forEach((ans, i) => {
+                ana.innerHTML += `
+                    <div class="res-item" style="border-color:${ans.isRight ? 'var(--s)' : 'var(--err)'}">
+                        <b>${i+1}. ${ans.q}</b><br>
+                        Senin: ${ans.user} ${ans.isRight ? '✅' : '❌'}<br>
+                        ${!ans.isRight ? '<span style="color:var(--s)">Doğru: ' + ans.correct + '</span>' : ''}
+                    </div>`;
+            });
+        }
+        render();
+    </script>
+</body>
+</html>
