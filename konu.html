@@ -2,89 +2,160 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <title>Mastery Academy | Ders Paneli</title>
+    <title>Mastery Academy | Ders Müfredatı</title>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
-        :root { --bg: #0b0f1a; --card: #161e2d; --p: #6366f1; --s: #10b981; }
-        body { background: var(--bg); color: white; font-family: 'Outfit', sans-serif; margin: 0; padding: 40px; }
-        .container { max-width: 900px; margin: auto; }
-        .lesson-card { background: var(--card); padding: 40px; border-radius: 30px; border: 1px solid #334155; margin-bottom: 30px; }
-        h1 { color: var(--s); font-size: 2.2rem; }
-        .vocab-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 20px 0; }
-        .vocab-item { background: #1f2937; padding: 15px; border-radius: 12px; border-left: 5px solid var(--p); }
-        .quiz-section { background: #0f172a; padding: 30px; border-radius: 20px; border: 1px dashed var(--p); margin-top: 40px; }
-        .opt { width: 100%; padding: 15px; margin: 8px 0; background: #1f2937; color: white; border: 1px solid #334155; border-radius: 12px; cursor: pointer; text-align: left; }
-        .opt:hover { border-color: var(--s); }
+        :root { --bg: #0b0f1a; --card: #161e2d; --p: #6366f1; --s: #10b981; --border: #334155; }
+        body { background: var(--bg); color: white; font-family: 'Outfit', sans-serif; margin: 0; display: flex; height: 100vh; overflow: hidden; }
+        
+        /* Sol Menü: Konu Listesi */
+        .sidebar { width: 300px; background: var(--card); border-right: 1px solid var(--border); overflow-y: auto; padding: 20px; }
+        .sidebar h2 { font-size: 1.2rem; color: var(--s); margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 10px; }
+        .topic-link { padding: 12px 15px; border-radius: 10px; cursor: pointer; margin-bottom: 8px; transition: 0.3s; font-size: 0.95rem; border: 1px solid transparent; }
+        .topic-link:hover { background: #1f2937; border-color: var(--p); }
+        .topic-link.active { background: var(--p); color: white; font-weight: 600; }
+
+        /* Sağ Alan: İçerik */
+        .content { flex: 1; overflow-y: auto; padding: 40px; scroll-behavior: smooth; }
+        .lesson-header { background: var(--card); padding: 30px; border-radius: 20px; border: 1px solid var(--border); margin-bottom: 30px; }
+        .vocab-box { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 20px 0; }
+        .v-item { background: #1f2937; padding: 12px; border-radius: 8px; border-left: 4px solid var(--s); }
+
+        /* Test Alanı */
+        .quiz-container { background: #0f172a; padding: 30px; border-radius: 20px; border: 2px dashed var(--p); margin-top: 40px; }
+        .opt { width: 100%; padding: 15px; margin: 8px 0; background: #1f2937; color: white; border: 1px solid var(--border); border-radius: 12px; cursor: pointer; text-align: left; transition: 0.2s; }
+        .opt:hover { border-color: var(--s); background: #232d3f; }
+        
+        .welcome-screen { text-align: center; margin-top: 100px; }
         .hidden { display: none; }
-        .btn-next { background: var(--p); color: white; padding: 15px 30px; border-radius: 12px; border: none; cursor: pointer; font-weight: 800; margin-top: 20px; }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <div class="lesson-card">
-        <h1>Present Continuous (Şimdiki Zaman)</h1>
-        <p>Şu an yapmakta olduğumuz eylemleri anlatırken kullanılır. Formül: <b>am/is/are + Fiil(-ing)</b></p>
-        
-        <h3>Kritik Kelimeler 🔑</h3>
-        <div class="vocab-grid">
-            <div class="vocab-item"><b>Right now:</b> Şu anda</div>
-            <div class="vocab-item"><b>At the moment:</b> Şu an</div>
-            <div class="vocab-item"><b>Currently:</b> Şu aralar</div>
-            <div class="vocab-item"><b>Listen!:</b> Dinle!</div>
-        </div>
+    <div class="sidebar">
+        <h2>📚 Tense Arşivi</h2>
+        <div id="topic-list">
+            </div>
     </div>
 
-    <div class="quiz-section">
-        <h2 style="color: var(--p);">Konu Pekiştime Testi (5 Soru)</h2>
-        <div id="mini-quiz">
-            <p id="m-question" style="font-size: 1.2rem; font-weight: 600;"></p>
-            <div id="m-options"></div>
+    <div class="content" id="lesson-content">
+        <div class="welcome-screen" id="welcome">
+            <h1 style="font-size: 3rem;">📖 Akademiye Hoş Geldin</h1>
+            <p style="color: #94a3b8; font-size: 1.2rem;">Lütfen çalışmak istediğin zaman dilimini sol menüden seç.</p>
         </div>
-        <div id="m-result" class="hidden">
-            <h3 style="color: var(--s);">Tebrikler! Konuyu Tamamladın. 🎉</h3>
-            <button class="btn-next" onclick="location.href='index.html'">Sıradaki Konuya Geç</button>
+
+        <div id="lesson-data" class="hidden">
+            <div class="lesson-header">
+                <h1 id="title" style="color: var(--s); margin-top: 0;"></h1>
+                <p id="desc" style="line-height: 1.6; font-size: 1.1rem; color: #cbd5e1;"></p>
+                
+                <h3>Önemli Kelimeler 🔑</h3>
+                <div class="vocab-box" id="vocab"></div>
+            </div>
+
+            <div class="quiz-container">
+                <h2 style="color: var(--p);">Konu Pekiştirme Testi</h2>
+                <div id="quiz-area">
+                    <p id="q-text" style="font-weight: 600; font-size: 1.2rem;"></p>
+                    <div id="opt-area"></div>
+                </div>
+            </div>
         </div>
     </div>
-</div>
 
 <script>
-    const miniQuestions = [
-        {q: "I ___ a letter right now.", a: ["am writing", "write", "writing"], c: 0},
-        {q: "Listen! The baby ___.", a: ["sleeps", "is sleeping", "is sleep"], c: 1},
-        {q: "They ___ playing football today.", a: ["is", "am", "are"], c: 2},
-        {q: "Why ___ you crying?", a: ["do", "is", "are"], c: 2},
-        {q: "He ___ coming to the party tonight.", a: ["isn't", "don't", "not"], c: 0}
-    ];
+    const database = {
+        "Simple Present Tense": {
+            desc: "Genel doğrular, alışkanlıklar ve rutinler için kullanılır. He/She/It öznelerinde fiile -s takısı gelir.",
+            vocab: ["Every day", "Usually", "Always", "Hardly ever"],
+            quiz: [
+                {q: "She ___ to the market every Friday.", a: ["go", "goes", "going"], c: 1},
+                {q: "Water ___ at 100 degrees.", a: ["boils", "boil", "is boiling"], c: 0},
+                {q: "___ they play football?", a: ["Does", "Do", "Are"], c: 1},
+                {q: "I ___ like spicy food.", a: ["doesn't", "don't", "am not"], c: 1},
+                {q: "Cats ___ milk.", a: ["likes", "like", "liking"], c: 1}
+            ]
+        },
+        "Simple Past Tense": {
+            desc: "Geçmişte tamamlanmış eylemler. Fiilin 2. hali (V2) kullanılır.",
+            vocab: ["Yesterday", "Two days ago", "In 1995", "Last night"],
+            quiz: [
+                {q: "I ___ a movie yesterday.", a: ["saw", "see", "seen"], c: 0},
+                {q: "Where ___ you go last night?", a: ["did", "do", "were"], c: 0},
+                {q: "They ___ born in Germany.", a: ["was", "were", "did"], c: 1},
+                {q: "She ___ not finish her work.", a: ["did", "was", "does"], c: 0},
+                {q: "We ___ to London last year.", a: ["go", "went", "gone"], c: 1}
+            ]
+        },
+        "Present Perfect Tense": {
+            desc: "Belirsiz bir zamanda yapılmış veya etkisi süren eylemler. Have/Has + V3 kullanılır.",
+            vocab: ["Already", "Yet", "Just", "Ever/Never"],
+            quiz: [
+                {q: "I ___ my homework yet.", a: ["haven't finished", "didn't finish", "don't finish"], c: 0},
+                {q: "___ you ever eaten sushi?", a: ["Did", "Have", "Are"], c: 1},
+                {q: "She ___ lived here for 10 years.", a: ["is", "did", "has"], c: 2},
+                {q: "We ___ that movie twice.", a: ["see", "saw", "have seen"], c: 2},
+                {q: "He ___ just arrived.", a: ["has", "is", "did"], c: 0}
+            ]
+        }
+        // Diğer 12 zamanı buraya aynı formatta ekleyebilirsin...
+    };
 
-    let currentM = 0;
+    // Menüyü oluştur
+    const list = document.getElementById('topic-list');
+    Object.keys(database).forEach(topic => {
+        const div = document.createElement('div');
+        div.className = 'topic-link';
+        div.innerText = topic;
+        div.onclick = () => loadLesson(topic, div);
+        list.appendChild(div);
+    });
 
-    function renderMini() {
-        if(currentM >= 5) {
-            document.getElementById('mini-quiz').classList.add('hidden');
-            document.getElementById('m-result').classList.remove('hidden');
+    let currentQ = 0;
+    let activeTopic = "";
+
+    function loadLesson(topic, element) {
+        document.querySelectorAll('.topic-link').forEach(l => l.classList.remove('active'));
+        element.classList.add('active');
+        
+        document.getElementById('welcome').classList.add('hidden');
+        document.getElementById('lesson-data').classList.remove('hidden');
+        
+        activeTopic = topic;
+        const data = database[topic];
+        document.getElementById('title').innerText = topic;
+        document.getElementById('desc').innerText = data.desc;
+        
+        const vArea = document.getElementById('vocab');
+        vArea.innerHTML = "";
+        data.vocab.forEach(v => vArea.innerHTML += `<div class="v-item">${v}</div>`);
+        
+        currentQ = 0;
+        renderQuiz();
+    }
+
+    function renderQuiz() {
+        const qData = database[activeTopic].quiz[currentQ];
+        if(!qData) {
+            document.getElementById('quiz-area').innerHTML = `<h3 style="color:var(--s)">Tebrikler! ${activeTopic} konusunu tamamladın. ✅</h3>`;
             return;
         }
-        const data = miniQuestions[currentM];
-        document.getElementById('m-question').innerText = `${currentM + 1}. ${data.q}`;
+        document.getElementById('q-text').innerText = `${currentQ + 1}. ${qData.q}`;
         let html = "";
-        data.a.forEach((opt, i) => {
-            html += `<button class="opt" onclick="checkMini(${i})">${opt}</button>`;
+        qData.a.forEach((opt, i) => {
+            html += `<button class="opt" onclick="checkAnswer(${i})">${opt}</button>`;
         });
-        document.getElementById('m-options').innerHTML = html;
+        document.getElementById('opt-area').innerHTML = html;
     }
 
-    function checkMini(idx) {
-        if(idx === miniQuestions[currentM].c) {
-            alert("Doğru! ✅");
-            currentM++;
-            renderMini();
+    function checkAnswer(idx) {
+        if(idx === database[activeTopic].quiz[currentQ].c) {
+            currentQ++;
+            renderQuiz();
         } else {
-            alert("Hatalı, tekrar dene! ❌");
+            alert("Hatalı cevap, tekrar düşün! ❌");
         }
     }
-
-    renderMini();
 </script>
 </body>
 </html>
