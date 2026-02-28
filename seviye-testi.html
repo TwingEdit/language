@@ -12,23 +12,23 @@
         .progress-bar { width: 100%; height: 12px; background: #1f2937; border-radius: 10px; overflow: hidden; margin-bottom: 30px; border: 1px solid #334155; }
         #bar { height: 100%; width: 0%; background: linear-gradient(90deg, var(--p), var(--s)); transition: 0.5s; }
         .main-grid { display: grid; grid-template-columns: 1fr 1.5fr; gap: 25px; }
-        .pane { background: var(--card); padding: 35px; border-radius: 30px; border: 1px solid #334155; min-height: 400px; box-shadow: 0 10px 30px rgba(0,0,0,0.4); }
+        .pane { background: var(--card); padding: 35px; border-radius: 30px; border: 1px solid #334155; min-height: 480px; box-shadow: 0 10px 30px rgba(0,0,0,0.4); }
         .opt { width: 100%; padding: 18px; margin: 10px 0; background: #1f2937; color: white; border: 1px solid #334155; border-radius: 15px; cursor: pointer; text-align: left; font-size: 1.1rem; transition: 0.3s; font-family: 'Outfit'; }
         .opt:hover { border-color: var(--p); background: #232d3f; transform: translateX(8px); }
         
-        /* Sonuç Ekranı Tasarımı */
-        .score-summary { display: flex; justify-content: center; gap: 20px; margin-bottom: 40px; }
-        .score-box { background: var(--card); padding: 25px; border-radius: 20px; border: 1px solid #334155; text-align: center; min-width: 150px; }
-        .score-num { font-size: 2.5rem; font-weight: 800; }
-        .res-card { padding: 20px; border-radius: 15px; margin-bottom: 12px; border-left: 8px solid; background: #1a2333; }
-        .btn-finish { background: var(--s); color: white; padding: 22px; border-radius: 20px; border: none; width: 100%; cursor: pointer; font-weight: 800; font-size: 1.3rem; margin-top: 20px; transition: 0.3s; }
-        .btn-finish:hover { transform: scale(1.02); filter: brightness(1.1); }
+        /* SKOR TABELASI TASARIMI */
+        .score-container { display: flex; justify-content: center; gap: 20px; margin: 30px 0; }
+        .score-card { background: #1f2937; padding: 25px; border-radius: 20px; border: 2px solid #334155; min-width: 180px; text-align: center; }
+        .score-val { font-size: 3.5rem; font-weight: 800; display: block; line-height: 1; margin-top: 10px; }
+        
+        .res-card { padding: 15px; border-radius: 12px; margin-bottom: 10px; border-left: 8px solid; background: #0f172a; }
+        .btn-finish { background: var(--s); color: white; padding: 22px; border-radius: 20px; border: none; width: 100%; cursor: pointer; font-weight: 800; font-size: 1.3rem; margin-top: 20px; }
     </style>
 </head>
 <body>
 
 <div id="quiz-screen" class="container">
-    <div class="header"><span id="q-text">YÜKLENİYOR...</span><span id="p-text">%0</span></div>
+    <div class="header"><span id="q-count-text">YÜKLENİYOR...</span><span id="p-text">%0</span></div>
     <div class="progress-bar"><div id="bar"></div></div>
     <div class="main-grid">
         <div class="pane">
@@ -40,16 +40,16 @@
 </div>
 
 <div id="result-screen" class="container" style="display:none">
-    <h1 style="text-align:center; font-size: 2.5rem; margin-bottom: 10px;">Analiz Raporun 📊</h1>
+    <h1 style="text-align:center; font-size: 2.5rem; margin-bottom: 5px;">Analiz Raporun 📊</h1>
     
-    <div class="score-summary">
-        <div class="score-box">
-            <div style="color: var(--s); font-size: 0.9rem; margin-bottom: 5px;">DOĞRU</div>
-            <div id="correct-total" class="score-num" style="color: var(--s);">0</div>
+    <div class="score-container">
+        <div class="score-card" style="border-color: var(--s);">
+            <span style="color: var(--s); font-weight: 800; letter-spacing: 1px;">DOĞRU</span>
+            <span id="final-correct" class="score-val" style="color: var(--s);">0</span>
         </div>
-        <div class="score-box">
-            <div style="color: var(--err); font-size: 0.9rem; margin-bottom: 5px;">YANLIŞ</div>
-            <div id="wrong-total" class="score-num" style="color: var(--err);">0</div>
+        <div class="score-card" style="border-color: var(--err);">
+            <span style="color: var(--err); font-weight: 800; letter-spacing: 1px;">YANLIŞ</span>
+            <span id="final-wrong" class="score-val" style="color: var(--err);">0</span>
         </div>
     </div>
 
@@ -59,7 +59,6 @@
 
 <script>
     const questions = [
-        // Soruların tamamını buraya ekliyoruz (Senin listen + Tamamlama)
         {q: "She ___ to the gym every morning.", a: ["go", "goes", "going"], c: 1, h: "Simple Present: He/She/It fiili -s alır."},
         {q: "Water ___ at 100 degrees.", a: ["boil", "boils", "is boiling"], c: 1, h: "Bilimsel gerçekler Geniş Zaman ile söylenir."},
         {q: "___ you play the guitar?", a: ["Do", "Does", "Are"], c: 0, h: "You için soru kalıbı 'Do'dur."},
@@ -103,17 +102,36 @@
     ];
 
     let current = 0;
-    let scoreRecords = [];
+    let score = [];
 
     function render() {
-        if(current >= questions.length) {
-            showResults();
+        if(current >= 40) {
+            document.getElementById('quiz-screen').style.display='none';
+            document.getElementById('result-screen').style.display='block';
+            
+            const list = document.getElementById('res-list');
+            let correctCount = 0;
+            
+            score.forEach((s, i) => {
+                if(s.ok) correctCount++;
+                const d = document.createElement('div');
+                d.className = `res-card`;
+                d.style.borderLeftColor = s.ok ? 'var(--s)' : 'var(--err)';
+                d.innerHTML = `<b>${i+1}. ${s.q}</b><br>Senin Cevabın: ${s.u} ${s.ok ? '✅' : '❌'}`;
+                list.appendChild(d);
+            });
+            
+            // SKORLARI YAZDIRAN KISIM
+            document.getElementById('final-correct').innerText = correctCount;
+            document.getElementById('final-wrong').innerText = 40 - correctCount;
+            
+            window.scrollTo(0,0);
             return;
         }
 
         const data = questions[current];
-        const pc = Math.round((current / questions.length) * 100);
-        document.getElementById('q-text').innerText = `SORU: ${current + 1} / ${questions.length}`;
+        const pc = Math.round((current / 40) * 100);
+        document.getElementById('q-count-text').innerText = `SORU: ${current + 1} / 40`;
         document.getElementById('p-text').innerText = `%${pc}`;
         document.getElementById('bar').style.width = pc + "%";
         document.getElementById('hint').innerText = data.h;
@@ -126,44 +144,10 @@
     }
 
     function next(idx) {
-        const isCorrect = idx === questions[current].c;
-        scoreRecords.push({
-            q: questions[current].q, 
-            u: questions[current].a[idx], 
-            correct: questions[current].a[questions[current].c],
-            ok: isCorrect
-        });
+        score.push({q: questions[current].q, u: questions[current].a[idx], ok: idx === questions[current].c});
         current++;
         render();
     }
-
-    function showResults() {
-        document.getElementById('quiz-screen').style.display='none';
-        document.getElementById('result-screen').style.display='block';
-        
-        const correctCount = scoreRecords.filter(s => s.ok).length;
-        const wrongCount = questions.length - correctCount;
-
-        document.getElementById('correct-total').innerText = correctCount;
-        document.getElementById('wrong-total').innerText = wrongCount;
-
-        const list = document.getElementById('res-list');
-        scoreRecords.forEach((s, i) => {
-            const d = document.createElement('div');
-            d.className = `res-card`;
-            d.style.borderLeftColor = s.ok ? 'var(--s)' : 'var(--err)';
-            d.innerHTML = `
-                <div style="font-size:1.1rem; margin-bottom:5px;"><b>${i+1}. ${s.q}</b></div>
-                <div style="color:${s.ok ? 'var(--s)' : 'var(--err)'}">
-                    Cevabın: ${s.u} ${s.ok ? '✅' : '❌'}
-                </div>
-                ${!s.ok ? `<div style="color:#94a3b8; font-size:0.9rem; margin-top:5px;">Doğru Cevap: ${s.correct}</div>` : ''}
-            `;
-            list.appendChild(d);
-        });
-        window.scrollTo(0,0);
-    }
-
     render();
 </script>
 </body>
