@@ -3,164 +3,161 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mastery English | AI Learning Path</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+    <title>Mastery English | 40-Step Analysis</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;600;800&display=swap" rel="stylesheet">
     <style>
-        :root { --p: #6366f1; --p-dark: #4f46e5; --s: #10b981; --err: #f43f5e; --bg: #0f172a; --card: #1e293b; }
-        * { box-sizing: border-box; font-family: 'Poppins', sans-serif; }
-        body { background-color: var(--bg); color: #f8fafc; margin: 0; min-height: 100vh; overflow-x: hidden; }
-
-        /* Arka Plan Süslemesi */
-        .bg-blur { position: fixed; top: -10%; left: -10%; width: 40%; height: 40%; background: var(--p); filter: blur(150px); opacity: 0.2; z-index: -1; }
-
-        /* Ana Ekran (Hero Section) */
-        .hero { height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 20px; }
-        .hero h1 { font-size: clamp(2.5rem, 8vw, 4.5rem); margin: 0; background: linear-gradient(to right, #818cf8, #c084fc); -webkit-background-clip: text; -webkit-text-fill-color: transparent; line-height: 1.1; }
-        .hero p { font-size: 1.2rem; color: #94a3b8; max-width: 600px; margin: 20px 0 40px; }
-        .btn-start { background: var(--p); color: white; padding: 20px 50px; border-radius: 16px; border: none; font-size: 1.2rem; font-weight: 600; cursor: pointer; transition: all 0.3s; box-shadow: 0 10px 25px -5px rgba(99, 102, 241, 0.4); }
-        .btn-start:hover { transform: translateY(-5px); background: var(--p-dark); box-shadow: 0 20px 30px -5px rgba(99, 102, 241, 0.5); }
-
-        /* Test ve İçerik Alanı */
-        .container { max-width: 850px; margin: 50px auto; padding: 20px; display: none; }
-        .card { background: var(--card); padding: 40px; border-radius: 30px; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); }
-        .progress-wrap { width: 100%; height: 10px; background: #334155; border-radius: 10px; margin-bottom: 30px; overflow: hidden; }
-        .progress-bar { height: 100%; background: linear-gradient(to right, var(--p), var(--s)); width: 0%; transition: 0.4s; }
-
-        /* Sorular */
-        .q-text { font-size: 1.5rem; font-weight: 600; margin-bottom: 30px; color: #f1f5f9; }
-        .opt { display: block; width: 100%; padding: 18px 25px; margin-bottom: 15px; background: #334155; border: 2px solid transparent; border-radius: 15px; color: #cbd5e1; text-align: left; cursor: pointer; font-size: 1.1rem; transition: 0.2s; }
-        .opt:hover { border-color: var(--p); background: #475569; color: white; }
-
-        /* Analiz */
-        .analysis-card { background: #0f172a; padding: 20px; border-radius: 15px; margin-bottom: 15px; border-left: 4px solid var(--err); }
-        .lesson-box { background: linear-gradient(135deg, #312e81 0%, #1e1b4b 100%); padding: 25px; border-radius: 20px; margin-top: 25px; border: 1px solid var(--p); }
-        .tag-correct { color: var(--s); font-weight: bold; }
-        .tag-wrong { color: var(--err); text-decoration: line-through; opacity: 0.7; }
+        :root { --p: #6366f1; --s: #10b981; --err: #f43f5e; --bg: #0b0f1a; --card: #161e2d; }
+        * { box-sizing: border-box; font-family: 'Outfit', sans-serif; }
+        body { background: var(--bg); color: #f1f5f9; margin: 0; min-height: 100vh; }
+        .hero { height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; background: radial-gradient(circle at top right, #1e1b4b, transparent); }
+        h1 { font-size: 4rem; margin: 0; background: linear-gradient(to right, #818cf8, #34d399); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .btn { background: var(--p); color: white; padding: 20px 60px; border-radius: 50px; border: none; font-size: 1.2rem; font-weight: 600; cursor: pointer; transition: 0.3s; box-shadow: 0 10px 30px rgba(99, 102, 241, 0.4); }
+        .btn:hover { transform: scale(1.05); background: #4f46e5; }
+        .container { max-width: 800px; margin: 50px auto; padding: 20px; display: none; }
+        .card { background: var(--card); padding: 40px; border-radius: 30px; border: 1px solid rgba(255,255,255,0.05); shadow: 0 20px 40px rgba(0,0,0,0.4); }
+        .progress-bar { width: 100%; height: 8px; background: #2d3748; border-radius: 10px; margin-bottom: 30px; }
+        .fill { height: 100%; background: var(--s); width: 0%; transition: 0.4s; }
+        .opt { display: block; width: 100%; padding: 18px; margin-bottom: 12px; background: #1f2937; border: 2px solid transparent; border-radius: 15px; color: #94a3b8; text-align: left; cursor: pointer; transition: 0.2s; }
+        .opt:hover { border-color: var(--p); background: #374151; color: white; }
+        .analysis-card { background: #0b0f1a; padding: 20px; border-radius: 15px; margin-bottom: 10px; border-left: 4px solid var(--err); }
+        .lesson-box { background: linear-gradient(135deg, #1e1b4b, #312e81); padding: 25px; border-radius: 20px; margin-top: 20px; border: 1px solid var(--p); }
     </style>
 </head>
 <body>
 
-<div class="bg-blur"></div>
-
 <div id="home" class="hero">
-    <div style="font-size: 1rem; color: var(--p); font-weight: bold; text-transform: uppercase; letter-spacing: 3px; margin-bottom: 10px;">Future of Language</div>
     <h1>Mastery English</h1>
-    <p>Seviyeni tek seferde analiz edelim. Hatalarından öğrenen, sana özel bir müfredat oluşturan akıllı sistem.</p>
-    <button class="btn-start" onclick="begin()">Yolculuğa Başla</button>
+    <p style="color: #94a3b8; margin: 20px 0 40px;">40 soruda seviyeni belirle, yanlışlarından ders çıkar.</p>
+    <button class="btn" onclick="start()">Teste Başla</button>
 </div>
 
-<div id="test" class="container">
-    <div class="progress-wrap"><div id="bar" class="progress-bar"></div></div>
+<div id="quiz" class="container">
+    <div class="progress-bar"><div id="bar" class="fill"></div></div>
     <div class="card">
-        <div id="q-meta" style="color: #94a3b8; margin-bottom: 10px; font-weight: bold;"></div>
-        <div id="q-text" class="q-text"></div>
+        <div id="meta" style="color: var(--p); font-weight: 600; margin-bottom: 10px;"></div>
+        <div id="question" style="font-size: 1.5rem; font-weight: 600; margin-bottom: 30px;"></div>
         <div id="options"></div>
     </div>
 </div>
 
-<div id="results" class="container">
+<div id="result" class="container">
     <div class="card">
-        <h2 style="font-size: 2.5rem; margin-top: 0;">Analiz Raporun 🚀</h2>
-        <div id="score-text" style="font-size: 1.3rem; color: var(--s); margin-bottom: 30px;"></div>
-        
-        <div id="error-list"></div>
-        
-        <div id="study-plan">
-            <h3 style="margin-top: 40px; border-bottom: 1px solid #334155; padding-bottom: 10px;">Sana Özel Çalışma Notları</h3>
-            <div id="lessons"></div>
-        </div>
-        <button class="btn-start" style="margin-top: 30px; width: 100%;" onclick="location.reload()">Sıfırla ve Yeniden Başla</button>
+        <h2>Analiz Sonucun 🏆</h2>
+        <div id="final-score" style="font-size: 2rem; color: var(--s); margin-bottom: 20px;"></div>
+        <div id="errors"></div>
+        <h3 style="margin-top: 40px; color: var(--p);">Sana Özel Ders Programı</h3>
+        <div id="lessons"></div>
+        <button class="btn" style="width:100%; margin-top:30px;" onclick="location.reload()">Tekrarla</button>
     </div>
 </div>
 
 <script>
-    // 40 Soru Örneği (Mantık aynı, dilediğin kadar çoğaltabilirsin)
-    const db = [
-        { q: "She ___ French but she's learning it now.", a: ["doesn't speak", "isn't speaking", "don't speak"], c: 0, t: "Present Simple", d: "Genel durumlardan bahsederken Present Simple kullanılır. She/He/It öznelerinde 'doesn't' gelir.", lv: "A2" },
-        { q: "If I had seen him, I ___ hello.", a: ["would say", "would have said", "will say"], c: 1, t: "Conditionals Type 3", d: "Geçmişteki hayali durumlar için 'would have + V3' yapısı kullanılır.", lv: "B2" },
-        { q: "The thief ___ by the police last night.", a: ["is caught", "was caught", "caught"], c: 1, t: "Passive Voice", d: "Geçmiş zaman edilgen cümlelerde 'was/were + V3' kullanılır.", lv: "B1" },
-        { q: "I'm looking forward to ___ you.", a: ["see", "seeing", "seen"], c: 1, t: "Gerunds", d: "'Look forward to' kalıbından sonra fiil -ing takısı alır.", lv: "B1" }
-        // 40 soruya burayı kopyalayarak devam edebilirsin...
-    ];
+const db = [
+    // A2 Seviyesi (1-15)
+    { q: "I ___ to school every day.", a: ["goes", "go", "going"], c: 1, t: "Present Simple", d: "Geniş zamanda 'I' takı almaz.", lv: "A2" },
+    { q: "Where ___ you yesterday?", a: ["were", "was", "did"], c: 0, t: "To Be (Past)", d: "You/We/They için 'were' kullanılır.", lv: "A2" },
+    { q: "She ___ a book right now.", a: ["read", "reads", "is reading"], c: 2, t: "Present Continuous", d: "Şu an yapılan işler için 'am/is/are + ing' gelir.", lv: "A2" },
+    { q: "I have ___ apples in my bag.", a: ["any", "some", "a"], c: 1, t: "Quantifiers", d: "Olumlu cümlelerde 'some' kullanılır.", lv: "A2" },
+    { q: "Look! The bus ___.", a: ["comes", "is coming", "came"], c: 1, t: "Present Continuous", d: "Konuşma anında olan olaylar için kullanılır.", lv: "A2" },
+    { q: "___ you ever been to Paris?", a: ["Do", "Did", "Have"], c: 2, t: "Present Perfect", d: "Deneyimlerden bahsederken Have/Has + V3 kullanılır.", lv: "A2" },
+    { q: "He is ___ than his brother.", a: ["tall", "taller", "tallest"], c: 1, t: "Comparatives", d: "İki şeyi kıyaslarken -er takısı gelir.", lv: "A2" },
+    { q: "I ___ my keys last night.", a: ["lose", "lost", "losing"], c: 1, t: "Past Simple", d: "Lose fiilinin 2. hali 'lost'dur.", lv: "A2" },
+    { q: "How ___ water do you drink?", a: ["much", "many", "few"], c: 0, t: "Quantifiers", d: "Sayılamayanlar için 'much' kullanılır.", lv: "A2" },
+    { q: "I can ___ guitar.", a: ["play", "playing", "to play"], c: 0, t: "Modals (Can)", d: "Can'den sonra fiil yalın gelir.", lv: "A2" },
+    { q: "We ___ a movie tonight.", a: ["watch", "are going to watch", "watched"], c: 1, t: "Future Plans", d: "Planlı gelecek için 'going to' kullanılır.", lv: "A2" },
+    { q: "This is the ___ film I've seen.", a: ["gooder", "better", "best"], c: 2, t: "Superlatives", d: "En iyisi derken 'the best' kullanılır.", lv: "A2" },
+    { q: "___ it rain tomorrow?", a: ["Will", "Does", "Is"], c: 0, t: "Future (Will)", d: "Tahminler için 'will' kullanılır.", lv: "A2" },
+    { q: "She doesn't ___ milk.", a: ["likes", "like", "liking"], c: 1, t: "Present Simple (-)", d: "Doesn't'tan sonra fiil takı almaz.", lv: "A2" },
+    { q: "There ___ some students in the garden.", a: ["is", "are", "am"], c: 1, t: "There is/are", d: "Çoğul nesneler için 'are' kullanılır.", lv: "A2" },
 
-    let current = 0;
-    let log = [];
-    let score = 0;
+    // B1 Seviyesi (16-30)
+    { q: "The letter ___ yesterday.", a: ["sent", "was sent", "is sent"], c: 1, t: "Passive Voice", d: "Geçmiş zaman edilgen: was/were + V3.", lv: "B1" },
+    { q: "If it ___ tomorrow, I'll stay at home.", a: ["rains", "will rain", "rained"], c: 0, t: "Conditionals Type 1", d: "If'li kısım Present Simple olur.", lv: "B1" },
+    { q: "I ___ here for ten years.", a: ["am living", "lived", "have been living"], c: 2, t: "Present Perfect Cont.", d: "Geçmişten bugüne devam eden süreçler.", lv: "B1" },
+    { q: "She asked me where I ___.", a: ["live", "lived", "living"], c: 1, t: "Reported Speech", d: "Aktarılan cümlede zaman bir derece geçmişe gider.", lv: "B1" },
+    { q: "You ___ smoke here. It's forbidden.", a: ["don't have to", "mustn't", "might not"], c: 1, t: "Modals (Prohibition)", d: "Yasaklarda 'mustn't' kullanılır.", lv: "B1" },
+    { q: "I used to ___ football when I was young.", a: ["play", "playing", "played"], c: 0, t: "Used to", d: "Eski alışkanlıklarda fiil yalın gelir.", lv: "B1" },
+    { q: "The man ___ lives next door is a doctor.", a: ["which", "who", "whom"], c: 1, t: "Relative Clauses", d: "İnsanlar için 'who' kullanılır.", lv: "B1" },
+    { q: "I am interested ___ learning English.", a: ["at", "on", "in"], c: 2, t: "Prepositions", d: "Interested her zaman 'in' ile kullanılır.", lv: "B1" },
+    { q: "Would you mind ___ the window?", a: ["open", "opening", "to open"], c: 1, t: "Gerunds", d: "Mind fiilinden sonra -ing gelir.", lv: "B1" },
+    { q: "I wish I ___ a car.", a: ["have", "had", "will have"], c: 1, t: "Wish Clauses", d: "Şu anki pişmanlıklar için pasta gidilir.", lv: "B1" },
+    { q: "He is rich ___ to buy a plane.", a: ["enough", "too", "so"], c: 0, t: "Enough/Too", d: "Sıfattan sonra 'enough' gelir.", lv: "B1" },
+    { q: "They ___ already left when I arrived.", a: ["have", "had", "did"], c: 1, t: "Past Perfect", d: "Geçmişten daha önceki olaylar (Had+V3).", lv: "B1" },
+    { q: "I'll call you as soon as I ___.", a: ["arrive", "will arrive", "arrived"], c: 0, t: "Time Clauses", d: "Zaman bağlaçlarından sonra 'will' gelmez.", lv: "B1" },
+    { q: "___ being tired, she finished the work.", a: ["Although", "But", "Despite"], c: 2, t: "Contrast", d: "Despite'tan sonra isim/gerund gelir.", lv: "B1" },
+    { q: "You don't need to bring a coat, ___ you?", a: ["don't", "do", "need"], c: 1, t: "Tag Questions", d: "Cümle olumsuzsa takı olumlu olur.", lv: "B1" },
 
-    function begin() {
-        document.getElementById('home').style.display = 'none';
-        document.getElementById('test').style.display = 'block';
-        load();
-    }
+    // B2 Seviyesi (31-40)
+    { q: "Hardly ___ I started when it rained.", a: ["did", "had", "I had"], c: 1, t: "Inversion", d: "Hardly ile başlayan devrik cümle yapısı.", lv: "B2" },
+    { q: "It's time you ___ home.", a: ["go", "went", "going"], c: 1, t: "Subjunctive", d: "It's time kalıbından sonra pasta gidilir.", lv: "B2" },
+    { q: "I'd rather you ___ tell him.", a: ["don't", "didn't", "not"], c: 1, t: "Preference", d: "Başkasına yönelik tercihlerde past kullanılır.", lv: "B2" },
+    { q: "Should you ___ him, tell me.", a: ["see", "saw", "will see"], c: 0, t: "Inverted Conditionals", d: "If it should happen = Should it happen.", lv: "B2" },
+    { q: "The bridge is said ___ in 1800.", a: ["to build", "to be built", "to have been built"], c: 2, t: "Passive Infinitives", d: "Geçmişteki olaylar için Perfect Infinitive kullanılır.", lv: "B2" },
+    { q: "I forgot ___ the door.", a: ["lock", "locking", "to lock"], c: 2, t: "Gerunds/Infinitives", d: "Gelecek bir eylemi unutmak (to).", lv: "B2" },
+    { q: "No sooner had I left ___ the phone rang.", a: ["when", "than", "then"], c: 1, t: "Correlative Conjunctions", d: "No sooner ... than kalıbı.", lv: "B2" },
+    { q: "By next year, I ___ my degree.", a: ["will finish", "will have finished", "finish"], c: 1, t: "Future Perfect", d: "Belli bir tarihe kadar tamamlanmış eylemler.", lv: "B2" },
+    { q: "I suggested that he ___ a doctor.", a: ["see", "sees", "saw"], c: 0, t: "Subjunctive", d: "Suggest'ten sonra yalın fiil gelir.", lv: "B2" },
+    { q: "She is used to ___ early.", a: ["wake up", "waking up", "waked up"], c: 1, t: "Used to (Current)", d: "Be used to'dan sonra -ing gelir.", lv: "B2" }
+];
 
-    function load() {
-        const q = db[current];
-        document.getElementById('q-meta').innerText = `SORU ${current + 1} / ${db.length} • SEVİYE: ${q.lv}`;
-        document.getElementById('q-text').innerText = q.q;
-        document.getElementById('bar').style.width = ((current + 1) / db.length * 100) + "%";
+let current = 0;
+let score = 0;
+let logs = [];
 
-        const box = document.getElementById('options');
-        box.innerHTML = '';
-        q.a.forEach((opt, i) => {
-            const b = document.createElement('button');
-            b.className = 'opt';
-            b.innerText = opt;
-            b.onclick = () => submit(i);
-            box.appendChild(b);
-        });
-    }
+function start() {
+    document.getElementById('home').style.display = 'none';
+    document.getElementById('quiz').style.display = 'block';
+    load();
+}
 
-    function submit(idx) {
-        const q = db[current];
-        const isRight = idx === q.c;
-        if(isRight) score++;
+function load() {
+    const q = db[current];
+    document.getElementById('meta').innerText = `Soru ${current+1} / 40 • ${q.lv}`;
+    document.getElementById('question').innerText = q.q;
+    document.getElementById('bar').style.width = ((current+1)/40*100) + "%";
+    
+    const opts = document.getElementById('options');
+    opts.innerHTML = '';
+    q.a.forEach((o, i) => {
+        const b = document.createElement('button');
+        b.className = 'opt';
+        b.innerText = o;
+        b.onclick = () => submit(i);
+        opts.appendChild(b);
+    });
+}
 
-        log.push({
-            q: q.q,
-            u: q.a[idx],
-            r: q.a[q.c],
-            ok: isRight,
-            topic: q.t,
-            desc: q.d
-        });
+function submit(idx) {
+    const q = db[current];
+    const isRight = idx === q.c;
+    if(isRight) score++;
+    logs.push({ q: q.q, u: q.a[idx], r: q.a[q.c], ok: isRight, t: q.t, d: q.d });
+    
+    current++;
+    if(current < db.length) load();
+    else showResult();
+}
 
-        current++;
-        if(current < db.length) load();
-        else finish();
-    }
-
-    function finish() {
-        document.getElementById('test').style.display = 'none';
-        document.getElementById('results').style.display = 'block';
-        
-        document.getElementById('score-text').innerText = `Başarı Oranı: %${(score/db.length*100).toFixed(0)} (${score} / ${db.length} Doğru)`;
-        
-        let errHTML = "";
-        let lessonHTML = "";
-        let topics = new Set();
-
-        log.forEach(item => {
-            if(!item.ok) {
-                errHTML += `
-                <div class="analysis-card">
-                    <div style="color: #94a3b8; font-size: 0.9rem; margin-bottom: 5px;">Soru: ${item.q}</div>
-                    <div>Cevabın: <span class="tag-wrong">${item.u}</span> | Doğru: <span class="tag-correct">${item.r}</span></div>
-                </div>`;
-                
-                if(!topics.has(item.topic)) {
-                    lessonHTML += `
-                    <div class="lesson-box">
-                        <h4 style="margin: 0 0 10px; color: var(--p);">📖 Konu: ${item.topic}</h4>
-                        <p style="margin: 0; font-size: 0.95rem; color: #cbd5e1;">${item.desc}</p>
-                    </div>`;
-                    topics.add(item.topic);
-                }
+function showResult() {
+    document.getElementById('quiz').style.display = 'none';
+    document.getElementById('result').style.display = 'block';
+    
+    let level = score < 15 ? "A1/A2" : (score < 30 ? "B1" : "B2");
+    document.getElementById('final-score').innerText = `Seviyen: ${level} (${score}/40)`;
+    
+    let errHTML = "", lessonHTML = "", topics = new Set();
+    logs.forEach(l => {
+        if(!l.ok) {
+            errHTML += `<div class="analysis-card"><b>${l.q}</b><br>Sen: <span style="color:var(--err)">${l.u}</span> | Doğru: <span style="color:var(--s)">${l.r}</span></div>`;
+            if(!topics.has(l.t)) {
+                lessonHTML += `<div class="lesson-box"><b>${l.t}</b><br>${l.d}</div>`;
+                topics.add(l.t);
             }
-        });
-
-        document.getElementById('error-list').innerHTML = errHTML || "🎉 Hiç hata yapmadın, harikasın!";
-        document.getElementById('lessons').innerHTML = lessonHTML || "Geliştirilmesi gereken bir konu bulunamadı.";
-    }
+        }
+    });
+    document.getElementById('errors').innerHTML = errHTML || "Mükemmel skor!";
+    document.getElementById('lessons').innerHTML = lessonHTML || "Ders notuna gerek yok!";
+}
 </script>
 </body>
 </html>
