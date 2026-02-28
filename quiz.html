@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>Mastery English | Analiz</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root { --p: #6366f1; --s: #10b981; --err: #f43f5e; --bg: #0b0f1a; --card: #161e2d; }
+        body { background: var(--bg); color: #f1f5f9; font-family: 'Outfit', sans-serif; margin: 0; padding: 20px; }
+        .container { max-width: 800px; margin: 40px auto; }
+        .card { background: var(--card); padding: 40px; border-radius: 32px; border: 1px solid rgba(255,255,255,0.05); }
+        .progress { width: 100%; height: 8px; background: #1f2937; border-radius: 10px; margin-bottom: 30px; overflow: hidden; }
+        .fill { height: 100%; background: linear-gradient(to right, var(--p), var(--s)); width: 0%; transition: 0.4s; }
+        .opt { display: block; width: 100%; padding: 18px; margin-bottom: 12px; background: #1f2937; border: 2px solid transparent; border-radius: 16px; color: #94a3b8; text-align: left; cursor: pointer; font-size: 1.1rem; }
+        .opt:hover { border-color: var(--p); background: #2d3748; color: white; }
+        .lesson-card { background: #1e1b4b; padding: 20px; border-radius: 15px; margin-bottom: 15px; border-left: 5px solid var(--s); }
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+    <div class="container" id="quiz-area">
+        <div class="progress"><div id="bar" class="fill"></div></div>
+        <div class="card">
+            <div id="q-text" style="font-size: 1.5rem; font-weight: 600; margin-bottom: 30px;"></div>
+            <div id="options"></div>
+        </div>
+    </div>
+
+    <div class="container hidden" id="result-area">
+        <div class="card">
+            <h2 style="font-size: 2.5rem; margin-bottom: 20px;">Eksiklerin 📊</h2>
+            <div id="lesson-list"></div>
+            <a href="calisma.html" style="background:var(--s); color:white; padding:15px; display:block; text-align:center; border-radius:15px; text-decoration:none; font-weight:bold; margin-top:20px;">AKADEMİYE GİT (ÇALIŞMA ALANI)</a>
+        </div>
+    </div>
+
+<script>
+    const db = Array(40).fill({ q: "Sample Question?", a: ["Op1", "Op2", "Op3"], c: 0, t: "Konu Başlığı", d: "Mala anlatır gibi açıklama buraya..." }); 
+    // Not: Buradaki db dizisini 40 farklı soruyla doldurabilirsin.
+    
+    let cur = 0, logs = [];
+    function load() {
+        document.getElementById('bar').style.width = (cur/40*100) + "%";
+        document.getElementById('q-text').innerText = db[cur].q;
+        const box = document.getElementById('options');
+        box.innerHTML = '';
+        db[cur].a.forEach((o, i) => {
+            const b = document.createElement('button');
+            b.className = 'opt'; b.innerText = o;
+            b.onclick = () => { if(i !== db[cur].c) logs.push(db[cur]); cur++; if(cur<40) load(); else finish(); };
+            box.appendChild(b);
+        });
+    }
+    function finish() {
+        document.getElementById('quiz-area').classList.add('hidden');
+        document.getElementById('result-area').classList.remove('hidden');
+        const list = document.getElementById('lesson-list');
+        let seen = new Set();
+        logs.forEach(l => {
+            if(!seen.has(l.t)) {
+                list.innerHTML += `<div class="lesson-card"><b>${l.t}</b><br><small>${l.d}</small></div>`;
+                seen.add(l.t);
+            }
+        });
+    }
+    load();
+</script>
+</body>
+</html>
