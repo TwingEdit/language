@@ -17,12 +17,11 @@
 
         .chat-container { display: grid; grid-template-columns: 350px 1fr; flex: 1; overflow: hidden; }
 
-        /* Sol Panel - Profil */
+        /* Sol Panel - Profil Alanı */
         .ai-avatar-panel { background: var(--card); border-right: 1px solid var(--border); display: flex; flex-direction: column; align-items: center; padding: 40px 20px; box-sizing: border-box; }
         .avatar-frame { width: 220px; height: 220px; border-radius: 50%; border: 4px solid var(--p); overflow: hidden; box-shadow: 0 0 30px rgba(99, 102, 241, 0.3); margin-bottom: 20px; background: #000; position: relative; }
         .avatar-frame img { width: 100%; height: 100%; object-fit: cover; }
         
-        /* Chat Alanı */
         .chat-main { display: flex; flex-direction: column; background: #0f172a; position: relative; overflow: hidden; }
         #chat-window { flex: 1; overflow-y: auto; padding: 30px; display: flex; flex-direction: column; gap: 20px; padding-bottom: 140px; }
         
@@ -57,19 +56,19 @@
 <div class="chat-container">
     <div class="ai-avatar-panel">
         <div class="avatar-frame">
-            <img src="teacher.png" onerror="this.onerror=null; this.src='ComfyUI_00001_.png';" alt="Prof. Twing AI">
+            <img src="teacher.png" onerror="this.src='ComfyUI_00001_.png'" alt="Prof. Twing AI">
         </div>
         <h2 style="margin: 10px 0;">Prof. Twing AI</h2>
         <p><span style="color:var(--s)">●</span> Online & Yardıma Hazır</p>
         <div style="background: #1f2937; padding: 15px; border-radius: 12px; font-size: 0.9rem; margin-top: 20px; border-left: 4px solid var(--p);">
             <b>Hoca Notu:</b><br>
-            Ben hem Türkçe hem İngilizce konuşabilen AI hocan Prof. Twing AI! Seninle çalışmak için hazırım.
+            Ben hem Türkçe hem İngilizce konuşabilen AI hocan Prof. Twing AI! Seninle pratik yapmak için sabırsızlanıyorum.
         </div>
     </div>
 
     <div class="chat-main">
         <div id="chat-window">
-            <div class="msg ai">Hello! I am Prof. Twing AI. Mastery Academy'ye hoş geldin! Seninle tanıştığıma çok memnun oldum. Bugün İngilizce adına ne yapmak istersin? Sorularını hem Türkçe hem İngilizce sorabilirsin! 🎓</div>
+            <div class="msg ai">Hello! I am Prof. Twing AI. Mastery Academy'ye hoş geldin! Senin için arayüzü ve API bağlantısını güncelledim. Artık hem Türkçe hem İngilizce sohbet edebiliriz! 🎓</div>
         </div>
         <div id="loading" class="typing">Prof. Twing AI yanıt yazıyor...</div>
         <div class="input-area">
@@ -82,7 +81,7 @@
 <script type="module">
     import { GoogleGenerativeAI } from "https://esm.run/@google/generative-ai";
 
-    // Panelindeki aktif anahtarın
+    // Senin oluşturduğun ve aktif olan API anahtarın
     const API_KEY = "AIzaSyBjEhNsJLMP5y1fOTpfYEHsqkkdw-HopaQ"; 
     const genAI = new GoogleGenerativeAI(API_KEY);
 
@@ -109,7 +108,7 @@
             addMessage(response.text(), 'ai');
         } catch (e) {
             console.error(e);
-            addMessage("Küçük bir bağlantı sorunu oldu. Lütfen internetini kontrol et veya sayfayı yenile. Eğer yeni oluşturduysan anahtarın aktifleşmesi 2-3 dakika sürebilir.", 'ai');
+            addMessage("Küçük bir bağlantı sorunu oldu. Lütfen internetini kontrol et veya sayfayı yenile.", 'ai');
         } finally {
             loading.style.display = "none";
         }
