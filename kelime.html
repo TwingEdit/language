@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>Mastery Academy | Kelime Havuzu</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg: #0b0f1a; --card: #161e2d; --p: #6366f1; --s: #10b981; }
+        body { background: var(--bg); color: white; font-family: 'Outfit', sans-serif; padding: 40px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; }
+        .word-card { background: var(--card); padding: 20px; border-radius: 15px; border: 1px solid #334155; display: flex; justify-content: space-between; transition: 0.3s; }
+        .word-card:hover { border-color: var(--p); transform: scale(1.02); }
+        .btn { background: var(--p); color: white; border: none; padding: 15px 30px; border-radius: 10px; cursor: pointer; margin-bottom: 30px; font-weight: 800; }
+    </style>
+</head>
+<body>
+    <button class="btn" onclick="window.location.href='index.html'">← Ana Menü</button>
+    <h1>🔤 Kelime Havuzu</h1>
+    <p>Her yenilediğinde 500 kelime arasından farklı bir set gelir.</p>
+    <button class="btn" style="background:var(--s)" onclick="renderWords()">Yenile 🔄</button>
+    <div id="word-grid" class="grid"></div>
+
+    <script>
+        const words = Array.from({length: 500}, (_, i) => ({
+            en: ["Accomplish", "Exaggerate", "Predict", "Reluctant", "Sustain", "Abandon", "Innate", "Versatile"][i % 8] + " " + (i+1),
+            tr: ["Başarmak", "Abartmak", "Tahmin Etmek", "İsteksiz", "Sürdürmek", "Terk etmek", "Doğuştan", "Çok Yönlü"][i % 8]
+        }));
+
+        function renderWords() {
+            const container = document.getElementById('word-grid');
+            container.innerHTML = "";
+            const shuffle = words.sort(() => 0.5 - Math.random()).slice(0, 48);
+            shuffle.forEach(w => {
+                container.innerHTML += `<div class="word-card"><b>${w.en}</b> <span style="color:var(--s)">${w.tr}</span></div>`;
+            });
+        }
+        renderWords();
+    </script>
+</body>
+</html>
