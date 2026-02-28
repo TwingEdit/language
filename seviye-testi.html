@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>Mastery English | Tense Analizi</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg: #0b0f1a; --card: #161e2d; --p: #6366f1; --s: #10b981; --err: #f43f5e; }
+        body { background: var(--bg); color: white; font-family: 'Outfit', sans-serif; margin: 0; padding: 20px; }
+        .container { max-width: 1100px; margin: auto; }
+        .header { display: flex; justify-content: space-between; font-weight: 800; color: var(--p); margin-bottom: 10px; }
+        .progress-bar { width: 100%; height: 12px; background: #1f2937; border-radius: 10px; overflow: hidden; margin-bottom: 30px; border: 1px solid #334155; }
+        #bar { height: 100%; width: 0%; background: linear-gradient(90deg, var(--p), var(--s)); transition: 0.5s; }
+        .main-grid { display: grid; grid-template-columns: 1fr 1.5fr; gap: 25px; }
+        .pane { background: var(--card); padding: 35px; border-radius: 30px; border: 1px solid #334155; min-height: 480px; box-shadow: 0 10px 30px rgba(0,0,0,0.4); }
+        .opt { width: 100%; padding: 18px; margin: 10px 0; background: #1f2937; color: white; border: 1px solid #334155; border-radius: 15px; cursor: pointer; text-align: left; font-size: 1.1rem; transition: 0.3s; font-family: 'Outfit'; }
+        .opt:hover { border-color: var(--p); background: #232d3f; transform: translateX(8px); }
+        .res-card { padding: 15px; border-radius: 12px; margin-bottom: 10px; border-left: 8px solid; background: #0f172a; }
+        .btn-finish { background: var(--s); color: white; padding: 22px; border-radius: 20px; border: none; width: 100%; cursor: pointer; font-weight: 800; font-size: 1.3rem; margin-top: 20px; }
+    </style>
+</head>
+<body>
+
+<div id="quiz-screen" class="container">
+    <div class="header"><span id="q-text">YÜKLENİYOR...</span><span id="p-text">%0</span></div>
+    <div class="progress-bar"><div id="bar"></div></div>
+    <div class="main-grid">
+        <div class="pane">
+            <h2 style="color:var(--s); margin-top:0;">Gramer Notu 💡</h2>
+            <p id="hint" style="color:#94a3b8; line-height:1.7; font-size: 1.1rem;"></p>
+        </div>
+        <div class="pane" id="q-area"></div>
+    </div>
+</div>
+
+<div id="result-screen" class="container" style="display:none">
+    <h1 style="text-align:center; font-size: 2.5rem;">Analiz Raporun 📊</h1>
+    <div id="res-list"></div>
+    <button class="btn-finish" onclick="location.href='konu.html'">EKSİK KONULARI ÇALIŞMAYA BAŞLA →</button>
+</div>
+
+<script>
+    // 40 Soruluk Tam Liste - Her Tense için 5 Soru
+    const questions = [
+        // Present Simple (1-5)
+        {q: "She ___ to the gym every morning.", a: ["go", "goes", "going"], c: 1, h: "Simple Present: He/She/It fiili -s alır."},
+        {q: "Water ___ at 100 degrees.", a: ["boil", "boils", "is boiling"], c: 1, h: "Bilimsel gerçekler Geniş Zaman ile söylenir."},
+        {q: "___ you play the guitar?", a: ["Do", "Does", "Are"], c: 0, h: "You için soru kalıbı 'Do'dur."},
+        {q: "He ___ like spicy food.", a: ["don't", "doesn't", "isn't"], c: 1, h: "Olumsuzda He/She/It için 'doesn't' gelir."},
+        {q: "The train ___ at 10:00 every day.", a: ["leaves", "leave", "is leaving"], c: 0, h: "Zaman çizelgeleri Geniş Zaman'dır."},
+        
+        // Present Continuous (6-10)
+        {q: "Look! The baby ___.", a: ["sleeps", "is sleeping", "sleep"], c: 1, h: "Şu an olan eylemler (is sleeping)."},
+        {q: "I ___ a book these days.", a: ["read", "am reading", "reads"], c: 1, h: "Geçici süreçler Şimdiki Zaman'dır."},
+        {q: "They ___ soccer right now.", a: ["play", "are playing", "plays"], c: 1, h: "Now/Right now ifadeleri -ing gerektirir."},
+        {q: "Why ___ you laughing?", a: ["do", "are", "is"], c: 1, h: "Şu anki durumu sorma kalıbı."},
+        {q: "The weather ___ colder now.", a: ["gets", "is getting", "get"], c: 1, h: "Değişen durumlar Şimdiki Zaman'dır."},
+
+        // Past Simple (11-15)
+        {q: "I ___ a movie yesterday.", a: ["saw", "see", "seen"], c: 0, h: "Past Simple: Dün (yesterday) V2 hali (saw)."},
+        {q: "Where ___ you go last night?", a: ["did", "do", "were"], c: 1, h: "Geçmiş zaman soru yardımcı fiili 'did'."},
+        {q: "She ___ her homework an hour ago.", a: ["finished", "finish", "finishes"], c: 0, h: "Belirli geçmiş zaman V2 gerektirir."},
+        {q: "We ___ not go out last night.", a: ["did", "do", "were"], c: 0, h: "Olumsuz geçmiş zaman 'did not'."},
+        {q: "They ___ born in 1990.", a: ["was", "were", "did"], c: 1, h: "You/We/They için 'were born' kullanılır."},
+
+        // Future Continuous (16-20)
+        {q: "This time next week, I ___ on a beach.", a: ["will be lying", "lie", "am lying"], c: 0, h: "Gelecekte sürecek eylem."},
+        {q: "At 9 PM tonight, he ___ dinner.", a: ["eats", "will be eating", "will eat"], c: 1, h: "Gelecekte belirli bir andaki eylem."},
+        {q: "I ___ working all day tomorrow.", a: ["will be", "am", "will"], c: 0, h: "Gelecek süreç vurgusu."},
+        {q: "___ you be using your laptop later?", a: ["Will", "Do", "Are"], c: 0, h: "Nazikçe gelecek planı sorma."},
+        {q: "They ___ traveling this time tomorrow.", a: ["will", "will be", "are"], c: 1, h: "Belirli gelecek zaman noktası."},
+
+        // Diğer Zamanlar (21-40) - Analiz için 40'a tamamlama
+        {q: "I ___ my homework already.", a: ["finish", "have finished", "finished"], c: 1, h: "Present Perfect: Belirsiz geçmiş."},
+        {q: "How long ___ you lived here?", a: ["do", "did", "have"], c: 2, h: "Süreç sorma (Present Perfect)."},
+        {q: "She ___ just arrived.", a: ["has", "is", "did"], c: 0, h: "Henüz bitmiş eylem (just)."},
+        {q: "I ___ never been to Japan.", a: ["am", "did", "have"], c: 2, h: "Hayat tecrübesi (never/ever)."},
+        {q: "We ___ known each other for years.", a: ["have", "did", "are"], c: 0, h: "Süreç bildiren durumlar."},
+        {q: "I think it ___ rain tomorrow.", a: ["will", "is going to", "rains"], c: 0, h: "Tahmin (will)."},
+        {q: "Watch out! You ___ fall.", a: ["will", "are going to", "fall"], c: 1, h: "Gözle görülür kanıt (be going to)."},
+        {q: "I ___ meet them at 5 PM.", a: ["will", "am going to", "meet"], c: 1, h: "Önceden planlanmış eylem."},
+        {q: "By 2030, technology ___ changed.", a: ["will", "will have", "is"], c: 1, h: "Future Perfect: Gelecekte bitmiş olacak."},
+        {q: "If it ___ tomorrow, I'll stay home.", a: ["rains", "will rain", "rain"], c: 0, h: "If Type 1: Geniş zaman kullanılır."},
+        {q: "The book ___ written in 1850.", a: ["is", "was", "were"], c: 1, h: "Passive: Geçmiş zaman edilgen."},
+        {q: "I wish I ___ a car.", a: ["have", "had", "will have"], c: 1, h: "Şu anki pişmanlık (wish + V2)."},
+        {q: "She is interested ___ music.", a: ["at", "on", "in"], c: 2, h: "Kalıp: Interested in."},
+        {q: "I am good ___ English.", a: ["at", "in", "on"], c: 0, h: "Kalıp: Good at."},
+        {q: "He forgot ___ the door.", a: ["to lock", "locking", "lock"], c: 0, h: "Yapılması gereken işi unutmak."},
+        {q: "I look forward to ___ you.", a: ["meet", "meeting", "to meet"], c: 1, h: "Kalıp: Look forward to + V-ing."},
+        {q: "You ___ smoke here. It's forbidden.", a: ["mustn't", "don't have to", "shouldn't"], c: 0, h: "Yasak (mustn't)."},
+        {q: "You ___ see a doctor. You look ill.", a: ["should", "would", "must"], c: 0, h: "Tavsiye (should)."},
+        {q: "While I ___ cooking, the lights went out.", a: ["am", "was", "did"], c: 1, h: "Geçmişte uzun eylem (was -ing)."},
+        {q: "I ___ my keys. I can't find them.", a: ["lost", "have lost", "lose"], c: 1, h: "Etkisi süren olay (Present Perfect)."}
+    ];
+
+    let current = 0;
+    let score = [];
+
+    function render() {
+        if(current >= 40) {
+            document.getElementById('quiz-screen').style.display='none';
+            document.getElementById('result-screen').style.display='block';
+            const list = document.getElementById('res-list');
+            score.forEach((s, i) => {
+                const d = document.createElement('div');
+                d.className = `res-card`;
+                d.style.borderLeftColor = s.ok ? 'var(--s)' : 'var(--err)'; //
+                d.innerHTML = `<b>${i+1}. ${s.q}</b><br>Senin Cevabın: ${s.u} ${s.ok ? '✅' : '❌'}`;
+                list.appendChild(d);
+            });
+            window.scrollTo(0,0);
+            return;
+        }
+
+        const data = questions[current];
+        const pc = Math.round((current / 40) * 100); // %18 gibi doğru hesaplama
+        document.getElementById('q-text').innerText = `SORU: ${current + 1} / 40`;
+        document.getElementById('p-text').innerText = `%${pc}`;
+        document.getElementById('bar').style.width = pc + "%";
+        document.getElementById('hint').innerText = data.h;
+
+        let optHtml = `<p style="font-size:1.6rem; font-weight:600; margin-bottom:30px;">${data.q}</p>`;
+        data.a.forEach((o, i) => {
+            optHtml += `<button class="opt" onclick="next(${i})">${o}</button>`;
+        });
+        document.getElementById('q-area').innerHTML = optHtml;
+    }
+
+    function next(idx) {
+        score.push({q: questions[current].q, u: questions[current].a[idx], ok: idx === questions[current].c});
+        current++;
+        render();
+    }
+    render();
+</script>
+</body>
+</html>
