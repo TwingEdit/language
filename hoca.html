@@ -13,8 +13,9 @@
 
         .chat-container { display: grid; grid-template-columns: 350px 1fr; flex: 1; overflow: hidden; }
 
+        /* Sol Panel - Resmin Olduğu Yer */
         .ai-avatar-panel { background: var(--card); border-right: 1px solid var(--border); display: flex; flex-direction: column; align-items: center; padding: 40px 20px; }
-        .avatar-frame { width: 220px; height: 220px; border-radius: 50%; border: 4px solid var(--p); overflow: hidden; box-shadow: 0 0 30px rgba(99, 102, 241, 0.3); margin-bottom: 20px; }
+        .avatar-frame { width: 220px; height: 220px; border-radius: 50%; border: 4px solid var(--p); overflow: hidden; box-shadow: 0 0 30px rgba(99, 102, 241, 0.3); margin-bottom: 20px; background: #000; }
         .avatar-frame img { width: 100%; height: 100%; object-fit: cover; }
         
         .chat-main { display: flex; flex-direction: column; background: #0f172a; position: relative; }
@@ -24,6 +25,7 @@
         .msg.ai { background: var(--card); align-self: flex-start; border-bottom-left-radius: 2px; border: 1px solid var(--border); }
         .msg.user { background: var(--p); align-self: flex-end; border-bottom-right-radius: 2px; }
 
+        /* Yazı Yazma Alanı - Daha Büyük ve Kullanışlı */
         .input-area { 
             position: absolute; bottom: 30px; left: 20px; right: 20px;
             padding: 15px; background: var(--card); border: 2px solid var(--border); 
@@ -53,11 +55,11 @@
 
     <div class="chat-main">
         <div id="chat-window">
-            <div class="msg ai">Hello! I am Prof. Twing AI. Hem Türkçe hem İngilizce sohbet edebiliriz. Mesaj alanını senin için büyüttüm, hadi bir şeyler yaz! 🎓</div>
+            <div class="msg ai">Hello! I am Prof. Twing AI. Senin için arayüzü ve API bağlantısını güncelledim. Artık hem Türkçe hem İngilizce sohbet edebiliriz! 🎓</div>
         </div>
-        <div id="loading" class="typing">Prof. Twing AI yanıt yazıyor...</div>
+        <div id="loading" class="typing">Prof. Twing AI yazıyor...</div>
         <div class="input-area">
-            <input type="text" id="user-input" placeholder="Buraya yazın..." onkeypress="if(event.key === 'Enter') sendMessage()">
+            <input type="text" id="user-input" placeholder="Hocaya bir şeyler yaz..." onkeypress="if(event.key === 'Enter') sendMessage()">
             <button class="btn-send" onclick="sendMessage()">GÖNDER</button>
         </div>
     </div>
@@ -66,11 +68,13 @@
 <script type="module">
     import { GoogleGenerativeAI } from "https://esm.run/@google/generative-ai";
 
-    const API_KEY = "AIzaSyBjEhNsJLMP5y1fOTpfYEHsqkkdw-HopaQ";
+    // Paneldeki API anahtarın:
+    const API_KEY = "AIzaSyBjEhNsJLMP5y1fOTpfYEHsqkkdw-HopaQ"; 
     const genAI = new GoogleGenerativeAI(API_KEY);
+
     const model = genAI.getGenerativeModel({ 
         model: "gemini-1.5-flash",
-        systemInstruction: "Senin adın Prof. Twing AI. Karizmatik ve bilgili bir İngilizce hocasısın. Türkçe ve İngilizce konuşabilirsin."
+        systemInstruction: "Senin adın Prof. Twing AI. Karizmatik bir İngilizce hocasısın. Kullanıcıyla hem Türkçe hem İngilizce konuş, hatalarını düzelt."
     });
 
     const chat = model.startChat({ history: [] });
@@ -90,7 +94,7 @@
             addMessage(response.text(), 'ai');
         } catch (e) {
             console.error(e);
-            addMessage("Bağlantı sorunu! Lütfen 1 dakika bekleyip sayfayı yenile.", 'ai');
+            addMessage("Bağlantı aktifleşiyor, lütfen birkaç saniye sonra tekrar dene.", 'ai');
         } finally {
             document.getElementById('loading').style.display = "none";
         }
