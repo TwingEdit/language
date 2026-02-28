@@ -13,6 +13,7 @@
             --s: #10b981; 
             --text: #ffffff; 
             --border: #334155;
+            --ai-gold: #fbbf24;
         }
         
         body { 
@@ -29,14 +30,15 @@
 
         .main-container {
             background: var(--card); 
-            padding: 60px 50px; /* Daha dolgun padding */
+            padding: 50px 40px; 
             border-radius: 30px; 
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7); 
             text-align: center;
             border: 1px solid var(--border); 
             width: 100%;
-            max-width: 480px; /* Biraz daha geniş ve oturaklı */
+            max-width: 480px; 
             transition: transform 0.3s ease;
+            position: relative;
         }
 
         h1 { 
@@ -48,15 +50,15 @@
             -webkit-text-fill-color: transparent;
         }
 
-        p { color: #94a3b8; margin-bottom: 45px; font-size: 1.1rem; line-height: 1.5; }
+        p { color: #94a3b8; margin-bottom: 35px; font-size: 1.1rem; line-height: 1.5; }
         
-        .menu-list { display: flex; flex-direction: column; gap: 18px; }
+        .menu-list { display: flex; flex-direction: column; gap: 15px; }
 
         .menu-btn {
             background: #1f2937; 
             color: white; 
             text-decoration: none;
-            padding: 20px; 
+            padding: 18px; 
             border-radius: 18px; 
             font-weight: 600;
             border: 1px solid var(--border); 
@@ -64,32 +66,37 @@
             display: block;
             font-size: 1rem;
             position: relative;
-            overflow: hidden;
         }
 
         .menu-btn:hover {
             transform: translateY(-5px); 
             border-color: var(--p);
             background: #2d3748; 
-            box-shadow: 0 15px 30px rgba(99, 102, 241, 0.3);
+            box-shadow: 0 15px 30px rgba(99, 102, 241, 0.2);
         }
 
-        /* Analiz Butonu Özel Parlama Efekti */
-        .btn-analiz { 
-            background: var(--p); 
+        /* AI TUTOR BUTONU - ÖZEL PARLAK TASARIM */
+        .btn-ai { 
+            background: linear-gradient(135deg, var(--p), #4338ca); 
             border: none; 
             font-weight: 800;
             letter-spacing: 1px;
-            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
         }
         
-        .btn-analiz:hover { 
-            background: #4f46e5; 
-            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.6);
+        .btn-ai:hover { 
+            background: linear-gradient(135deg, #4f46e5, #3730a3); 
+            box-shadow: 0 8px 30px rgba(99, 102, 241, 0.7);
         }
 
+        .btn-ai span { font-size: 1.4rem; }
+
         .footer-info {
-            margin-top: 40px;
+            margin-top: 35px;
             font-size: 0.85rem;
             color: #475569;
             text-transform: uppercase;
@@ -97,7 +104,6 @@
             font-weight: 600;
         }
 
-        /* Süsleme Efekti */
         .decoration {
             position: absolute;
             width: 300px;
@@ -121,10 +127,14 @@
         <p>Dil becerilerini modern ve interaktif <br> metodlarla zirveye taşı.</p>
 
         <div class="menu-list">
-    <a href="./seviye-testi.html" class="menu-btn btn-analiz">📊 SEVİYE ANALİZİNİ BAŞLAT</a>
-    <a href="./konu.html" class="menu-btn">📖 KONU ANLATIMLARI (12 ZAMAN)</a>
-    <a href="./kelime.html" class="menu-btn">🧠 KELİME ANTRENÖRÜ (A2-B2)</a>
-</div>
+            <a href="./hoca.html" class="menu-btn btn-ai">
+                <span>👨‍🏫</span> AI TUTOR (MR. MASTERY)
+            </a>
+            
+            <a href="./seviye-testi.html" class="menu-btn">📊 SEVİYE ANALİZİ</a>
+            <a href="./konu.html" class="menu-btn">📖 KONU ANLATIMLARI</a>
+            <a href="./kelime.html" class="menu-btn">🧠 KELİME ANTRENÖRÜ</a>
+        </div>
         
         <div class="footer-info">
             E-LEARNING SYSTEM V2.0
