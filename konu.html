@@ -9,18 +9,29 @@
         body { background: var(--bg); color: white; font-family: 'Outfit', sans-serif; margin: 0; display: flex; height: 100vh; overflow: hidden; }
         
         /* Sidebar Düzenlemesi */
-        .sidebar { width: 300px; background: var(--card); border-right: 1px solid var(--border); padding: 20px; overflow-y: auto; flex-shrink: 0; display: flex; flex-direction: column; }
-        .sidebar h2 { color: var(--s); font-size: 1.2rem; margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 10px; }
+        .sidebar { width: 300px; background: var(--card); border-right: 1px solid var(--border); padding: 20px; overflow-y: auto; flex-shrink: 0; }
         
-        #menu-list { flex-grow: 1; } /* Menü öğeleri alanı kaplasın */
+        .sidebar h2 { color: var(--s); font-size: 1.2rem; margin-bottom: 10px; padding-bottom: 10px; }
+
+        /* ANA MENÜ BUTONU - SİDEBARIN EN ÜSTÜNDE */
+        .btn-home { 
+            display: block;
+            background: #1e1b4b; 
+            color: #a5b4fc; 
+            padding: 12px; 
+            border-radius: 10px; 
+            text-align: center; 
+            text-decoration: none; 
+            font-weight: 800; 
+            margin-bottom: 25px; 
+            border: 1px solid var(--p); 
+            transition: 0.3s;
+        }
+        .btn-home:hover { background: var(--p); color: white; transform: scale(1.02); }
 
         .topic-link { padding: 12px; border-radius: 10px; cursor: pointer; margin-bottom: 6px; background: #1f2937; transition: 0.2s; font-size: 0.85rem; border: 1px solid transparent; }
         .topic-link:hover { border-color: var(--p); transform: translateX(5px); }
         .topic-link.active { background: var(--p); color: white; font-weight: 800; }
-
-        /* Ana Menü Butonu Stili */
-        .btn-home { background: #312e81; color: white; padding: 15px; border-radius: 12px; text-align: center; text-decoration: none; font-weight: 800; margin-top: 20px; border: 1px solid var(--p); transition: 0.3s; cursor: pointer; display: block; }
-        .btn-home:hover { background: var(--p); box-shadow: 0 0 15px rgba(99, 102, 241, 0.4); }
 
         .main-content { flex: 1; overflow-y: auto; padding: 40px; }
         .lesson-card { background: var(--card); padding: 30px; border-radius: 20px; border: 1px solid var(--border); margin-bottom: 25px; }
@@ -33,15 +44,19 @@
         
         .hidden { display: none; }
         .welcome { text-align: center; margin-top: 150px; color: #94a3b8; }
+
+        /* Ders bitişindeki büyük buton */
+        .btn-final {
+            background: var(--s); color: white; padding: 15px 30px; border-radius: 12px; display: inline-block; margin-top: 20px; text-decoration: none; font-weight: 800;
+        }
     </style>
 </head>
 <body>
 
     <div class="sidebar">
+        <a href="index.html" class="btn-home">⬅ ANA MENÜYE DÖN</a>
         <h2>⏳ Tense Master</h2>
         <div id="menu-list"></div>
-        
-        <a href="index.html" class="btn-home">🏠 ANA MENÜYE DÖN</a>
     </div>
 
     <div class="main-content">
@@ -114,8 +129,7 @@ function showQ() {
         inner.innerHTML = `
             <h2 style="color:var(--s)">🎉 ${activeT} Tamamlandı!</h2>
             <p>Konuyu başarıyla bitirdin. Yeni bir ders seçebilir veya ana menüye dönebilirsin.</p>
-            <br>
-            <a href="index.html" class="btn-home" style="max-width:200px; margin:auto;">ANA MENÜYE GİT</a>
+            <a href="index.html" class="btn-final">🏠 ANA MENÜYE GİT</a>
         `;
         return;
     }
