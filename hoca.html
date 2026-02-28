@@ -2,55 +2,76 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <title>Mastery Academy | Prof. Twing</title>
+    <title>Mastery Academy | Prof. Twing AI</title>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
         :root { --bg: #0b0f1a; --card: #161e2d; --p: #6366f1; --s: #10b981; --border: #334155; }
-        body { background: var(--bg); color: white; font-family: 'Outfit', sans-serif; margin: 0; padding: 0; overflow: hidden; }
-        .header-nav { position: fixed; top: 0; left: 0; right: 0; height: 70px; background: rgba(11, 15, 26, 0.95); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border); display: flex; align-items: center; padding: 0 30px; z-index: 1000; }
+        body { background: var(--bg); color: white; font-family: 'Outfit', sans-serif; margin: 0; padding: 0; overflow: hidden; height: 100vh; }
+
+        .header-nav { 
+            position: fixed; top: 0; left: 0; right: 0; height: 70px; 
+            background: rgba(11, 15, 26, 0.95); backdrop-filter: blur(10px); 
+            border-bottom: 1px solid var(--border); display: flex; align-items: center; padding: 0 30px; z-index: 1000; 
+        }
         .btn-home { background: var(--p); color: white; padding: 10px 20px; border-radius: 10px; text-decoration: none; font-weight: 800; border: none; cursor: pointer; }
-        .chat-container { display: grid; grid-template-columns: 350px 1fr; height: 100vh; padding-top: 70px; }
-        .ai-avatar-panel { background: var(--card); border-right: 1px solid var(--border); display: flex; flex-direction: column; align-items: center; padding: 40px 20px; }
-        .avatar-frame { width: 220px; height: 220px; border-radius: 50%; border: 4px solid var(--p); overflow: hidden; box-shadow: 0 0 30px rgba(99, 102, 241, 0.3); margin-bottom: 20px; }
-        .avatar-frame img { width: 100%; height: 100%; object-fit: cover; }
-        .chat-main { display: flex; flex-direction: column; background: #0f172a; }
-        #chat-window { flex: 1; overflow-y: auto; padding: 30px; display: flex; flex-direction: column; gap: 20px; }
-        .msg { max-width: 80%; padding: 15px 20px; border-radius: 20px; line-height: 1.6; }
+
+        .chat-container { display: grid; grid-template-columns: 350px 1fr; height: calc(100vh - 70px); margin-top: 70px; }
+
+        .ai-avatar-panel { background: var(--card); border-right: 1px solid var(--border); display: flex; flex-direction: column; align-items: center; padding: 40px 20px; box-sizing: border-box; }
+        .avatar-frame { width: 220px; height: 220px; border-radius: 50%; border: 4px solid var(--p); overflow: hidden; box-shadow: 0 0 30px rgba(99, 102, 241, 0.3); margin-bottom: 20px; background: #000; }
+        .avatar-frame img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        
+        .chat-main { display: flex; flex-direction: column; background: #0f172a; position: relative; height: 100%; }
+        #chat-window { flex: 1; overflow-y: auto; padding: 30px; display: flex; flex-direction: column; gap: 20px; padding-bottom: 100px; }
+        
+        .msg { max-width: 80%; padding: 15px 20px; border-radius: 20px; line-height: 1.6; font-size: 1rem; word-wrap: break-word; }
         .msg.ai { background: var(--card); align-self: flex-start; border-bottom-left-radius: 2px; border: 1px solid var(--border); }
         .msg.user { background: var(--p); align-self: flex-end; border-bottom-right-radius: 2px; }
-        .input-area { padding: 25px; background: var(--card); border-top: 1px solid var(--border); display: flex; gap: 15px; }
-        input { flex: 1; background: #0b0f1a; border: 1px solid var(--border); border-radius: 12px; color: white; padding: 15px; outline: none; }
-        .typing { font-style: italic; color: #94a3b8; display: none; margin-left: 30px; }
+
+        /* Giriş Alanı Düzenlemesi */
+        .input-area { 
+            position: absolute; bottom: 0; left: 0; right: 0;
+            padding: 20px 30px; background: var(--card); border-top: 1px solid var(--border); 
+            display: flex; gap: 15px; align-items: center; z-index: 10;
+        }
+        input { 
+            flex: 1; background: #0b0f1a; border: 1px solid var(--border); 
+            border-radius: 15px; color: white; padding: 18px; font-size: 1.1rem; outline: none; 
+        }
+        .btn-send { background: var(--p); color: white; padding: 15px 30px; border-radius: 15px; font-weight: 800; border: none; cursor: pointer; transition: 0.3s; }
+        .btn-send:hover { background: #4f46e5; transform: scale(1.05); }
+
+        .typing { font-style: italic; color: #94a3b8; margin-bottom: 10px; display: none; padding-left: 30px; }
     </style>
 </head>
 <body>
 
 <div class="header-nav">
     <a href="index.html" class="btn-home">⬅ ANA MENÜ</a>
-    <h3 style="margin-left: 20px;">AI Tutor: <span style="color:var(--p)">Prof. Twing</span></h3>
+    <h3 style="margin-left: 20px;">AI Tutor: <span style="color:var(--p)">Prof. Twing AI</span></h3>
 </div>
 
 <div class="chat-container">
     <div class="ai-avatar-panel">
         <div class="avatar-frame">
-            <img src="ComfyUI_00001_.png" alt="Prof. Twing" id="tutor-img">
+            <img src="ComfyUI_00001_.png" alt="Prof. Twing AI">
         </div>
-        <h2>Prof. Twing</h2>
+        <h2>Prof. Twing AI</h2>
         <p><span style="color:var(--s)">●</span> Online & Yardıma Hazır</p>
-        <div style="background: #1f2937; padding: 15px; border-radius: 12px; font-size: 0.85rem; margin-top: 20px;">
+        <div style="background: #1f2937; padding: 15px; border-radius: 12px; font-size: 0.9rem; margin-top: 20px; border-left: 4px solid var(--p);">
             <b>Hoca Hakkında:</b><br>
-            Ben hem Türkçe hem İngilizce konuşabilen AI hocan Prof. Twing! Hatalarını düzeltebilir, seninle pratik yapabilirim.
+            Ben hem Türkçe hem İngilizce konuşabilen AI hocan Prof. Twing AI! Hatalarını düzeltebilir, seninle pratik yapabilirim.
         </div>
     </div>
 
     <div class="chat-main">
         <div id="chat-window">
-            <div class="msg ai">Hello! I am Prof. Twing. Seninle tanıştığıma çok memnun oldum! Bugün İngilizce adına ne yapmak istersin?</div>
+            <div class="msg ai">Hello! I am Prof. Twing AI. Seninle tanıştığıma çok memnun oldum! Bugün İngilizce adına ne yapmak istersin? Hem Türkçe hem İngilizce konuşabiliriz! 🎓</div>
         </div>
-        <div id="loading" class="typing">Prof. Twing düşünüyor...</div>
+        <div id="loading" class="typing">Prof. Twing AI yazıyor...</div>
         <div class="input-area">
             <input type="text" id="user-input" placeholder="Hocaya bir şeyler yaz..." onkeypress="if(event.key === 'Enter') sendMessage()">
-            <button class="btn-home" onclick="sendMessage()">GÖNDER</button>
+            <button class="btn-send" onclick="sendMessage()">GÖNDER</button>
         </div>
     </div>
 </div>
@@ -58,11 +79,11 @@
 <script type="module">
     import { GoogleGenerativeAI } from "https://esm.run/@google/generative-ai";
 
-    const API_KEY = "AIzaSyBjEhNsJLMP5y1fOTpfYEHsqkkdw-HopaQ"; //
+    const API_KEY = "AIzaSyBjEhNsJLMP5y1fOTpfYEHsqkkdw-HopaQ";
     const genAI = new GoogleGenerativeAI(API_KEY);
     const model = genAI.getGenerativeModel({ 
         model: "gemini-1.5-flash",
-        systemInstruction: "Senin adın Prof. Twing. Mastery Academy'de nazik ve bilgili bir İngilizce hocasısın. Kullanıcıyla hem Türkçe hem İngilizce konuşabilirsin. Hatalarını düzelt ve onu her zaman teşvik et."
+        systemInstruction: "Senin adın Prof. Twing AI. Mastery Academy'de nazik ve çok bilgili bir İngilizce hocasısın. Kullanıcıyla hem Türkçe hem İngilizce konuşmalısın. Eğer kullanıcı Türkçe yazarsa Türkçe cevap ver ama İngilizce terimleri de öğret. İngilizce yazarsa İngilizcesini geliştir ve hatalarını düzelt. Her zaman teşvik edici ol."
     });
 
     const chat = model.startChat({ history: [] });
