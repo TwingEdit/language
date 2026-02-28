@@ -2,22 +2,98 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <title>Mastery English | Akademi</title>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@600&display=swap" rel="stylesheet">
+    <title>Mastery Academy | Çalışma Alanı</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;600;800&display=swap" rel="stylesheet">
     <style>
-        body { background: #0b0f1a; color: white; font-family: 'Outfit', sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        .grid { display: grid; grid-template-columns: repeat(3, 250px); gap: 20px; }
-        .box { background: #161e2d; height: 350px; border-radius: 25px; border: 2px solid #334155; display: flex; flex-direction: column; justify-content: center; align-items: center; cursor: pointer; transition: 0.3s; }
-        .box:hover { border-color: #6366f1; transform: translateY(-10px); background: #1e293b; }
-        h3 { font-size: 1.5rem; text-align: center; }
-        .icon { font-size: 3rem; margin-bottom: 20px; }
+        :root { --p: #6366f1; --s: #10b981; --bg: #0b0f1a; --card: #161e2d; }
+        body { background: var(--bg); color: white; font-family: 'Outfit', sans-serif; margin: 0; padding: 20px; min-height: 100vh; }
+        
+        /* Ana Menü Izgarası */
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; max-width: 1000px; margin: 50px auto; }
+        .box { background: var(--card); height: 300px; border-radius: 30px; border: 2px solid #334155; display: flex; flex-direction: column; justify-content: center; align-items: center; cursor: pointer; transition: 0.3s; text-align: center; }
+        .box:hover { border-color: var(--p); transform: translateY(-10px); box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
+        .icon { font-size: 4rem; margin-bottom: 15px; }
+
+        /* İçerik Panelleri */
+        .panel { display: none; max-width: 800px; margin: 40px auto; background: var(--card); padding: 40px; border-radius: 32px; border: 1px solid rgba(255,255,255,0.1); }
+        .active { display: block; animation: fadeIn 0.5s; }
+        
+        .back-btn { background: #1f2937; color: white; padding: 10px 20px; border-radius: 12px; cursor: pointer; border: none; margin-bottom: 20px; }
+        .lesson-step { background: #1e1b4b; padding: 20px; border-radius: 15px; margin-bottom: 20px; border-left: 5px solid var(--p); }
+        .word-card { background: #0f172a; padding: 15px; border-radius: 12px; margin: 10px 0; border: 1px dashed var(--s); display: flex; justify-content: space-between; }
+        
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
-    <div class="grid">
-        <div class="box"><div class="icon">📖</div><h3>KONU ÇALIŞMA</h3></div>
-        <div class="box"><div class="icon">🔤</div><h3>KELİME ÇALIŞMA</h3></div>
-        <div class="box"><div class="icon">📝</div><h3>QUİZLER</h3></div>
+
+    <div style="text-align: center; margin-top: 30px;">
+        <h1 style="font-size: 2.5rem; background: linear-gradient(to right, #818cf8, #34d399); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Akademi Merkezi</h1>
+        <p style="color: #94a3b8;">Hangi alanda kendini geliştirmek istersin?</p>
     </div>
+
+    <div id="main-menu" class="grid">
+        <div class="box" onclick="showPanel('panel-konu')">
+            <div class="icon">📖</div>
+            <h3>KONU ÇALIŞMA</h3>
+            <p style="font-size: 0.8rem; color: #94a3b8; padding: 0 20px;">Gramer konularını "mala anlatır gibi" öğren.</p>
+        </div>
+        <div class="box" onclick="showPanel('panel-kelime')">
+            <div class="icon">🔤</div>
+            <h3>KELİME ÇALIŞMA</h3>
+            <p style="font-size: 0.8rem; color: #94a3b8; padding: 0 20px;">En çok kullanılan kelimeleri ezberle.</p>
+        </div>
+        <div class="box" onclick="showPanel('panel-quiz')">
+            <div class="icon">📝</div>
+            <h3>QUİZLER</h3>
+            <p style="font-size: 0.8rem; color: #94a3b8; padding: 0 20px;">Öğrendiklerini hızlıca test et.</p>
+        </div>
+    </div>
+
+    <div id="panel-konu" class="panel">
+        <button class="back-btn" onclick="showMainMenu()">← Geri Dön</button>
+        <h2>📖 Konu Anlatımları</h2>
+        <div class="lesson-step">
+            <h4 style="color: var(--p);">Present Simple (Geniş Zaman)</h4>
+            <p>Bak kardeşim, her gün yaptığın işleri anlatırken fiili olduğu gibi bırakıyorsun. Ama özne "He, She, It" ise fiilin sonuna bir "s" ekliyorsun. Bu kadar!</p>
+            <code style="color: var(--s);">I go to work. / She goes to work.</code>
+        </div>
+        <div class="lesson-step">
+            <h4 style="color: var(--p);">Past Simple (Geçmiş Zaman)</h4>
+            <p>Dün yaptığın bir şeyi anlatırken fiilin 2. halini kullanırsın. Düzenli fiillere "-ed" takısı gelir, düzensizleri (go -> went gibi) ezberlemek zorundasın.</p>
+        </div>
+    </div>
+
+    <div id="panel-kelime" class="panel">
+        <button class="back-btn" onclick="showMainMenu()">← Geri Dön</button>
+        <h2>🔤 Kelime Kartları</h2>
+        <div class="word-card"><span>Accomplish</span> <span>Başarmak ✅</span></div>
+        <div class="word-card"><span>Exaggerate</span> <span>Abartmak 📢</span></div>
+        <div class="word-card"><span>Predict</span> <span>Tahmin Etmek 🔮</span></div>
+        <div class="word-card"><span>Reluctant</span> <span>İsteksiz 😒</span></div>
+    </div>
+
+    <div id="panel-quiz" class="panel">
+        <button class="back-btn" onclick="showMainMenu()">← Geri Dön</button>
+        <h2>📝 Hızlı Quizler</h2>
+        <div style="background: #1f2937; padding: 20px; border-radius: 15px;">
+            <p>Soru: "She ___ (play) tennis every day." boşluğuna ne gelmelidir?</p>
+            <button style="width: 100%; padding: 10px; margin: 5px; border-radius: 8px; border: none; cursor: pointer;" onclick="alert('Doğru! 🎉')">plays</button>
+            <button style="width: 100%; padding: 10px; margin: 5px; border-radius: 8px; border: none; cursor: pointer;" onclick="alert('Yanlış! He/She/It için S takısı gelir.')">play</button>
+        </div>
+    </div>
+
+    <script>
+        function showPanel(panelId) {
+            document.getElementById('main-menu').style.display = 'none';
+            document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+            document.getElementById(panelId).classList.add('active');
+        }
+
+        function showMainMenu() {
+            document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+            document.getElementById('main-menu').style.display = 'grid';
+        }
+    </script>
 </body>
 </html>
