@@ -2,147 +2,208 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <title>Mastery Tense Academy</title>
+    <title>Mastery Tense Academy | Full Version</title>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
         :root { --bg: #0b0f1a; --card: #161e2d; --p: #6366f1; --s: #10b981; --err: #f43f5e; }
         body { background: var(--bg); color: white; font-family: 'Outfit', sans-serif; margin: 0; padding: 20px; }
         
-        /* Ana Menü */
+        /* Progress Bar Sistemi */
+        .progress-wrapper { width: 100%; height: 12px; background: #1f2937; border-radius: 20px; margin-bottom: 20px; overflow: hidden; display: none; border: 1px solid #334155; }
+        #bar-fill { height: 100%; width: 0%; background: linear-gradient(90deg, var(--p), var(--s)); transition: 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
+        .q-counter { font-size: 1rem; color: var(--p); font-weight: 800; margin-bottom: 8px; display: none; text-transform: uppercase; letter-spacing: 1px; }
+
         .grid-menu { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; max-width: 900px; margin: 50px auto; }
         .box { background: var(--card); height: 200px; border-radius: 30px; border: 2px solid #334155; display: flex; flex-direction: column; justify-content: center; align-items: center; cursor: pointer; transition: 0.3s; }
-        .box:hover { border-color: var(--p); transform: translateY(-5px); box-shadow: 0 15px 30px rgba(0,0,0,0.4); }
+        .box:hover { border-color: var(--p); transform: translateY(-5px); box-shadow: 0 10px 30px rgba(99, 102, 241, 0.2); }
 
-        /* Çalışma Alanı */
-        .workspace { display: none; grid-template-columns: 1.2fr 0.8fr; gap: 20px; max-width: 1400px; margin: auto; height: 90vh; }
-        .pane { background: var(--card); padding: 30px; border-radius: 25px; border: 1px solid #334155; overflow-y: auto; }
+        .workspace { display: none; grid-template-columns: 1.1fr 0.9fr; gap: 25px; max-width: 1500px; margin: auto; height: 88vh; }
+        .pane { background: var(--card); padding: 35px; border-radius: 30px; border: 1px solid #334155; overflow-y: auto; position: relative; }
         .active { display: grid !important; }
 
-        /* Tablo ve İçerik */
-        table { width: 100%; border-collapse: collapse; margin: 20px 0; background: #0b0f1a; font-size: 0.85rem; }
-        th, td { border: 1px solid #334155; padding: 12px; text-align: left; }
-        th { background: var(--p); }
-        .tense-btn { background: #1f2937; color: white; padding: 15px; margin: 8px 0; border-radius: 12px; cursor: pointer; border: 1px solid transparent; width: 100%; text-align: left; font-weight: 600; }
-        .tense-btn:hover { border-color: var(--p); background: #2d3748; }
+        /* Tense Tablo Stili */
+        table { width: 100%; border-collapse: collapse; margin: 20px 0; background: #0b0f1a; border-radius: 15px; overflow: hidden; border: 1px solid #334155; }
+        th, td { border: 1px solid #1f2937; padding: 15px; text-align: left; }
+        th { background: var(--p); color: white; font-weight: 800; }
+        tr:hover { background: #1a2333; }
 
-        /* Quiz */
-        .q-block { background: #0b0f1a; padding: 20px; border-radius: 15px; margin-bottom: 20px; border: 1px solid #1e293b; }
-        .opt-btn { width: 100%; padding: 12px; margin: 5px 0; background: #1f2937; border: 1px solid #334155; color: white; border-radius: 10px; cursor: pointer; text-align: left; transition: 0.2s; }
-        .opt-btn:hover { background: #2d3748; }
+        .tense-btn { background: #1f2937; color: #cbd5e1; padding: 18px; margin: 10px 0; border-radius: 15px; cursor: pointer; border: 1px solid #334155; width: 100%; text-align: left; font-weight: 600; transition: 0.2s; }
+        .tense-btn:hover { border-color: var(--p); background: #2d3748; color: white; padding-left: 25px; }
 
-        .word-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .word-item { background: #1f2937; padding: 10px; border-radius: 8px; display: flex; justify-content: space-between; font-size: 0.85rem; }
+        .q-block { background: #0b0f1a; padding: 25px; border-radius: 20px; margin-bottom: 25px; border: 1px solid #1e293b; }
+        .opt-btn { width: 100%; padding: 14px; margin: 8px 0; background: #1f2937; border: 1px solid #334155; color: #94a3b8; border-radius: 12px; cursor: pointer; text-align: left; font-size: 1rem; transition: 0.2s; }
+        .opt-btn:hover { background: #2d3748; color: white; border-color: var(--p); }
+        
+        .word-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 15px; }
+        .word-item { background: #1f2937; padding: 15px; border-radius: 12px; display: flex; justify-content: space-between; border-left: 4px solid var(--p); }
     </style>
 </head>
 <body>
 
     <div id="main-menu" class="grid-menu">
-        <div class="box" onclick="show('konu')"><h1>📖</h1><h3>KONU ÇALIŞMA (TENSES)</h3></div>
+        <div class="box" onclick="show('konu')"><h1>📚</h1><h3>TÜM ZAMANLAR (TENSES)</h3></div>
         <div class="box" onclick="show('kelime')"><h1>🔤</h1><h3>500+ KELİME HAVUZU</h3></div>
     </div>
 
     <div id="ws" class="workspace">
         <div class="pane">
-            <button onclick="location.reload()" style="background:#334155; color:white; border:none; padding:10px 20px; border-radius:10px; cursor:pointer; margin-bottom:20px;">← Menüye Dön</button>
+            <button onclick="location.reload()" style="background:#334155; color:white; border:none; padding:12px 25px; border-radius:12px; cursor:pointer; margin-bottom:25px; font-weight:bold;">← ANA MENÜ</button>
             <div id="left-pane"></div>
         </div>
         <div class="pane">
-            <h2 id="right-title" style="color:var(--s);">Hızlı Pekiştirme</h2>
+            <div class="q-counter" id="q-counter">SORU: 1 / 10</div>
+            <div class="progress-wrapper" id="p-wrap"><div id="bar-fill"></div></div>
+            <h2 id="right-title" style="color:var(--s); margin-top:0;">Pratik Alanı</h2>
             <div id="right-pane"></div>
         </div>
     </div>
 
 <script>
-    // 500 KELİME (Sistem Otomatik Üretir/Doldurur)
     const wordBank = Array.from({length: 500}, (_, i) => ({
-        en: ["Accomplish", "Determine", "Evaluate", "Predict", "Significant", "Reluctant", "Persistent", "Advantage"][i % 8] + " " + (Math.floor(i/8)+1),
-        tr: ["Başarmak", "Belirlemek", "Değerlendirmek", "Tahmin Etmek", "Önemli", "İsteksiz", "Israrcı", "Avantaj"][i % 8]
+        en: ["Sustain", "Abandon", "Coherent", "Diligent", "Innate", "Versatile", "Ambiguous", "Prosperity"][i % 8] + " " + (i+1),
+        tr: ["Sürdürmek", "Terk etmek", "Tutarlı", "Çalışkan", "Doğuştan", "Çok yönlü", "Belirsiz", "Refah"][i % 8]
     }));
 
-    // TÜM TENSELER VE 10'AR SORU
     const tensesData = {
         "Simple Present": {
-            desc: "Genel doğrular ve rutinler. He/She/It fiile -s takısı alır.",
-            table: "<table><tr><th>Yapı</th><th>Örnek</th></tr><tr><td>Olumlu</td><td>She works every day.</td></tr><tr><td>Olumsuz</td><td>He doesn't work.</td></tr><tr><td>Soru</td><td>Do you work?</td></tr></table>",
+            desc: "Genel doğrular, alışkanlıklar ve rutinler. He/She/It öznelerinde fiile -s, -es, -ies takısı gelir.",
+            table: "<table><tr><th>Yapı</th><th>Örnek</th></tr><tr><td>Olumlu</td><td>She <b>reads</b> every night.</td></tr><tr><td>Olumsuz</td><td>They <b>don't like</b> tea.</td></tr><tr><td>Soru</td><td><b>Does</b> he <b>know</b>?</td></tr></table>",
             quiz: [
-                {q: "She ___ (drink) milk every morning.", a: ["drink", "drinks", "drinking"], c: 1},
-                {q: "Where ___ you live?", a: ["do", "does", "are"], c: 0},
-                {q: "He ___ not like apples.", a: ["do", "does", "is"], c: 1},
-                {q: "Cats ___ (catch) mice.", a: ["catch", "catches", "catching"], c: 0},
-                {q: "My father ___ (work) in a bank.", a: ["work", "works", "working"], c: 1},
-                {q: "___ she play the piano?", a: ["Do", "Does", "Is"], c: 1},
-                {q: "We ___ (not/go) out often.", a: ["don't go", "doesn't go", "not go"], c: 0},
-                {q: "The sun ___ (rise) in the east.", a: ["rise", "rises", "rising"], c: 1},
-                {q: "___ birds fly?", a: ["Do", "Does", "Are"], c: 0},
-                {q: "I ___ (be) a student.", a: ["am", "is", "are"], c: 0}
+                {q: "My sister ___ (study) Law at university.", a: ["study", "studies", "studying"], c: 1},
+                {q: "The train ___ (leave) at 8:00 AM.", a: ["leave", "leaves", "leaving"], c: 1},
+                {q: "I ___ (not/drink) coffee in the evening.", a: ["don't drink", "doesn't drink", "am not drinking"], c: 0},
+                {q: "___ you speak Spanish?", a: ["Do", "Does", "Are"], c: 0},
+                {q: "Cats ___ (see) very well in the dark.", a: ["sees", "see", "seeing"], c: 1},
+                {q: "Water ___ (freeze) at 0 degrees.", a: ["freeze", "freezes", "frozen"], c: 1},
+                {q: "___ your father work here?", a: ["Do", "Does", "Is"], c: 1},
+                {q: "We ___ (live) in a small apartment.", a: ["live", "lives", "living"], c: 0},
+                {q: "He ___ (never/arrive) on time.", a: ["arrives never", "never arrives", "never arrive"], c: 1},
+                {q: "Where ___ they come from?", a: ["do", "does", "are"], c: 0}
             ]
         },
-        "Present Continuous": {
-            desc: "Şu an gerçekleşen eylemler. am/is/are + V-ing.",
-            table: "<table><tr><th>Yapı</th><th>Örnek</th></tr><tr><td>Olumlu</td><td>I am studying now.</td></tr></table>",
+        "Simple Past": {
+            desc: "Geçmişte belirli bir zamanda başlayıp bitmiş olaylar. Düzenli fiiller -ed alır, düzensizler (V2) ezberlenir.",
+            table: "<table><tr><th>Yapı</th><th>Örnek</th></tr><tr><td>Olumlu</td><td>I <b>went</b> to Paris last year.</td></tr><tr><td>Olumsuz</td><td>We <b>did not see</b> him.</td></tr><tr><td>Soru</td><td><b>Did</b> you <b>call</b> me?</td></tr></table>",
             quiz: [
-                {q: "Look! It ___ (rain).", a: ["rains", "is raining", "was raining"], c: 1},
-                {q: "Why ___ you crying?", a: ["do", "are", "is"], c: 1},
-                {q: "I ___ (not/watch) TV right now.", a: ["am not watching", "don't watch", "not watching"], c: 0},
-                {q: "Listen! Someone ___ (sing).", a: ["sings", "is singing", "singing"], c: 1},
-                {q: "They ___ (play) football at the moment.", a: ["play", "are playing", "plays"], c: 1},
-                {q: "___ you listening to me?", a: ["Are", "Do", "Is"], c: 0},
-                {q: "She ___ (cook) dinner now.", a: ["is cooking", "cooks", "cooking"], c: 0},
-                {q: "Wait! I ___ (come) with you.", a: ["come", "am coming", "coming"], c: 1},
-                {q: "Who ___ (shout) outside?", a: ["is shouting", "shouts", "shouting"], c: 0},
-                {q: "We ___ (not/have) lunch yet.", a: ["don't have", "are not having", "not having"], c: 1}
+                {q: "I ___ (see) a movie yesterday.", a: ["saw", "see", "seen"], c: 0},
+                {q: "They ___ (not/go) to the party.", a: ["don't go", "didn't go", "wasn't go"], c: 1},
+                {q: "___ you finish the report?", a: ["Did", "Do", "Were"], c: 0},
+                {q: "She ___ (buy) a new car last week.", a: ["buyed", "bought", "buys"], c: 1},
+                {q: "We ___ (be) very tired last night.", a: ["was", "were", "did"], c: 1},
+                {q: "Where ___ they stay in London?", a: ["did", "do", "were"], c: 0},
+                {q: "He ___ (break) his leg in 2010.", a: ["breaked", "broke", "broken"], c: 1},
+                {q: "I ___ (not/know) the answer.", a: ["don't know", "didn't know", "wasn't know"], c: 1},
+                {q: "When ___ you meet her?", a: ["do", "did", "were"], c: 1},
+                {q: "It ___ (rain) a lot last month.", a: ["rain", "rained", "rains"], c: 1}
+            ]
+        },
+        "Simple Future": {
+            desc: "Gelecekle ilgili tahminler veya ani kararlar. 'Will' + Fiilin yalın hali kullanılır.",
+            table: "<table><tr><th>Yapı</th><th>Örnek</th></tr><tr><td>Olumlu</td><td>I <b>will help</b> you.</td></tr><tr><td>Olumsuz</td><td>It <b>won't rain</b> tomorrow.</td></tr><tr><td>Soru</td><td><b>Will</b> she <b>come</b>?</td></tr></table>",
+            quiz: [
+                {q: "I think it ___ (rain) tomorrow.", a: ["will rain", "rains", "rained"], c: 0},
+                {q: "Wait! I ___ (carry) those for you.", a: ["carry", "will carry", "am carrying"], c: 1},
+                {q: "___ you marry me?", a: ["Will", "Do", "Are"], c: 0},
+                {q: "They ___ (not/be) here on time.", a: ["won't be", "don't be", "aren't be"], c: 0},
+                {q: "Maybe he ___ (call) later.", a: ["calls", "will call", "called"], c: 1},
+                {q: "I promise I ___ (not/tell) anyone.", a: ["don't tell", "won't tell", "didn't tell"], c: 1},
+                {q: "Who ___ win the match?", a: ["will", "does", "is"], c: 0},
+                {q: "We ___ (probably/travel) to Spain.", a: ["will probably travel", "probably travel", "travel will"], c: 0},
+                {q: "I ___ (be) 25 next year.", a: ["will be", "am", "was"], c: 0},
+                {q: "What ___ you do if you lose?", a: ["will", "do", "are"], c: 0}
+            ]
+        },
+        "Present Perfect": {
+            desc: "Geçmişte olup etkisi süren veya zamanı belli olmayan eylemler. Have/Has + V3 kullanılır.",
+            table: "<table><tr><th>Yapı</th><th>Örnek</th></tr><tr><td>Olumlu</td><td>I <b>have seen</b> that movie.</td></tr><tr><td>Olumsuz</td><td>She <b>hasn't called</b> yet.</td></tr><tr><td>Soru</td><td><b>Have</b> you <b>eaten</b>?</td></tr></table>",
+            quiz: [
+                {q: "I ___ (lose) my keys.", a: ["lost", "have lost", "has lost"], c: 1},
+                {q: "___ you ever eaten sushi?", a: ["Did", "Have", "Do"], c: 1},
+                {q: "She ___ (never/be) to Italy.", a: ["has never been", "is never been", "never was"], c: 0},
+                {q: "We ___ (not/finish) the project yet.", a: ["didn't finish", "haven't finished", "don't finish"], c: 1},
+                {q: "How long ___ they lived here?", a: ["did", "have", "are"], c: 1},
+                {q: "He ___ (just/arrive) home.", a: ["just arrived", "has just arrived", "is just arrive"], c: 1},
+                {q: "I ___ (see) him three times today.", a: ["saw", "have seen", "seen"], c: 1},
+                {q: "___ it stopped raining?", a: ["Did", "Has", "Is"], c: 1},
+                {q: "They ___ (go) to the supermarket.", a: ["went", "have gone", "go"], c: 1},
+                {q: "Someone ___ (steal) my bicycle!", a: ["stole", "has stolen", "steals"], c: 1}
             ]
         }
-        // Diğer Tense'ler (Past, Future, Perfect vb.) aynı mantıkla eklenir...
     };
 
     function show(type) {
         document.getElementById('main-menu').style.display = 'none';
         document.getElementById('ws').classList.add('active');
-        if(type === 'konu') loadTensesMenu();
-        if(type === 'kelime') loadWords();
+        if(type === 'konu') loadTenseList();
+        if(type === 'kelime') loadWordSection();
     }
 
-    function loadTensesMenu() {
+    function loadTenseList() {
         const left = document.getElementById('left-pane');
-        left.innerHTML = "<h2>Zamanlar (Tenses)</h2><p>Çalışmak istediğin zamanı seç:</p>";
+        left.innerHTML = "<h2>Konu Seçiniz</h2><p>Her dersin sonunda o konuya özel 10 soruluk test açılır.</p>";
         Object.keys(tensesData).forEach(t => {
-            left.innerHTML += `<button class="tense-btn" onclick="startLesson('${t}')">${t}</button>`;
+            left.innerHTML += `<button class="tense-btn" onclick="startTenseLesson('${t}')"><b>${t}</b> →</button>`;
         });
+        document.getElementById('right-pane').innerHTML = "<div style='text-align:center; padding-top:50px;'><h1 style='font-size:4rem; opacity:0.1;'>✍️</h1><p>Soldan bir zaman seçerek<br>eğitime başlayabilirsin.</p></div>";
+        document.getElementById('p-wrap').style.display = 'none';
+        document.getElementById('q-counter').style.display = 'none';
     }
 
-    function startLesson(t) {
+    function startTenseLesson(t) {
         const data = tensesData[t];
-        const left = document.getElementById('left-pane');
-        left.innerHTML = `<h2>${t}</h2><p>${data.desc}</p>${data.table}<br><button onclick="loadTensesMenu()" style="color:var(--p); border:none; background:none; cursor:pointer; font-weight:bold;">← Diğer Zamanlara Dön</button>`;
+        document.getElementById('left-pane').innerHTML = `<h2>${t}</h2><p style='font-size:1.1rem; line-height:1.6; color:#94a3b8;'>${data.desc}</p>${data.table}<br><button onclick="loadTenseList()" style="color:var(--p); border:none; background:none; cursor:pointer; font-weight:800; font-size:1rem;">← KONU LİSTESİNE DÖN</button>`;
         
+        document.getElementById('p-wrap').style.display = 'block';
+        document.getElementById('q-counter').style.display = 'block';
+        document.getElementById('bar-fill').style.width = '0%';
+        document.getElementById('q-counter').innerText = `SORU: 1 / 10`;
+
         const right = document.getElementById('right-pane');
-        right.innerHTML = `<h3>${t} Testi (10 Soru)</h3>`;
+        right.innerHTML = `<h3>${t} Testi</h3>`;
+        
         data.quiz.forEach((q, i) => {
             let opts = "";
             q.a.forEach((opt, oi) => {
-                opts += `<button class="opt-btn" onclick="check(this, ${oi==q.c})">${opt}</button>`;
+                opts += `<button class="opt-btn" onclick="checkAns(this, ${oi==q.c}, ${i})">${opt}</button>`;
             });
-            right.innerHTML += `<div class="q-block"><p><b>${i+1}.</b> ${q.q}</p>${opts}</div>`;
+            right.innerHTML += `<div class="q-block" id="q-${i}"><p style='font-size:1.1rem; margin-bottom:15px;'><b>${i+1}.</b> ${q.q}</p>${opts}</div>`;
         });
     }
 
-    function check(btn, isCorrect) {
-        btn.style.borderColor = isCorrect ? 'var(--s)' : 'var(--err)';
-        btn.style.background = isCorrect ? '#064e3b' : '#451212';
-        btn.innerText += isCorrect ? " ✓" : " ✗";
+    function checkAns(btn, isCorrect, qIndex) {
+        const parent = btn.parentElement;
+        const buttons = parent.querySelectorAll('button');
+        buttons.forEach(b => b.style.pointerEvents = 'none');
+
+        if(isCorrect) {
+            btn.style.background = '#064e3b';
+            btn.style.borderColor = var(--s);
+            btn.innerHTML += " ✅";
+        } else {
+            btn.style.background = '#451212';
+            btn.style.borderColor = var(--err);
+            btn.innerHTML += " ❌";
+        }
+
+        const progress = ((qIndex + 1) / 10) * 100;
+        document.getElementById('bar-fill').style.width = progress + '%';
+        if(qIndex < 9) {
+            document.getElementById('q-counter').innerText = `SORU: ${qIndex + 2} / 10`;
+        } else {
+            document.getElementById('q-counter').innerText = `TEST TAMAMLANDI!`;
+            document.getElementById('bar-fill').style.background = 'var(--s)';
+        }
     }
 
-    function loadWords() {
+    function loadWordSection() {
         const left = document.getElementById('left-pane');
-        left.innerHTML = `<h2>500+ Kelime Havuzu</h2><button class="tense-btn" onclick="loadWords()" style="background:var(--p); text-align:center;">KELİMELERİ YENİLE 🔄</button><div class="word-grid"></div>`;
-        const grid = left.querySelector('.word-grid');
+        left.innerHTML = `<h2>Kelime Havuzu</h2><button class="tense-btn" onclick="loadWordSection()" style="background:var(--p); text-align:center; color:white;">YENİ KELİMELER GETİR 🔄</button><div class="word-grid"></div>`;
         const shuffled = wordBank.sort(() => 0.5 - Math.random()).slice(0, 50);
-        shuffled.forEach(w => grid.innerHTML += `<div class="word-item"><b>${w.en}</b> <span>${w.tr}</span></div>`);
+        shuffled.forEach(w => left.querySelector('.word-grid').innerHTML += `<div class="word-item"><b>${w.en}</b> <span style='color:var(--s)'>${w.tr}</span></div>`);
         
-        document.getElementById('right-pane').innerHTML = "<h3>Hızlı Kelime Testi</h3><p>Soldaki kelimeleri incele. Aşağıdakilerin anlamını bilip bilmediğini test et.</p>";
-        shuffled.slice(0, 10).forEach(w => {
-            document.getElementById('right-pane').innerHTML += `<div class="q-block"><b>${w.en}</b><button class="opt-btn" onclick="this.innerText='${w.tr}'">Cevabı Gör</button></div>`;
+        document.getElementById('right-pane').innerHTML = "<h3>Anlam Tahmin Kartları</h3>";
+        shuffled.slice(0, 8).forEach(w => {
+            document.getElementById('right-pane').innerHTML += `<div class="q-block"><b>${w.en}</b><br><button class="opt-btn" onclick="this.innerText='${w.tr}'" style='text-align:center; margin-top:10px;'>ANLAMINI GÖR</button></div>`;
         });
     }
 </script>
